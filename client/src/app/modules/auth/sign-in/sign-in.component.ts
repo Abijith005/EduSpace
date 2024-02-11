@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class SignInComponent {
 
+  role:string=''
+
+  selectRoel(newRole:string){
+    this.role=newRole
+  }
 }

@@ -2,10 +2,28 @@
   <div class="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5">
     <div class="sm:w-1/2 sm:px-12">
       <h2 class="font-bold text-2xl">Login</h2>
-      <div class="flex">
-        <img src="../../../../assets/images/EduSpaceSignUp.jpeg" class="h-8" alt="" >
-        <img src="" alt="">
-        <img src="" alt="">
+      <div class="flex items-center justify-around mt-4">
+        <div
+          class="bb sm:h-16 h-14 sm:w-14 w-12"
+          [ngClass]="{ box: role === 'user' }"
+          (click)="selectRoel('user')"
+        >
+          <h3 class="font-bold text-center text-sm">USER</h3>
+        </div>
+        <div
+          class="bb sm:h-16 h-14 sm:w-14 w-12"
+          (click)="selectRoel('tutor')"
+          [ngClass]="{ box: role === 'tutor' }"
+        >
+          <h3 class="font-bold text-center text-sm">TUTOR</h3>
+        </div>
+        <div
+          class="bb sm:h-16 h-14 sm:w-14 w-12"
+          [ngClass]="{ box: role === 'admin' }"
+          (click)="selectRoel('admin')"
+        >
+          <h3 class="font-bold text-center sm:text-sm text-xs">ADMIN</h3>
+        </div>
       </div>
       <form action="" class="flex flex-col gap-4">
         <input
@@ -15,9 +33,9 @@
         />
         <div class="relative">
           <input
-            type="text"
+            type="password"
             class="w-full p-2 rounded-xl border"
-            placeholder="password"
+            placeholder="Password"
           />
           <i class="bi bi-eye absolute top-1/4 right-3 text-gray-500"></i>
         </div>
