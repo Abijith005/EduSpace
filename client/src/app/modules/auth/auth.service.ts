@@ -1,0 +1,15 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { IgenreralResponse, Ilogin } from 'src/app/interfaces/interfaces';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  constructor( private _http:HttpClient) { }
+
+  login(loginData:Ilogin){
+    return this._http.post<IgenreralResponse>('/v1/auth/login',loginData)
+  }
+}
