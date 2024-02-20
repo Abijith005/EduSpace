@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  mysql:
+    container_name: auth_db_container
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  api:
+    build: .
+    ports:
+      - "5010:6010"
+    environment:
+      PORT: 5010
+      NODE_ENV: "development"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql: {}
