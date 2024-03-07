@@ -6,14 +6,16 @@ services:
     image: mysql:latest
     restart: always
     ports:
-      - "3306:3306"
+      - 3307:3307
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password_here
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql:/var/lib/mysql
 
   api:
     build: .
     ports:
-      - "5010:6010"
+      - 5010:5010
     environment:
       PORT: 5010
       NODE_ENV: "development"

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../auth.service';
@@ -9,7 +9,7 @@ import { NgToastService } from 'ng-angular-popup';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css'],
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent implements OnInit,OnDestroy {
   role: string = '';
   isSubmitted: boolean = false;
   passwordVisibilty: boolean = false;
@@ -65,10 +65,15 @@ export class SignInComponent implements OnInit {
     data.role = this.role;
 
     this._authService
-      .login(data)
+      .userLogin(data)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         console.log(res);
       });
+  }
+
+  ngOnDestroy(): void {
+    this._ngUnsbscribe.next()
+    this._ngUnsbscribe.complete()
   }
 }

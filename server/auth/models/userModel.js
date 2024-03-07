@@ -1,17 +1,21 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/sequelize.js";
 
-class User extends Model {}
+class UserModel extends Model {}
 
-User.init(
+UserModel.init(
   {
-    userName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
@@ -21,4 +25,4 @@ User.init(
   }
 );
 
-export default User;
+export default UserModel;

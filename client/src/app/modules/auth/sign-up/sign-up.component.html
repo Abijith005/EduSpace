@@ -11,36 +11,111 @@
     <div class="sm:w-1/2 sm:px-10">
       <h2 class="font-bold text-2xl">Register</h2>
 
-      <form action="" class="flex flex-col gap-4 text-sm">
+      <form
+        class="flex flex-col gap-2 text-sm"
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit()"
+      >
+        <label
+          [style.color]="
+            isSubmitted && formControls['name'].errors ? 'red' : ''
+          "
+          class="mt-3 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["name"].errors?.hasOwnProperty("required")
+              ? "Name required"
+              : "Name"
+          }}</label
+        >
         <input
           type="text"
-          placeholder="Name"
-          class="rounded-xl p-2 mt-4"
+          formControlName="name"
+          placeholder="Jhon Lops"
+          class="rounded-xl p-2"
         />
 
-        <input type="email" placeholder="Email" class="rounded-xl p-2" />
-
-        <input type="password" placeholder="Password" class="p-2 rounded-xl" />
-
+        <label
+          [style.color]="
+            isSubmitted && formControls['email'].errors ? 'red' : ''
+          "
+          class="mt-1 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["email"].errors?.hasOwnProperty("required")
+              ? "Email required"
+              : isSubmitted &&
+                formControls["email"].errors?.hasOwnProperty("pattern")
+              ? "Invalid email"
+              : "Email"
+          }}</label
+        >
         <input
-          type="password"
-          placeholder="Confirm Password"
+          type="email"
+          formControlName="email"
+          placeholder="example@gmail.com"
+          class="rounded-xl p-2"
+        />
+
+        <label
+          [style.color]="
+            isSubmitted && formControls['password'].errors ? 'red' : ''
+          "
+          class="mt-1 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["password"].errors?.hasOwnProperty("required")
+              ? "Password required"
+              : isSubmitted &&
+                formControls["password"].errors?.hasOwnProperty("pattern")
+              ? "Minimun 4 characters required"
+              : "Password"
+          }}</label
+        >
+        <input
+          type="text"
+          formControlName="password"
+          placeholder="Password@123"
           class="p-2 rounded-xl"
         />
-        <button class="bg-[#002D74] text-white rounded-xl py-2 mt-3 hover:scale-105 duration-300">
+
+        <label
+          [style.color]="
+            isSubmitted && formControls['confirmPassword'].errors ? 'red' : ''
+          "
+          class="mt-1 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["confirmPassword"].errors?.hasOwnProperty("required")
+              ? "Confirm password required"
+              : isSubmitted &&
+                formControls["confirmPassword"].errors?.hasOwnProperty("match")
+              ? "Password not matching"
+              : "Confirm password"
+          }}</label
+        >
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Password@123"
+          class="p-2 rounded-xl"
+        />
+        <button
+          class="bg-[#002D74] text-white rounded-xl py-2 mt-3 hover:scale-105 duration-300"
+        >
           Register
         </button>
       </form>
 
       <div
-        class="mt-4 text-gray-400 grid grid-cols-3 items-center justify-center"
+        class="mt-2 text-gray-400 grid grid-cols-3 items-center justify-center"
       >
         <hr class="border-gray-400" />
         <p class="text-sm text-center">OR</p>
         <hr class="border-gray-400" />
       </div>
 
-      <div class="mt-4">
+      <div class="mt-2">
         <button
           class="flex text-sm items-center justify-center border py-2 w-full rounded-xl hover:scale-105 duration-300"
         >
@@ -75,9 +150,14 @@
       <div class="mt-4">
         <hr />
       </div>
-      <div class="flex text-xs mt-3 justify-between items-center">
+      <div class="flex text-xs mt-1.5 justify-between items-center">
         <p>If you have account</p>
-        <button class="py-2 px-8 border rounded-xl text-xs hover:scale-110 duration-300" [routerLink]="'../signIn'">Login</button>
+        <button
+          class="py-2 px-8 border rounded-xl text-xs hover:scale-110 duration-300"
+          [routerLink]="'../signIn'"
+        >
+          Login
+        </button>
       </div>
     </div>
   </div>

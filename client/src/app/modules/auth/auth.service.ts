@@ -1,15 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IgenreralResponse, Ilogin } from 'src/app/interfaces/interfaces';
+import {
+  IgenreralResponse,
+  IuserLogin,
+  IuserRegisterData,
+} from 'src/app/interfaces/interfaces';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  constructor(private _http: HttpClient) {}
 
-  constructor( private _http:HttpClient) { }
+  userRegister(registerData: IuserRegisterData) {
+    return this._http.post<IgenreralResponse>(
+      `/v1/auth/user/register`,
+      registerData
+    );
+  }
 
-  login(loginData:Ilogin){
-    return this._http.post<IgenreralResponse>('/v1/auth/login',loginData)
+  userLogin(loginData: IuserLogin) {
+    return this._http.post<IgenreralResponse>(
+      `/v1/auth/${loginData.role}/login`,
+      loginData
+    );
   }
 }
