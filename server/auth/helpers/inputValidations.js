@@ -1,7 +1,6 @@
 export function userCredentialsValidation(data) {
   try {
     const { name, email, password } = data;
-    console.log(name,email,password);
     if (name && !name?.match(/^[a-zA-Z\s'-]+$/)) {
       return false;
     }

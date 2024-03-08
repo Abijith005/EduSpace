@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import "dotenv/config";
+import authMiddleware from './middlewares/authMiddleware.js'
 
 const app = express();
 
@@ -26,7 +27,7 @@ app.use(
 );
 
 app.use(
-  "/api/v1/service",
+  "/api/v1/service",authMiddleware,
   createProxyMiddleware({
     target: process.env.USER_SERVICE_URL,
     changeOrigin: true,

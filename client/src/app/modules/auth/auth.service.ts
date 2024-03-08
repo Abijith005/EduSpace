@@ -25,4 +25,8 @@ export class AuthService {
       loginData
     );
   }
+
+  getNewAccessToken(token:String){
+    return this._http.get(`v1/auth/token/accessToken/${token}`)
+  }
 }

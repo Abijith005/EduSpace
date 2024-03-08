@@ -28,6 +28,7 @@ sequelize
   });
 
 app.use("/api/v1/auth/user",userAuthRoutes); 
+app.use('/api/v1/auth/token')
 app.listen(port, () => {
   console.log(`auth service running in port ${port}`);
 });
