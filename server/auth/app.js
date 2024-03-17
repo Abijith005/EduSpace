@@ -1,9 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+
 import "dotenv/config";
 import userAuthRoutes from "./routes/useAuthRoutes.js"
+import tokenRoutes from "./routes/tokenRoutes.js"
 import sequelize from "./config/sequelize.js";
+import cronJob from "./helpers/cronJob.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -16,7 +19,7 @@ app.use(
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
   })
-);
+); 
 app.use(morgan("dev"));
 sequelize
   .sync()
@@ -26,9 +29,10 @@ sequelize
   .catch((err) => {
     console.error("Error synchronizing the database:", err);
   });
+  cronJob()
 
 app.use("/api/v1/auth/user",userAuthRoutes); 
-app.use('/api/v1/auth/token')
+app.use('/api/v1/auth/token',tokenRoutes)
 app.listen(port, () => {
   console.log(`auth service running in port ${port}`);
-});
+}); 

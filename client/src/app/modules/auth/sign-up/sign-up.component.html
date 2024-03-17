@@ -1,4 +1,7 @@
-<section class="min-h-screen flex items-center justify-center bg-gray-50">
+<section
+  class="min-h-screen flex items-center justify-center bg-gray-50"
+  *ngIf="!otp; else elseBlock"
+>
   <div class="flex max-w-3xl p-5 shadow-lg bg-gray-100 rounded-2xl">
     <div class="w-1/2 sm:block hidden">
       <img
@@ -14,7 +17,7 @@
       <form
         class="flex flex-col gap-2 text-sm"
         [formGroup]="registerForm"
-        (ngSubmit)="onSubmit()"
+        (ngSubmit)="sentOtp()"
       >
         <label
           [style.color]="
@@ -162,3 +165,98 @@
     </div>
   </div>
 </section>
+<ng-template #elseBlock>
+  <div
+    class="relative flex min-h-screen flex-col justify-center overflow-hidden shadow-lg bg-gray-100 py-12"
+  >
+    <div
+      class="relative mx-auto w-full max-w-md flex-col space-y-16 p-8 bg-white rounded-2xl shadow-2xl"
+    >
+      <div
+        class="flex flex-col items-center justify-center space-y-2 text-center"
+      >
+        <div class="text-3xl font-semibold">
+          <i class="bi bi-shield-fill-check text-blue-500 text-3xl"></i>
+        </div>
+        <div class="flex flex-row text-sm font-medium text-gray-400">
+          <p>Please verify OTP sent to your email {{ resendOtp }}</p>
+        </div>
+      </div>
+      <div>
+        <form #form="ngForm" class="mt-5" (ngSubmit)="onSubmit(form)">
+          <div class="flex flex-col space-y-16">
+            <div
+              class="mx-auto flex w-full max-w-xs flex-row items-center justify-between"
+            >
+              <div class="h-16 w-16">
+                <input
+                  type="text"
+                  #txt1
+                  maxlength="1"
+                  name="text1"
+                  [(ngModel)]="text1"
+                  (keyup)="move($event, '', txt1, txt2)"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+              <div class="h-16 w-16">
+                <input
+                  type="text"
+                  #txt2
+                  maxlength="1"
+                  name="text2"
+                  [(ngModel)]="text2"
+                  (keyup)="move($event, txt1, txt2, txt3)"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+              <div class="h-16 w-16">
+                <input
+                  type="text"
+                  #txt3
+                  maxlength="1"
+                  name="text3"
+                  [(ngModel)]="text3"
+                  (keyup)="move($event, txt2, txt3, txt4)"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+              <div class="h-16 w-16">
+                <input
+                  type="text"
+                  #txt4
+                  maxlength="1"
+                  name="text4"
+                  [(ngModel)]="text4"
+                  (keyup)="move($event, txt3, txt4, '')"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col space-y-5">
+              <div>
+                <button
+                  class="flex w-full flex-row items-center justify-center rounded-xl border border-none bg-blue-700 py-3 text-center text-sm text-white shadow-sm outline-none"
+                  type="submit"
+                >
+                  Verify Account
+                </button>
+              </div>
+              <div 
+                class="flex flex-row items-center justify-center space-x-1 text-center text-sm font-medium text-gray-500"
+              >
+                <p>Didn't receive OTP ?</p>
+                <p class="flex flex-row items-center text-blue-600 cursor-pointer"
+                (click)="sentOtp()"
+                *ngIf="resendOtp;else countDown"
+                  >Resend</p>
+                <ng-template #countDown><strong> {{timer}}</strong></ng-template>
+                
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

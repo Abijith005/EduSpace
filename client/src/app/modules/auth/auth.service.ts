@@ -19,14 +19,21 @@ export class AuthService {
     );
   }
 
-  userLogin(loginData: IuserLogin) {
-    return this._http.post<IgenreralResponse>(
-      `/v1/auth/${loginData.role}/login`,
-      loginData
-    );
+  sendOtp(email: string) {
+    return this._http.post<IgenreralResponse>(`/v1/auth/user/sendOtp`, {
+      email: email,
+    });
   }
 
-  getNewAccessToken(token:String){
-    return this._http.get(`v1/auth/token/accessToken/${token}`)
+  userLogin(loginData: IuserLogin) {
+    return this._http.post<
+      { accessToken: string; refreshToken: string } & IgenreralResponse
+    >(`/v1/auth/${loginData.role}/login`, loginData);
+  }
+
+  getNewAccessToken(token: String) {
+    return this._http.get<IgenreralResponse & { accessToken: string }>(
+      `/v1/auth/token/accessToken/${token}`
+    );
   }
 }

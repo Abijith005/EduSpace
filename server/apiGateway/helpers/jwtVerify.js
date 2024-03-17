@@ -2,12 +2,14 @@ import jwt from "jsonwebtoken";
 
  const verifyJwt = (token) => {
   try {
+    console.log(token);
     const secret = process.env.JWT_SIGNATURE;
+    console.log(secret);
     const userInfo = jwt.verify(token, secret);
     return userInfo;
   } catch (error) {
-    console.log("Error \n", error);
-    throw new Error("Jwt verification failed");
+    console.log(error,'from verification==============================');
+   return false
   }
 };
 

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { NgToastService } from 'ng-angular-popup';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -20,7 +21,8 @@ export class SignInComponent implements OnInit,OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _authService: AuthService,
-    private _ngToaster: NgToastService
+    private _ngToaster: NgToastService,
+    private _router:Router
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +70,11 @@ export class SignInComponent implements OnInit,OnDestroy {
       .userLogin(data)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        console.log(res);
+        if (res.success) {
+          localStorage.setItem('accessToken',res.accessToken)
+          localStorage.setItem('refreshToken',res.refreshToken)
+          this._router.navigate(['/home'])
+        }
       });
   }
 

@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
     return userInfo;
   } catch (error) {
     console.log("Error \n", error);
-    throw new Error("Jwt verification failed");
+    return false
   }
 };
 

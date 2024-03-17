@@ -27,7 +27,7 @@ app.use(
 );
 
 app.use(
-  "/api/v1/service",authMiddleware,
+  "/api/v1/user",authMiddleware('user'),
   createProxyMiddleware({
     target: process.env.USER_SERVICE_URL,
     changeOrigin: true,
