@@ -1,0 +1,10 @@
+server/user/.env
+server/user/node_modules
+server/auth/.env
+server/auth/node_modules
+server/apiGateway/.env
+server/apiGateway/node_modules
+
+
+client/node_modules
+client/src/environments

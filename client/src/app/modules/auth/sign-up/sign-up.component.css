@@ -1,0 +1,26 @@
+.google-signin-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  /* Style the Google icon inside the button */
+  .google-signin-container svg {
+    margin-right: 0.5rem;
+  }
+
+  /* Style the text inside the button */
+  .google-signin-container span {
+    font-size: 1rem;
+  }
+
+  /* Hover effect */
+  .google-signin-container:hover {
+    transform: scale(1.05);
+    border-color: #999;
+  }
