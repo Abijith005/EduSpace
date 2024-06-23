@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import "dotenv/config";
+import "dotenv/config.js";
 import authMiddleware from './middlewares/authMiddleware.js'
 
 const app = express();

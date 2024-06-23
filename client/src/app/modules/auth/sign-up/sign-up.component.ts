@@ -120,6 +120,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
       .sendOtp(this.email)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
+        console.log(res);
+        
         if (res.success) {
           this.otp = true;
           this._toasterService.showSuccess(res.message);
