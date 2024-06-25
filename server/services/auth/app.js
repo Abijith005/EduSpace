@@ -11,7 +11,7 @@ import dbConnect from "./config/dbConnect.js";
 
 const app = express();
 const port = process.env.PORT;
-
+ 
 dbConnect()
 app.use(helmet());
 app.use(morgan("dev"));

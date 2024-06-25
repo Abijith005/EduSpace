@@ -63,18 +63,18 @@
           <button
             type="button"
             class="bb sm:h-8 h-6 sm:w-16 w-12"
-            [ngClass]="{ box: role === 'user' }"
-            (click)="selectRole('user')"
+            [ngClass]="{ box: role === 'student' }"
+            (click)="selectRole('student')"
           >
             <h3 class="font-bold text-center text-sm">USER</h3>
           </button>
           <button
             type="button"
-            class="bb sm:h-8 h-6 sm:w-16 w-12"
-            (click)="selectRole('tutor')"
-            [ngClass]="{ box: role === 'tutor' }"
+            class="bb sm:h-8 h-6 sm:w-16 w-12 "
+            (click)="selectRole('teacher')"
+            [ngClass]="{ box: role === 'teacher' }"
           >
-            <h3 class="font-bold text-center text-sm">TUTOR</h3>
+            <h3 class="font-bold text-center text-sm ">TEACHER</h3>
           </button>
           <button
             type="button"

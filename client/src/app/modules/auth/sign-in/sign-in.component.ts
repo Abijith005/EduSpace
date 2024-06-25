@@ -99,7 +99,7 @@ export class SignInComponent implements OnInit, OnDestroy {
       return;
     }
     const data = this.loginForm.getRawValue();
-    data.role = this.role;
+    data.role = this.role.toLowerCase();
 
     this._authService
       .userLogin(data)
@@ -109,7 +109,7 @@ export class SignInComponent implements OnInit, OnDestroy {
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
           this._toasterService.showSuccess(res.message);
-          this._router.navigate(['/home']);
+          this._router.navigate([`/${this.role}`]);
         } else {
           this._toasterService.showError(res.message);
         }

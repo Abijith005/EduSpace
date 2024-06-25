@@ -1,41 +1,47 @@
 import { emailQueue } from "../config/queue.js";
 import generateOtp from "../helpers/generateOtp.js";
+import hashPassword from "../helpers/hashPassword.js";
 import { userCredentialsValidation } from "../helpers/inputValidations.js";
 import { createAccessToken, createRefreshToken } from "../helpers/jwtSign.js";
+import adminModel from "../models/adminModel.js";
 import otpModel from "../models/otpModel.js";
-import userModel from "../models/userModel.js";
+import studentModel from "../models/studentModel.js";
+import teacherModel from "../models/teacherModel.js";
 import bcrypt from "bcrypt";
 
 export const userRegister = async (req, res) => {
   try {
-    const { name, email, password, otp } = req.body;
-    const validate = userCredentialsValidation({ name, email, password });
+    const { name, email, password, otp, role } = req.body;
+    const model = role == "student" ? studentModel : teacherModel;
+    console.log(model, role);
+    const validate = userCredentialsValidation({ name, email, password, role });
     if (!validate.isValid) {
       return res
         .status(400)
         .json({ success: false, message: validate.message });
     }
-    const user = await userModel.findOne({ email: email });
+    const user = await model.findOne({ email: email });
 
     if (user) {
       const message = "Email already exists";
-      console.log("log user", user.socialId);
       if (user.socialId) {
         message = "Email already registered with google use Google Login";
       }
       return res.status(409).json({ success: false, message });
     }
 
-    const userOtp = await otpModel.findOne({ email: email });
+    const userOtp = await otpModel.findOne({
+      email: email,
+      user_type: role.toLowerCase(),
+      purpose: "registration",
+    });
     const currentDate = new Date();
     if (userOtp?.expiresAt >= currentDate && userOtp.otp == otp) {
-      const saltRounds = 10;
-      const salt = await bcrypt.genSalt(saltRounds);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      userModel.create({ name, email, password: hashedPassword });
+      const hashedPassword = await hashPassword(password);
+      await model.create({ name, email, password: hashedPassword });
       return res
         .status(200)
-        .json({ success: true, message: "User registration successfull" });
+        .json({ success: true, message: `${role} registration successfull` });
     } else {
       return res
         .status(401)
@@ -49,7 +55,14 @@ export const userRegister = async (req, res) => {
 
 export const userLogin = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
+    const model =
+      role == "student"
+        ? studentModel
+        : role == "teacher"
+        ? teacherModel
+        : adminModel;
+        console.log(role,'\n\n\n\n',model);
     const validate = userCredentialsValidation({ email, password });
     if (!validate.isValid) {
       return res
@@ -57,7 +70,7 @@ export const userLogin = async (req, res) => {
         .json({ success: false, message: validate.message });
     }
 
-    const user = await userModel.findOne({ email: email });
+    const user = await model.findOne({ email: email });
 
     if (user) {
       const verifyPassword = await bcrypt.compare(password, user.password);
@@ -98,8 +111,12 @@ export const userLogin = async (req, res) => {
 
 export const userRegistrationOtp = async (req, res) => {
   try {
-    const { email } = req.body;
-    const user = await userModel.findOne({ email: email });
+    const { email, role } = req.body;
+    console.log(role);
+    const model = role == "student" ? studentModel : teacherModel;
+    console.log(model, role);
+    const user = await model.findOne({ email: email });
+    console.log(user);
     if (user) {
       let message = "Email already registered";
       if (user.socialId) {
@@ -109,22 +126,31 @@ export const userRegistrationOtp = async (req, res) => {
     }
 
     const otp = await generateOtp();
-    const validate = userCredentialsValidation({ email });
+    const validate = userCredentialsValidation({ email, role });
     if (!validate.isValid) {
       return res
         .status(400)
         .json({ success: false, message: validate.message });
     }
 
-    const data = await otpModel.findOne({ email });
-
+    const data = await otpModel.findOne({
+      email,
+      purpose: "registration",
+      user_type: role.toLowerCase(),
+    });
     if (data) {
       data.otp = otp;
-      data.expiresAt=new Date(Date.now()+1*60*1000)
+      data.expiresAt = new Date(Date.now() + 1 * 60 * 1000);
       await data.save();
     } else {
-      await otpModel.create({ email, otp });
+      await otpModel.create({
+        email,
+        otp,
+        purpose: "registration",
+        user_type: role.toLowerCase(),
+      });
     }
+
     const job = {};
     job.subject = "EduSpace Email Verification";
     job.html = `<h1>Welcome to Eduspace!</h1>
@@ -136,7 +162,6 @@ export const userRegistrationOtp = async (req, res) => {
     <p>Thank you for choosing Eduspace!</p>`;
     job.email = email;
     await emailQueue.add(job);
-console.log("returning\n=\n=\n=\n=\n=\n=\n=\n=");
     return res
       .status(200)
       .json({ success: true, message: "OTP send successfully" });
@@ -148,31 +173,42 @@ console.log("returning\n=\n=\n=\n=\n=\n=\n=\n=");
   }
 };
 
-export const frogotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body;
-    const validate = userCredentialsValidation({ email });
+    const { email, role } = req.body;
+    const model = role == "student" ? studentModel : teacherModel;
+    console.log(role,model,'=======');
+    const validate = userCredentialsValidation({ email, role });
     if (!validate.isValid) {
       return res
         .status(400)
         .json({ success: false, message: validate.message });
     }
 
-    const user = await userModel.findOne({ email: email });
+    const user = await model.findOne({ email: email });
     if (!user) {
       return res
         .status(401)
         .json({ success: false, message: "Email not found" });
     } else {
       const otp = await generateOtp();
-      const data = await otpModel.findOne({ email });
+      const data = await otpModel.findOne({
+        email,
+        purpose: "forgot_password",
+        user_type: role.toLowerCase(),
+      });
 
       if (data) {
         data.otp = otp;
-        data.expiresAt=new Date(Date.now()+1*60*1000)
+        data.expiresAt = new Date(Date.now() + 1 * 60 * 1000);
         await data.save();
       } else {
-        await otpModel.create({ email, otp });
+        await otpModel.create({
+          email,
+          otp,
+          purpose: "forgot_password",
+          user_type: role.toLowerCase(),
+        });
       }
 
       const job = {};
@@ -198,9 +234,9 @@ export const frogotPassword = async (req, res) => {
   }
 };
 
-export const verifyOtp = async (req, res) => {
+export const forgotPasswordverifyOtp = async (req, res) => {
   try {
-    const { email, otp } = req.body;
+    const { email, otp, role } = req.body;
     const validate = userCredentialsValidation({ email });
     if (!validate.isValid) {
       return res
@@ -208,7 +244,11 @@ export const verifyOtp = async (req, res) => {
         .json({ success: false, message: validate.message });
     }
 
-    const otpData = await otpModel.findOne({ email: email });
+    const otpData = await otpModel.findOne({
+      email: email,
+      purpose: "forgot_password",
+      user_type: role.toLowerCase(),
+    });
     const currentDate = new Date();
     if (otpData.expiresAt >= currentDate && otpData.otp == otp) {
       return res.status(200).json({ success: true, message: "OTP verified" });
@@ -234,17 +274,64 @@ export const updatePassword = async (req, res) => {
         .status(400)
         .json({ success: false, message: validate.message });
     }
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(password, salt);
 
-    await userModel.updateOne(
+    const hashedPassword = await hashPassword(password);
+    await studentModel.updateOne(
       { email: email },
       { $set: { password: hashedPassword } }
     );
     res
       .status(200)
       .json({ success: true, message: "Password updated successfully" });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const adminLogin = async () => {
+  try {
+    const { email, password, role } = req.body;
+    const validate = userCredentialsValidation({ email, password, role });
+    if (!validate.isValid) {
+      return res
+        .status(400)
+        .json({ success: false, message: validate.message });
+    }
+
+    const admin = await adminModel.findOne({ email: email });
+
+    if (admin) {
+      const verifyPassword = await bcrypt.compare(password, admin.password);
+      if (verifyPassword) {
+        const refreshToken = createRefreshToken({
+          id: admin.id,
+          email: admin.email,
+          role: "admin",
+        });
+        const accessToken = createAccessToken({
+          id: admin.id,
+          email: admin.email,
+          role: "admin",
+        });
+        return res.status(200).json({
+          success: true,
+          message: "Login successfull",
+          accessToken,
+          refreshToken,
+        });
+      } else {
+        return res
+          .status(401)
+          .json({ success: false, message: "Incorrect password" });
+      }
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "Admin not found" });
+    }
   } catch (error) {
     console.log("Error \n", error);
     return res

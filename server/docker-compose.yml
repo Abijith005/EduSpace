@@ -1,3 +1,4 @@
+
 version: "3.9"
 
 services:
@@ -10,6 +11,15 @@ services:
     volumes:
       - mongo_auth-data:/data/db
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6380:6379"
+    networks:
+      - my-network
+    restart: always
+    
   auth_service:
     build: ./services/auth
     container_name: auth_service
@@ -17,21 +27,37 @@ services:
       - 5010:5010
     environment:
       PORT: 5010
-      MONGODB_URI: mongodb://mongo_db:27017
+      MONGODB_URI: mongodb://mongo_auth:27017
       DB_NAME: EduSpace_auth
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     depends_on: 
       - mongo_auth
-  
+      - redis
+    networks:
+      - my-network
+    volumes:
+      - ./services/auth:/usr/src/app  
+      - /usr/src/app/node_modules
+    
+
   api-gateway:
-    build: ./api-gateway
+    build: ./apiGateway
     container_name: api_gateway
     ports:
       - '5000:5000'
+    environment:
+      AUTH_SERVICE_URL: http://auth_service:5010
+      USER_SERVICE_URL: http://localhost:5020
     networks:
       - my-network
     depends_on:
       - auth_service
+      - mongo_auth
     restart: always
+    volumes:
+      - ./apiGateway:/usr/src/app  
+      - /usr/src/app/node_modules
 
 networks:
   my-network:
@@ -39,5 +65,3 @@ networks:
 
 volumes:
   mongo_auth-data:
-
- 

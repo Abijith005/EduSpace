@@ -25,8 +25,8 @@ export class ForgotPasswordComponent {
   text2 = '';
   text3 = '';
   text4 = '';
-  email = '';
-
+  data!:{email:string,role:string}
+  roles=["Student","Teacher",]
   private _ngUnsbscribe = new Subject<void>();
   constructor(
     private _fb: FormBuilder,
@@ -46,6 +46,8 @@ export class ForgotPasswordComponent {
           Validators.pattern(/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/),
         ],
       ],
+
+      role:['',Validators.required],
     });
   }
 
@@ -69,11 +71,11 @@ export class ForgotPasswordComponent {
     if (!this.passwordForm.valid) {
       return;
     }
-    this.email = this.formControls['email'].value;
+    this.data=this.passwordForm.getRawValue()
     this.resendOtp = false;
     this.resendOtpTimer();
     this._authService
-      .forgotPassword(this.email)
+      .forgotPassword(this.data.email,this.data.role.toLowerCase())
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
@@ -90,12 +92,12 @@ export class ForgotPasswordComponent {
       form.value.text1 + form.value.text2 + form.value.text3 + form.value.text4;
 
     this._authService
-      .verifyOtp(this.email, otpValue)
+      .verifyOtp(this.data.email,this.data.role.toLowerCase(), otpValue)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
           this._toasterService.showSuccess(res.message);          
-          this._store.dispatch(resetPasswordOtp({email:this.email}))
+          this._store.dispatch(resetPasswordOtp({email:this.data.email}))
           this._router.navigate(['../resetPassword'], {
             relativeTo: this._activeRoute,
           });

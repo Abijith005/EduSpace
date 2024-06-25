@@ -7,13 +7,13 @@ import authMiddleware from './middlewares/authMiddleware.js'
 
 const app = express();
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5000; 
 
 app.use(
   cors({
     origin: ["http://localhost:4200"],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
-    credentials: true,
+    credentials: true, 
   })
 );
 app.use(express.urlencoded({ extended: true }));

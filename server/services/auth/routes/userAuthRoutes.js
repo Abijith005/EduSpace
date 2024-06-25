@@ -1,5 +1,5 @@
 import express from 'express'
-import { frogotPassword, updatePassword, userLogin, userRegister, userRegistrationOtp, verifyOtp } from '../controllers/userAuthController.js'
+import { forgotPassword, forgotPasswordverifyOtp, updatePassword, userLogin, userRegister, userRegistrationOtp,  } from '../controllers/userAuthController.js'
 
 const router=express.Router()
 
@@ -9,9 +9,9 @@ router.post('/login',userLogin)
 
 router.post('/sendOtp',userRegistrationOtp)
 
-router.post('/forgotPassword',frogotPassword)
+router.post('/forgotPassword',forgotPassword)
 
-router.post('/verifyOtp',verifyOtp)
+router.post('/verifyOtp',forgotPasswordverifyOtp)
 
 router.patch('/updatePassword',updatePassword)
 

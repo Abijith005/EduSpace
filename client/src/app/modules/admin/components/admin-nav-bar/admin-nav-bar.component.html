@@ -1,0 +1,35 @@
+<div class="flex h-screen">
+    <div class="bg-white w-64 shadow-md p-6 rounded-lg">
+      <div class="flex items-center mb-6">
+        <img src="../../../../../assets/images/Log.ico" alt="EduSpace Logo" class="w-10 h-10 mr-2">
+        <h1 class="text-xl font-bold exo-text">EduSpace</h1>
+      </div>
+      <p class="text-gray-500 mb-6 jost-text">Admin Dashboard</p>
+      <div class="flex flex-col gap-2.5 py-2 ">
+      <a [ngClass]="{'active-link':selectedItem==0}" (click)="selectItem(0)" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+        <i class="fas fa-home mr-2"></i> Dashboard
+      </a>
+      <a [ngClass]="{'active-link':selectedItem==1}" (click)="selectItem(1)" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+        <i class="fas fa-user-graduate mr-2"></i> Instructors
+      </a>
+      <a [ngClass]="{'active-link':selectedItem==2}" (click)="selectItem(2)" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+        <i class="fas fa-graduation-cap mr-2"></i> Students
+      </a>
+      <a [ngClass]="{'active-link':selectedItem==3}" (click)="selectItem(3)" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+        <i class="fas fa-list-alt mr-2"></i> Categories
+      </a>
+      <a [ngClass]="{'active-link':selectedItem==4}" (click)="selectItem(4)" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+        <i class="fas fa-credit-card mr-2"></i> Payments
+      </a>
+      <a [ngClass]="{'active-link':selectedItem==5}" (click)="selectItem(5)" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+      </a>
+    </div>
+    </div>
+    <div class="flex-1  p-6 rounded-lg" style=" background: linear-gradient(125deg, #ffc53477, #ffffff9a, #6dceae54);">
+    </div>
+  </div>
+
+
+
+  

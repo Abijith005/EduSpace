@@ -18,7 +18,7 @@ import {
 })
 export class AuthService {
   constructor(private _http: HttpClient, private _store: Store<AppState>) {}
-
+number=1
   userRegister(registerData: IuserRegisterData) {
     return this._http.post<IgenreralResponse>(
       `/v1/auth/user/register`,
@@ -26,16 +26,16 @@ export class AuthService {
     );
   }
 
-  sendOtp(email: string) {
+  sendOtp(email: string,role:string) {
     return this._http.post<IgenreralResponse>(`/v1/auth/user/sendOtp`, {
-      email: email,
+      email,role
     });
   }
 
   userLogin(loginData: IuserLogin) {
     return this._http.post<
       { accessToken: string; refreshToken: string } & IgenreralResponse
-    >(`/v1/auth/${loginData.role}/login`, loginData);
+    >(`/v1/auth/user/login`, loginData);
   }
 
   getNewAccessToken(token: String) {
@@ -44,16 +44,15 @@ export class AuthService {
     );
   }
 
-  forgotPassword(email: string) {
-    return this._http.post<IgenreralResponse>(`/v1/auth/user/forgotPassword`, {
-      email: email,
-    });
+  forgotPassword(email: string,role:string) {
+    return this._http.post<IgenreralResponse>(`/v1/auth/user/forgotPassword`, {email,role});
   }
 
-  verifyOtp(email: string, otp: string) {
+  verifyOtp(email: string, role:string,otp: string,) {
     return this._http.post<IgenreralResponse>(`/v1/auth/user/verifyOtp`, {
       email,
       otp,
+      role
     });
   }
 
@@ -76,6 +75,8 @@ export class AuthService {
 
 
   signInWithGoogle(data:IuserInformation){
+    console.log('its called '+this.number++);
+    
     return this._http.post<
     { accessToken: string; refreshToken: string } & IgenreralResponse
   >(`/v1/auth/socialAuth/login`,data)

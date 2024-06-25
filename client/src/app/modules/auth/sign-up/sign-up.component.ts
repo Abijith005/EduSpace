@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import {
   IuserInformation,
-  IuserRegisterData,
 } from 'src/app/interfaces/interfaces';
 
 @Component({
@@ -29,6 +28,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
   text4 = '';
   email = '';
   socialLogin=false
+  roles=["Student","Teacher",]
 
   private _ngUnsbscribe = new Subject<void>();
   constructor(
@@ -50,6 +50,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
           Validators.pattern(/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/),
         ],
       ],
+      role:['',Validators.required],
       password: ['', [Validators.required, Validators.pattern(/^.{4,}$/)]],
       confirmPassword: ['', [Validators.required]],
     });
@@ -114,13 +115,13 @@ export class SignUpComponent implements OnInit, OnDestroy {
       return;
     }
     this.email = this.formControls['email'].value;
+    const role=this.formControls['role'].value
     this.resendOtp = false;
     this.resendOtpTimer();
     this._authService
-      .sendOtp(this.email)
+      .sendOtp(this.email,role)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        console.log(res);
         
         if (res.success) {
           this.otp = true;
@@ -131,8 +132,11 @@ export class SignUpComponent implements OnInit, OnDestroy {
       });
   }
 
+
   onSubmit(form: NgForm) {
     const data = this.registerForm.getRawValue();
+    console.log(data);
+    
     let otpValue =
       form.value.text1 + form.value.text2 + form.value.text3 + form.value.text4;
 

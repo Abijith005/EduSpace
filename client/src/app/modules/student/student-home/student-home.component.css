@@ -15,14 +15,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem; /* Adjust size as needed */
-    color: #ddd; /* Adjust color as needed */
+    font-size: 4rem;
+    color: #ddd;
   }
   
   .quote {
     display: inline-block;
-    transform: rotate(15deg); /* Adjust rotation as needed */
-    margin: 0 5px; /* Adjust spacing as needed */
-    font-family: Arial, sans-serif; /* Use a sans-serif font for straight quotes */
+    transform: rotate(15deg); 
+    margin: 0 5px; 
+    font-family: Arial, sans-serif;
   }
   

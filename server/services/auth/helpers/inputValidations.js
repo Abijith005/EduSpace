@@ -1,6 +1,7 @@
 export function userCredentialsValidation(data) {
   try {
-    const { name, email, password,profilePic,socialId } = data;
+    const roles=["student","teacher"]
+    const { name, email, password,profilePic,socialId,role } = data;
     if (name !== undefined && !name.match(/^[a-zA-Z\s'-]+$/)) {
       const message = !name
         ? "All fields are required"
@@ -38,6 +39,17 @@ export function userCredentialsValidation(data) {
       return { isValid: false, message: message };
       
     }
+
+    if (role!==undefined&&!roles.includes(role.toLowerCase())) {
+      console.log('errr',roles.includes(role));
+      const message = !role
+        ? "All fields are required"
+        : "Validation error!! Invalid role";
+      return { isValid: false, message: message };
+      
+    }
+
+
     return { isValid: true };
   } catch (error) {
     console.log(error);

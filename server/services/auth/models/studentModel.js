@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const studentSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: false,
+      required: true,
     },
     email: {
       type: String,
       unique: true,
-      required: false,
+      required: true,
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
     profilePic: {
       type: String,
@@ -25,10 +25,14 @@ const userSchema = new mongoose.Schema(
       sparse:true,
       required: false,
     },
+    active_status:{
+      type:Boolean,
+      default:true
+    }
   },
   { timestamps: true }
 );
 
-const userModel=mongoose.model("Users",userSchema)
+const studentModel=mongoose.model("Students",studentSchema)
 
-export default userModel
+export default studentModel
