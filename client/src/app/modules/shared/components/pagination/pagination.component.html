@@ -1,0 +1,27 @@
+<div class="flex items-center justify-center space-x-2">
+  <button
+    class="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-full hover:bg-gray-100"
+    (click)="previousPage()"
+    [disabled]="currentPage === 1"
+  >
+    &lt;
+  </button>
+  <ng-container *ngFor="let page of pages">
+    <button
+      class="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-full hover:bg-gray-100"
+      [ngClass]="{
+        'bg-black text-white ': currentPage === page
+      }"
+      (click)="goToPage(page)"
+    >
+      {{ page }}
+    </button>
+  </ng-container>
+  <button
+    class="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-full hover:bg-gray-100"
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages"
+  >
+    &gt;
+  </button>
+</div>

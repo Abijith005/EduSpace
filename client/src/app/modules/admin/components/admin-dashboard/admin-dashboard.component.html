@@ -1,0 +1,94 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold text-center mb-8">Dashboard</h1>
+
+    <div class="grid grid-cols-5 gap-4">
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-lg font-bold">Total Students</h2>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292m0 2.544a3 3 0 110-3.928m0 3.928a4.5 4.5 0 100-5.455" />
+                </svg>
+            </div>
+            <p class="text-4xl font-bold">4,209</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-lg font-bold">Total Instructors</h2>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292m0 2.544a3 3 0 110-3.928m0 3.928a4.5 4.5 0 100-5.455" />
+                </svg>
+            </div>
+            <p class="text-4xl font-bold">4,209</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-lg font-bold">Total Categories</h2>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292m0 2.544a3 3 0 110-3.928m0 3.928a4.5 4.5 0 100-5.455" />
+                </svg>
+            </div>
+            <p class="text-4xl font-bold">4,209</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-lg font-bold">Total Courses</h2>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292m0 2.544a3 3 0 110-3.928m0 3.928a4.5 4.5 0 100-5.455" />
+                </svg>
+            </div>
+            <p class="text-4xl font-bold">4,209</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-lg font-bold">Total Revenue</h2>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292m0 2.544a3 3 0 110-3.928m0 3.928a4.5 4.5 0 100-5.455" />
+                </svg>
+            </div>
+            <p class="text-4xl font-bold">4,209</p>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-between mt-8">
+        <div class="flex items-center">
+            <p class="text-lg font-bold">Timeframe: All-time</p>
+            <select class="ml-2 rounded-md border border-gray-300 px-2 py-1">
+                <option value="all-time">All-time</option>
+                <option value="last-month">Last Month</option>
+                <option value="last-year">Last Year</option>
+            </select>
+        </div>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+            Download
+        </button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-8">
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-bold mb-4">Overall Student Acquisition</h2>
+            <canvas id="studentAcquisitionChart"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-bold mb-4">Overall Subscription Activity</h2>
+            <canvas id="subscriptionActivityChart"></canvas>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mt-8">
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-bold mb-4">Total Revenue</h2>
+            <canvas id="totalRevenueChart"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-bold mb-4">Instructor Distribution</h2>
+            <canvas id="instructorDistributionChart"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-bold mb-4">Subscription Distribution</h2>
+            <canvas id="subscriptionDistributionChart"></canvas>
+        </div>
+    </div>
+</div>

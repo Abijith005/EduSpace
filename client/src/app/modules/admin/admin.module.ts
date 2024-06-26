@@ -2,15 +2,22 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminNavBarComponent } from './components/admin-nav-bar/admin-nav-bar.component';
+import { CategoryComponent } from './components/category/category.component';
+import { SharedModule } from '../shared/shared.module';
+import { AddCategoryComponent } from './components/add-category/add-category.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 
 
 @NgModule({
-  declarations: [
-    AdminNavBarComponent
+  declarations: [ 
+    AdminNavBarComponent,
+    CategoryComponent,
+    AddCategoryComponent,
+    AdminDashboardComponent
   ],
   imports: [
-    CommonModule,AdminRoutingModule
+    CommonModule,AdminRoutingModule,SharedModule
   ]
 })
 export class AdminModule { }
