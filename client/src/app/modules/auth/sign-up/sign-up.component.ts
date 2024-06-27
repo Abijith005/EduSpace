@@ -2,12 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Subject, takeUntil } from 'rxjs';
-import { CommonService } from 'src/app/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import {
-  IuserInformation,
-} from 'src/app/interfaces/interfaces';
+import { CommonService } from '../../../common.service';
+import { IuserInformation } from '../../../interfaces/interfaces';
+
 
 @Component({
   selector: 'app-sign-up',

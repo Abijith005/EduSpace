@@ -4,7 +4,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { authGuard } from 'src/app/guards/auth.guard';
+import { authGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
   {

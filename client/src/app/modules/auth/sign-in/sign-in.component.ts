@@ -5,8 +5,8 @@ import { AuthService } from '../auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { CommonService } from 'src/app/common.service';
-import { IuserInformation } from 'src/app/interfaces/interfaces';
+import { CommonService } from '../../../common.service';
+import { IuserInformation } from '../../../interfaces/interfaces';
 
 @Component({
   selector: 'app-sign-in',

@@ -3,11 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject, map, takeUntil } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from 'src/app/common.service';
 import { Store, select } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
-import { IuserRegisterData } from 'src/app/interfaces/interfaces';
-import { selectUserAuth, selectUserResetState } from 'src/app/store/userAuthSelector';
+import { CommonService } from '../../../common.service';
+import { AppState } from '../../../store/app.state';
+import { selectUserResetState } from '../../../store/userAuthSelector';
 
 @Component({
   selector: 'app-reset-password',

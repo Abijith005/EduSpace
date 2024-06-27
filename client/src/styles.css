@@ -3,8 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '~bootstrap/dist/css/bootstrap.min.css';
-@import '~bootstrap-icons/font/bootstrap-icons.css';
 
 .exo-text {
     font-family: "Exo", sans-serif;
@@ -24,7 +22,3 @@
     font-style: normal;
   }
   
-
-  .blur{
-    filter: blur(5px);
-  }

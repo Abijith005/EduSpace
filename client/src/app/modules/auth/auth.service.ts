@@ -6,12 +6,10 @@ import {
   IuserInformation,
   IuserLogin,
   IuserRegisterData,
-} from 'src/app/interfaces/interfaces';
-import { AppState } from 'src/app/store/app.state';
-import {
-  selectUserAuth,
-  selectUserResetState,
-} from 'src/app/store/userAuthSelector';
+} from '../../interfaces/interfaces';
+import { AppState } from '../../store/app.state';
+import { selectUserResetState } from '../../store/userAuthSelector';
+
 
 @Injectable({
   providedIn: 'root',

@@ -6,6 +6,8 @@ import { CategoryComponent } from './components/category/category.component';
 import { SharedModule } from '../shared/shared.module';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { NgApexchartsModule } from "ng-apexcharts";
+
 
 
 
@@ -14,10 +16,11 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     AdminNavBarComponent,
     CategoryComponent,
     AddCategoryComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    
   ],
   imports: [
-    CommonModule,AdminRoutingModule,SharedModule
+    CommonModule,AdminRoutingModule,SharedModule,NgApexchartsModule
   ]
 })
 export class AdminModule { }

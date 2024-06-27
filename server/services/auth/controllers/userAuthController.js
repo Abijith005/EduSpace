@@ -56,6 +56,7 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const { email, password, role } = req.body;
+    console.log(email,password);
     const model =
       role == "student"
         ? studentModel
@@ -177,7 +178,6 @@ export const forgotPassword = async (req, res) => {
   try {
     const { email, role } = req.body;
     const model = role == "student" ? studentModel : teacherModel;
-    console.log(role,model,'=======');
     const validate = userCredentialsValidation({ email, role });
     if (!validate.isValid) {
       return res

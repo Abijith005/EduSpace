@@ -2,12 +2,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { CommonService } from 'src/app/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
-import { resetPasswordOtp } from 'src/app/store/userAuth.actions';
-
+import { CommonService } from '../../../common.service';
+import { AppState } from '../../../store/app.state';
+import { resetPasswordOtp } from '../../../store/userAuth.actions';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
