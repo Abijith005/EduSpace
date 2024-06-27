@@ -8,7 +8,9 @@ const routes: Routes = [
   
   { path: 'student', loadChildren: () => import('./modules/student/student.module').then(module => module.StudentModule) },
 
-  {path:"admin",loadChildren:()=> import ('./modules/admin/admin.module').then(module=>module.AdminModule)}
+  {path:"admin",loadChildren:()=> import ('./modules/admin/admin.module').then(module=>module.AdminModule)},
+
+  {path:"teacher", loadChildren:()=>import('./modules/teacher/teacher.module').then(module=>module.TeacherModule)}
 ];
 
 @NgModule({

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AddCategoryComponent } from '../add-category/add-category.component';
 interface Category {
   name: string;
   instructors: number;
@@ -8,13 +7,12 @@ interface Category {
   icon: string;
   status: string;
 }
-
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
+  selector: 'app-category-management',
+  templateUrl: './category-management.component.html',
+  styleUrl: './category-management.component.css'
 })
-export class CategoryComponent {
+export class CategoryManagementComponent {
   totalPages = 10;
   currentPage = 1;
   categories: Category[] = [

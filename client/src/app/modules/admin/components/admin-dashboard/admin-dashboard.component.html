@@ -1,8 +1,7 @@
 <div class="container mx-auto py-8">
   <h1 class="text-2xl font-bold mb-4 exo-text">Dashboard</h1>
-  
 
-  <div class="grid grid-cols-5 gap-20">
+  <div class="grid grid-cols-5 gap-20 mt-10">
     <div class="bg-white rounded-lg shadow-md p-4">
       <div class="flex items-center justify-between mb-2">
         <div class="flex flex-col gap-4">
@@ -10,7 +9,7 @@
             <p class="text-4xl font-bold exo-text">4,209</p>
         </div>
         <div class="">
-            <i class="fa fa-user-graduate text-orange-500" style="font-size:40px;"
+            <i class="fa fa-user-graduate text-orange-400" style="font-size:40px;"
             ></i>
         </div>
       </div>
@@ -22,7 +21,7 @@
                 <p class="text-4xl font-bold exo-text">4,209</p>
             </div>
             <div class="">
-                <i class="fa fa-chalkboard-teacher text-orange-500" style="font-size:40px;"></i>
+                <i class="fa fa-chalkboard-teacher text-orange-400" style="font-size:40px;"></i>
             </div>
           </div>
     </div>
@@ -33,7 +32,7 @@
                 <p class="text-4xl font-bold exo-text">4,209</p>
             </div>
             <div class="">
-                <i class="fa fa-th-large text-orange-500" style="font-size:40px;"></i>
+                <i class="fa fa-th-large text-orange-400" style="font-size:40px;"></i>
             </div>
           </div>
     </div>
@@ -44,7 +43,7 @@
                 <p class="text-4xl font-bold exo-text">4,209</p>
             </div>
             <div class="">
-                <i class="fa fa-book text-orange-500 "style="font-size:40px;"></i>
+                <i class="fa fa-book text-orange-400 "style="font-size:40px;"></i>
             </div>
           </div>
     </div>
@@ -55,14 +54,14 @@
                 <p class="text-4xl font-bold exo-text">4,209</p>
             </div>
             <div class="">
-                <i class="fa fa-coins  text-orange-500" style="font-size:40px;"></i>
+                <i class="fa fa-coins  text-orange-400" style="font-size:40px;"></i>
             </div>
         </div>
     </div>
     
   </div>
 
-  <div class="flex items-center justify-between mt-8">
+  <div class="flex items-center justify-between mt-20">
     <div class="flex items-center jost-text">
       <p class="text-md font-bold">Timeframe: All-time</p>
       <select class="ml-2 rounded-md border text-sm border-gray-300 px-2 py-1">
@@ -72,13 +71,13 @@
       </select>
     </div>
     <button
-      class="ring-1 bg-white text-blue-700 font-thin py-1 text-sm px-10 rounded-lg"
+    class="rounded-md border  text-blue-600  py-1 px-10 hover:bg-blue-100 ring-1  ring-blue-600 jost-text" 
     >
     <i class="fa fa-download"></i> &nbsp;&nbsp;Download
     </button>
   </div>
 
-  <div class="grid grid-cols-2 gap-4 mt-8 m">
+  <div class="grid grid-cols-2 gap-4 mt-8 ">
     <div class="bg-white rounded-lg shadow-md p-4">
         <apx-chart
         [series]="chartOptions.series!"
