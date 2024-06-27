@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrl: './teacher-navbar.component.css'
 })
 export class TeacherNavbarComponent {
+  selectedItem=0
 
+
+  selectItem(index: number) {
+    this.selectedItem = index;
+  }
 }
