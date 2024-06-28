@@ -61,45 +61,46 @@
     </div>
   </div>
 
-  <div class="flex  flex-1" style="background: #f3f2f7">
-    <div class="flex items-center justify-between w-screen-64 p-6 fixed ml-64  z-10">
-      <div class="flex items-center">
-        <h1 class="text-2xl font-bold  exo-text">Dashboard</h1>
-      </div>
+  <div class="flex flex-1" style="background: #f3f2f7">
+    <div class="flex items-center justify-between px-6 fixed w-full z-10">
+      <div class="w-64 px-6"></div>
+      <div class="flex flex-1 justify-between pt-7 pb-0" style="background: #f3f2f7">
+        <h1 class="text-2xl font-bold mb-4 exo-text">Dashboard</h1>
+        <div class="flex items-center space-x-7 px-4">
+          <div
+            class="flex items-center px-12 space-x-10 border-r-2 border-gray-200"
+          >
+            <div class="relative">
+              <i
+                class="fas fa-comment-alt text-blue-500 rounded-full text-lg"
+              ></i>
+              <span
+                class="absolute -top-2.5 -right-3.5 p-2.5 inline-flex items-center justify-center w-4 h-4 text-xxs font-bold leading-none text-blue-100 bg-red-500 rounded-full"
+                >20</span
+              >
+            </div>
+            <div class="relative">
+              <i class="fas fa-bell text-blue-500 rounded-full text-lg"></i>
+              <span
+                class="absolute -top-2.5 -right-3.5 p-2.5 inline-flex items-center justify-center w-4 h-4 text-xxs font-bold leading-none text-blue-100 bg-red-500 rounded-full"
+                >20</span
+              >
+            </div>
+          </div>
 
-      <div class="flex items-center space-x-7">
-        <div
-          class="flex items-center px-12 space-x-10 border-r-2 border-gray-200"
-        >
-          <div class="relative">
-            <i
-              class="fas fa-comment-alt text-blue-500 rounded-full text-lg"
-            ></i>
-            <span
-              class="absolute -top-2.5 -right-3.5 p-2.5 inline-flex items-center justify-center w-4 h-4 text-xxs font-bold leading-none text-blue-100 bg-red-500 rounded-full"
-              >20</span
-            >
-          </div>
-          <div class="relative">
-            <i class="fas fa-bell text-blue-500 rounded-full text-lg"></i>
-            <span
-              class="absolute -top-2.5 -right-3.5 p-2.5 inline-flex items-center justify-center w-4 h-4 text-xxs font-bold leading-none text-blue-100 bg-red-500 rounded-full"
-              >20</span
-            >
-          </div>
+          <span class="mr-4">Samantha</span>
+          <img
+            src="https://via.placeholder.com/40"
+            alt="User Avatar"
+            class="rounded-full w-10 h-10"
+          />
         </div>
-
-        <span class="mr-4">Samantha</span>
-        <img
-          src="https://via.placeholder.com/40"
-          alt="User Avatar"
-          class="rounded-full w-10 h-10"
-        />
       </div>
     </div>
-    <!-- <div class="flex-1 overflow-y-auto p-6 mt-20 ml-64"></div> -->
-    <div class="flex-1 overflow-y-auto p-6 mt-20 ml-64">
-      <app-teacher-dash-board></app-teacher-dash-board>
+
+    <div class="flex-1 overflow-y-auto p-6 mt-6 ml-64">
+      <!-- <app-teacher-dash-board></app-teacher-dash-board> -->
+      <app-teacher-course-manage></app-teacher-course-manage>
     </div>
   </div>
 </div>

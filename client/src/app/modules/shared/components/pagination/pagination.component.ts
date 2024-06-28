@@ -12,6 +12,8 @@ export class PaginationComponent implements OnChanges {
   pages: number[] = [];
 
   ngOnChanges() {
+    console.log(this.pages);
+    
     this.updatePages();
   }
 
