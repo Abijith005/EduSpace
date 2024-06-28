@@ -1,99 +1,105 @@
 <div class="flex h-screen">
-    <div class="bg-white w-64 shadow-md p-6 rounded-lg">
-      <div class="flex items-center mb-6">
-        <img src="../../../../../assets/images/Log.ico" alt="EduSpace Logo" class="w-10 h-10 mr-2">
-        <h1 class="text-xl font-bold exo-text">EduSpace</h1>
-      </div>
-      <p class="text-gray-500 mb-6 jost-text">Teacher Panel</p>
-      <div class="flex flex-col gap-2.5 py-2 ">
-      <a [ngClass]="{'active-link':selectedItem==0}" (click)="selectItem(0)" [routerLink]="'./'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+  <div class="bg-white w-64 shadow-md p-6 rounded-lg fixed h-full">
+    <div class="flex items-center mb-6">
+      <img
+        src="../../../../../assets/images/Log.ico"
+        alt="EduSpace Logo"
+        class="w-10 h-10 mr-2"
+      />
+      <h1 class="text-xl font-bold exo-text">EduSpace</h1>
+    </div>
+    <p class="text-gray-500 mb-6 jost-text">Teacher Panel</p>
+    <div class="flex flex-col gap-2.5 py-2">
+      <a
+        [ngClass]="{ 'active-link': selectedItem == 0 }"
+        (click)="selectItem(0)"
+        [routerLink]="'./'"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
         <i class="fas fa-home mr-2"></i> Dashboard
       </a>
-      <a [ngClass]="{'active-link':selectedItem==1}" (click)="selectItem(1)" [routerLink]="'instructor_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a
+        [ngClass]="{ 'active-link': selectedItem == 1 }"
+        (click)="selectItem(1)"
+        [routerLink]="'instructor_manage'"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
         <i class="fas fa-book mr-2"></i> Courses
       </a>
-      <a [ngClass]="{'active-link':selectedItem==2}" (click)="selectItem(2)" [routerLink]="'student_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a
+        [ngClass]="{ 'active-link': selectedItem == 2 }"
+        (click)="selectItem(2)"
+        [routerLink]="'student_manage'"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
         <i class="fas fa-comments mr-2"></i> Discussions
       </a>
-      <a [ngClass]="{'active-link':selectedItem==3}" (click)="selectItem(3)" [routerLink]="'category_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a
+        [ngClass]="{ 'active-link': selectedItem == 3 }"
+        (click)="selectItem(3)"
+        [routerLink]="'category_manage'"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
         <i class="fas fa-wallet mr-2"></i> Wallet
       </a>
-      <a [ngClass]="{'active-link':selectedItem==4}" (click)="selectItem(4)" [routerLink]="'payment_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a
+        [ngClass]="{ 'active-link': selectedItem == 4 }"
+        (click)="selectItem(4)"
+        [routerLink]="'payment_manage'"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
         <i class="fas fa-user mr-2"></i> Profile
       </a>
-      <a [ngClass]="{'active-link':selectedItem==5}" (click)="selectItem(5)" [routerLink]="''" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a
+        [ngClass]="{ 'active-link': selectedItem == 5 }"
+        (click)="selectItem(5)"
+        [routerLink]="''"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
         <i class="fas fa-sign-out-alt mr-2"></i> Logout
       </a>
     </div>
-    </div>
-
-    
-    <div class="flex-1 overflow-y-auto  p-6 pt-0 " style=" background: #F3F2F7">
-      <router-outlet></router-outlet>
-    </div>
-    
   </div>
 
-
-
-  
-
-
-   <div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <div class="bg-white w-64 shadow-md p-6">
-      <div class="flex items-center mb-6">
-        <img src="../../../../../public/images/EduSpace.png" alt="EduSpace Logo" class="w-10 h-10 mr-2">
-        <h1 class="text-xl font-bold exo-text">EduSpace</h1>
+  <div class="flex  flex-1" style="background: #f3f2f7">
+    <div class="flex items-center justify-between w-screen-64 p-6 fixed ml-64  z-10">
+      <div class="flex items-center">
+        <h1 class="text-2xl font-bold  exo-text">Dashboard</h1>
       </div>
-      <p class="text-gray-500 mb-6 jost-text">Instructor Dashboard</p>
-      <div class="flex flex-col gap-2.5 py-2">
-        <a href="#" class="text-gray-700 hover:text-gray-900 flex items-center py-2 px-4 jost-text">
-          <i class="fas fa-home mr-2"></i> Dashboard
-        </a>
-        <a href="#" class="text-gray-700 hover:text-gray-900 flex items-center py-2 px-4 jost-text">
-          <i class="fas fa-book mr-2"></i> Courses
-        </a>
-        <a href="#" class="text-gray-700 hover:text-gray-900 flex items-center py-2 px-4 jost-text">
-          <i class="fas fa-comments mr-2"></i> Discussions
-        </a>
-        <a href="#" class="text-gray-700 hover:text-gray-900 flex items-center py-2 px-4 jost-text">
-          <i class="fas fa-wallet mr-2"></i> Wallet
-        </a>
-        <a href="#" class="text-gray-700 hover:text-gray-900 flex items-center py-2 px-4 jost-text">
-          <i class="fas fa-user mr-2"></i> Profile
-        </a>
-        <a href="#" class="text-gray-700 hover:text-gray-900 flex items-center py-2 px-4 jost-text">
-          <i class="fas fa-sign-out-alt mr-2"></i> Logout
-        </a>
-      </div>
-    </div>
-  
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col">
-      <!-- Top Bar -->
-      <div class="flex items-center justify-between p-6 bg-white shadow-md">
-        <div class="flex items-center space-x-4">
+
+      <div class="flex items-center space-x-7">
+        <div
+          class="flex items-center px-12 space-x-10 border-r-2 border-gray-200"
+        >
           <div class="relative">
-            <input type="text" class="border border-gray-300 rounded-lg py-2 px-4" placeholder="Search">
-            <i class="fas fa-search absolute top-2.5 right-3 text-gray-400"></i>
+            <i
+              class="fas fa-comment-alt text-blue-500 rounded-full text-lg"
+            ></i>
+            <span
+              class="absolute -top-2.5 -right-3.5 p-2.5 inline-flex items-center justify-center w-4 h-4 text-xxs font-bold leading-none text-blue-100 bg-red-500 rounded-full"
+              >20</span
+            >
           </div>
-          <div class="flex space-x-4">
-            <i class="fas fa-bell text-blue-500"></i>
-            <i class="fas fa-envelope text-blue-500"></i>
-            <i class="fas fa-cog text-pink-500"></i>
+          <div class="relative">
+            <i class="fas fa-bell text-blue-500 rounded-full text-lg"></i>
+            <span
+              class="absolute -top-2.5 -right-3.5 p-2.5 inline-flex items-center justify-center w-4 h-4 text-xxs font-bold leading-none text-blue-100 bg-red-500 rounded-full"
+              >20</span
+            >
           </div>
         </div>
-        <div class="flex items-center">
-          <span class="mr-4">Hello, Samantha</span>
-          <img src="https://via.placeholder.com/40" alt="User Avatar" class="rounded-full w-10 h-10">
-        </div>
-      </div>
-  
-      <!-- Main Content Area -->
-      <div class="flex-1 p-6">
-        <!-- Your main content goes here -->
+
+        <span class="mr-4">Samantha</span>
+        <img
+          src="https://via.placeholder.com/40"
+          alt="User Avatar"
+          class="rounded-full w-10 h-10"
+        />
       </div>
     </div>
+    <!-- <div class="flex-1 overflow-y-auto p-6 mt-20 ml-64"></div> -->
+    <div class="flex-1 overflow-y-auto p-6 mt-20 ml-64">
+      <app-teacher-dash-board></app-teacher-dash-board>
+    </div>
   </div>
-  
+</div>

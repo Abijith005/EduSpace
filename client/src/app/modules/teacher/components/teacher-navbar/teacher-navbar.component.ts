@@ -12,4 +12,6 @@ export class TeacherNavbarComponent {
   selectItem(index: number) {
     this.selectedItem = index;
   }
+
+  
 }

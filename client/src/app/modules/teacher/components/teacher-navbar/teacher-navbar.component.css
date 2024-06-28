@@ -1,3 +1,7 @@
 .active-link {
     @apply bg-green-500 hover:bg-green-600 text-white font-bold  px-4 rounded-md block mb-4;
   }
+
+  .text-xxs {
+    font-size: 0.7rem; 
+  }
