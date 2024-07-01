@@ -1,0 +1,132 @@
+ <section class="bg-gray-50 min-h-screen flex items-center justify-center">
+  <div class="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5">
+    <div class="flex flex-row h-full">
+      <div class="sm:w-1/2 sm:px-8">
+        <h2 class="font-bold text-2xl">Login</h2>
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="onSubmit()"
+          class="flex flex-col gap-2"
+        >
+          <label
+            [style.color]="
+              isSubmitted && formControls['email'].errors ? 'red' : ''
+            "
+            class="mt-8 text-gray-400 text-sm"
+            >{{
+              isSubmitted &&
+              formControls["email"].errors?.hasOwnProperty("required")
+                ? "Email required"
+                : isSubmitted &&
+                  formControls["email"].errors?.hasOwnProperty("pattern") 
+                ? "Invalid email"
+                : "Email"
+            }}</label
+          >
+          <input
+            type="text"
+            class="p-2 rounded-xl border border-gray-300 focus:ring-0"
+            formControlName="email"
+            placeholder="example@gmail.com"
+          />
+          <div>
+            <label
+              [style.color]="
+                isSubmitted && formControls['password'].errors ? 'red' : ''
+              "
+              class="mt-3 text-gray-400 text-sm"
+              >{{
+                isSubmitted &&
+                formControls["password"].errors?.hasOwnProperty("required")
+                  ? "Password required"
+                  : isSubmitted &&
+                    formControls["password"].errors?.hasOwnProperty("pattern")
+                  ? "Minimun 4 characters required"
+                  : "Password"
+              }}</label
+            >
+          </div>
+          <div class="relative">
+            <input
+              type="password"
+              class="w-full p-2 rounded-xl border border-gray-300 focus:ring-0"
+              placeholder="Password@123"
+              formControlName="password"
+              [type]="passwordVisibilty ? 'text' : 'password'"
+            />
+            <i
+              [ngClass]="passwordVisibilty ? 'bi bi-eye-slash' : 'bi bi-eye'"
+              class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"
+              (click)="showPassword()"
+            ></i>
+          </div>
+          <div class="flex items-center justify-around mt-4">
+            <button
+              type="button"
+              class="bb sm:h-8 h-6 sm:w-16 w-12"
+              [ngClass]="{ box: role === 'student' }"
+              (click)="selectRole('student')"
+            >
+              <h3 class="font-bold text-center text-sm">USER</h3>
+            </button>
+            <button
+              type="button"
+              class="bb sm:h-8 h-6 sm:w-16 w-12 "
+              (click)="selectRole('teacher')"
+              [ngClass]="{ box: role === 'teacher' }"
+            >
+              <h3 class="font-bold text-center text-sm ">TEACHER</h3>
+            </button>
+            <button
+              type="button"
+              class="bb sm:h-8 h-6 sm:w-16 w-12"
+              [ngClass]="{ box: role === 'admin' }"
+              (click)="selectRole('admin')"
+            >
+              <h3 class="font-bold text-center sm:text-sm text-xs">ADMIN</h3>
+            </button>
+          </div>
+          <button
+            class="bg-[#002D74] text-white rounded-xl py-2 hover:scale-105 duration-300 mt-4"
+          >
+            Login
+          </button>
+        </form>
+
+        <div
+          class="mt-3 text-gray-400 grid grid-cols-3 items-center justify-center"
+        >
+          <hr class="border-gray-400" />
+          <p class="text-center text-sm">OR</p>
+          <hr class="border-gray-400" />
+        </div>
+
+        <div class="mt-2">
+          <asl-google-signin-button data-click_listener="signInWithGoogle()" type='standard' shape="circle" text="signin_with" size='medium' class="flex text-sm items-center justify-center border py-2 w-full rounded-xl hover:scale-105 duration-300"></asl-google-signin-button>
+        </div>
+
+        <div class="text-xs mt-2 border-b border-gray-400 py-3.5">
+          <a [routerLink]="'../forgotPassword'">Forgot password ?</a>
+        </div>
+
+        <div class="mt-3 text-xs flex justify-between items-center">
+          <p>If you don'thave account</p>
+          <button
+            type="button"
+            class="py-2 px-4 rounded-xl border hover:scale-110 duration-300 bg-white"
+            [routerLink]="'../signUp'"
+          >
+            Register
+          </button>
+        </div>
+      </div>
+      <div class="sm:w-1/2 sm:block hidden">
+        <img
+          class="rounded-2xl h-full object-cover "
+          src="images/EduSpaceLogin.jpeg"
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
+</section>

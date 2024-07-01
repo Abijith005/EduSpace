@@ -1,108 +1,191 @@
-<div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center mt-12">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <div class="flex items-center mb-8">
-            <img class="w-16 h-16 rounded-full mr-4" src="https://via.placeholder.com/150" alt="Avatar">
-            <div>
-                <h2 class="text-xl font-bold">Samantha</h2>
-                <p class="text-gray-600">alexarawlesgmail.com</p>
-            </div>
-        </div>
-        <form>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-gray-700">Full Name</label>
-                    <input type="text" placeholder="Your First Name" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
-                </div>
-                <div>
-                    <label class="block text-gray-700">Nick Name</label>
-                    <input type="text" placeholder="Your First Name" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
-                </div>
-                <div>
-                    <label class="block text-gray-700">Gender</label>
-                    <select class="w-full mt-2 p-2 border border-gray-300 rounded-md">
-                        <option>Your First Name</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Country</label>
-                    <input type="text" placeholder="Your First Name" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
-                </div>
-                <div>
-                    <label class="block text-gray-700">Language</label>
-                    <select class="w-full mt-2 p-2 border border-gray-300 rounded-md">
-                        <option>Your First Name</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Qualifications</label>
-                    <input type="text" placeholder="Your First Name" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
-                </div>
-                <div class="col-span-2">
-                    <label class="block text-gray-700">Email Address</label>
-                    <div class="flex items-center mt-2 p-2 border border-gray-300 rounded-md">
-                        <i class="fas fa-envelope text-blue-500 mr-2"></i>
-                        <span>alexarawlesgmail.com</span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-end mt-8">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Update</button>
-            </div>
-        </form>
-    </div>
-
-    
-        <div class="mt-10 w-full max-w-4xl">
-            <div class="flex justify-between">
-                <h2 class="text-xl font-bold mb-4">Certificates</h2>
-                <button
-  class="rounded-md border text-blue-600 px-1 py-0.5 hover:bg-blue-100 ring-1 ring-blue-600 jost-text text-xs leading-none"
+<div
+  class="max-h-screen bg-gray-100 flex flex-col items-center justify-center mt-12"
 >
-  <i class="fas fa-upload" style="font-size: 0.1rem;"></i>
-  &nbsp;&nbsp;Upload
-</button>
-
-            </div>
-        <div class="grid grid-cols-3 gap-4 mt-4">
-          <div class="flex flex-col items-center">
-            <div class="border rounded-lg p-4 flex flex-col items-center">
-              <svg class="h-16 w-16 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-4H8V8h5v2z"/>
-              </svg>
-              <span class="mt-2 text-sm font-medium">Samantha_B.E Certificate</span>
-              <span class="text-green-500 mt-1">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="border rounded-lg p-4 flex flex-col items-center">
-              <svg class="h-16 w-16 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-4H8V8h5v2z"/>
-              </svg>
-              <span class="mt-2 text-sm font-medium">Samantha_CA Certificate</span>
-              <span class="text-green-500 mt-1">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="border rounded-lg p-4 flex flex-col items-center">
-              <svg class="h-16 w-16 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-4H8V8h5v2z"/>
-              </svg>
-              <span class="mt-2 text-sm font-medium">Samantha_CA Certificate</span>
-            </div>
-          </div>
-        </div>
-        <div class="mt-4 flex justify-end">
-          <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Upload Certificates</button>
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+    <div class="flex items-center mb-8 justify-between">
+      <div class="flex items-center">
+        <img
+          class="w-16 h-16 rounded-full mr-4"
+          src="https://via.placeholder.com/150"
+          alt="Avatar"
+        />
+        <div>
+          <h2 class="text-xl font-bold">Samantha</h2>
+          <p class="text-gray-600">alexarawlesgmail.com</p>
         </div>
       </div>
-      
+      <button
+        type="submit"
+        class="bg-blue-700 text-white px-4 py-1.5 rounded-md ring-1 text-sm"
+      >
+        Update
+      </button>
+    </div>
+    <form>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm">Name</label>
+          <input
+            type="text"
+            placeholder="Your  Name"
+            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+          />
+        </div>
+
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm"
+            >Qualification</label
+          >
+          <input
+            type="text"
+            placeholder="Your Highest Qualification"
+            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+          />
+        </div>
+
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm"
+            >Nick Name</label
+          >
+          <input
+            type="text"
+            placeholder="Your Nick Name"
+            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm">Gender</label>
+          <select
+            class="w-full mt-2 p-2 bg-gray-50 pace text-sm border-none rounded-lg"
+            placeholder="Select Gender"
+          >
+            <option>Your Gender</option>
+            <option>Your Gender</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm"
+            >Country</label
+          >
+          <input
+            type="text"
+            placeholder="Your Country"
+            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm"
+            >Language</label
+          >
+          <select
+            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+          >
+            <option>Your Language</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="mt-10 bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+    <div class="flex justify-between">
+      <h2 class="text-xl font-bold mb-4">Certificates</h2>
+      <button
+        data-modal-target="crud-modal"
+        data-modal-toggle="crud-modal"
+        (click)="openModal()"
+        class="rounded-md border text-blue-600 h-6 px-4 py-0.5 hover:bg-blue-100 ring-1 ring-blue-600 jost-text text-xs leading-none"
+      >
+        <i class="fas fa-upload mr-2"></i>
+        Verify Certificates
+      </button>
+    </div>
+    <div class="grid grid-cols-3 gap-4 mt-4">
+      <div class="flex flex-col items-center">
+        <div class="border rounded-lg p-4 flex flex-col items-center">
+          <svg
+            class="h-16 w-16 text-red-500"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-4H8V8h5v2z"
+            />
+          </svg>
+          <span class="mt-2 text-sm font-medium">Samantha_B.E Certificate</span>
+          <span class="text-green-500 mt-1">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="border rounded-lg p-4 flex flex-col items-center">
+          <svg
+            class="h-16 w-16 text-red-500"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-4H8V8h5v2z"
+            />
+          </svg>
+          <span class="mt-2 text-sm font-medium">Samantha_CA Certificate</span>
+          <span class="text-green-500 mt-1">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="border rounded-lg p-4 flex flex-col items-center">
+          <svg
+            class="h-16 w-16 text-red-500"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-4H8V8h5v2z"
+            />
+          </svg>
+          <span class="mt-2 text-sm font-medium">Samantha_CA Certificate</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div
+  *ngIf="isVisible$ | async"
+  id="crud-modal"
+  tabindex="-1"
+  data-modal-backdrop="static"
+  aria-hidden="true"
+  class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60"
+>
+  <app-upload-certificates
+    (modalClosed)="closeModal()"
+  ></app-upload-certificates>
+</div>

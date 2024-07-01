@@ -10,6 +10,7 @@ import { InstructorManagementComponent } from './components/instructor-managemen
 import { CategoryManagementComponent } from './components/category-management/category-management.component';
 import { PaymentManagemetComponent } from './components/payment-managemet/payment-managemet.component';
 import { StudentManagementComponent } from './components/student-management/student-management.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -26,7 +27,7 @@ import { StudentManagementComponent } from './components/student-management/stud
     
   ],
   imports: [
-    CommonModule,AdminRoutingModule,SharedModule,NgApexchartsModule
+    CommonModule,AdminRoutingModule,SharedModule,NgApexchartsModule,FormsModule,ReactiveFormsModule
   ]
 })
 export class AdminModule { }

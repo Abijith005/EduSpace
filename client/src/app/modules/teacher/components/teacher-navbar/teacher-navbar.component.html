@@ -2,7 +2,7 @@
   <div class="bg-white w-64 shadow-md p-6 rounded-lg fixed h-full">
     <div class="flex items-center mb-6">
       <img
-        src="../../../../../assets/images/Log.ico"
+        src="images/Log.ico"
         alt="EduSpace Logo"
         class="w-10 h-10 mr-2"
       />
@@ -21,7 +21,7 @@
       <a
         [ngClass]="{ 'active-link': selectedItem == 1 }"
         (click)="selectItem(1)"
-        [routerLink]="'instructor_manage'"
+        [routerLink]="'course_manage'"
         class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
       >
         <i class="fas fa-book mr-2"></i> Courses
@@ -29,7 +29,7 @@
       <a
         [ngClass]="{ 'active-link': selectedItem == 2 }"
         (click)="selectItem(2)"
-        [routerLink]="'student_manage'"
+        [routerLink]="'discussions'"
         class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
       >
         <i class="fas fa-comments mr-2"></i> Discussions
@@ -37,7 +37,7 @@
       <a
         [ngClass]="{ 'active-link': selectedItem == 3 }"
         (click)="selectItem(3)"
-        [routerLink]="'category_manage'"
+        [routerLink]="'wallet_manage'"
         class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
       >
         <i class="fas fa-wallet mr-2"></i> Wallet
@@ -45,7 +45,7 @@
       <a
         [ngClass]="{ 'active-link': selectedItem == 4 }"
         (click)="selectItem(4)"
-        [routerLink]="'payment_manage'"
+        [routerLink]="'profile_manage'"
         class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
       >
         <i class="fas fa-user mr-2"></i> Profile
@@ -99,9 +99,7 @@
     </div>
 
     <div class="flex-1 overflow-y-auto p-6 mt-6 ml-64">
-      <!-- <app-teacher-dash-board></app-teacher-dash-board> -->
-      <!-- <app-teacher-course-manage></app-teacher-course-manage> -->
-      <app-teacher-profile></app-teacher-profile>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

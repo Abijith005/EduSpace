@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ModalService } from '../../../shared/modal.service';
 interface Category {
   name: string;
   instructors: number;
@@ -10,9 +11,10 @@ interface Category {
 @Component({
   selector: 'app-category-management',
   templateUrl: './category-management.component.html',
-  styleUrl: './category-management.component.css'
+  styleUrl: './category-management.component.css',
 })
 export class CategoryManagementComponent {
+  isVisible$ = this._modalService.isVisible$;
   totalPages = 10;
   currentPage = 1;
   categories: Category[] = [
@@ -22,7 +24,7 @@ export class CategoryManagementComponent {
       students: 100,
       courses: 100,
       icon: '📷',
-      status: 'Active'
+      status: 'Active',
     },
     {
       name: 'Videography',
@@ -30,7 +32,7 @@ export class CategoryManagementComponent {
       students: 100,
       courses: 100,
       icon: '🎥',
-      status: 'Blocked'
+      status: 'Blocked',
     },
     {
       name: 'Web Design',
@@ -38,7 +40,7 @@ export class CategoryManagementComponent {
       students: 77,
       courses: 77,
       icon: '💻',
-      status: 'Blocked'
+      status: 'Blocked',
     },
     {
       name: 'Digital Marketing',
@@ -46,7 +48,7 @@ export class CategoryManagementComponent {
       students: 6,
       courses: 6,
       icon: '📈',
-      status: 'Active'
+      status: 'Active',
     },
     {
       name: 'Jerome Bell',
@@ -54,7 +56,7 @@ export class CategoryManagementComponent {
       students: 85,
       courses: 85,
       icon: '👨‍🏫',
-      status: 'Active'
+      status: 'Active',
     },
     {
       name: 'Kathryn Murphy',
@@ -62,7 +64,7 @@ export class CategoryManagementComponent {
       students: 12,
       courses: 12,
       icon: '👩‍🏫',
-      status: 'Active'
+      status: 'Active',
     },
     {
       name: 'Jacob Jones',
@@ -70,7 +72,7 @@ export class CategoryManagementComponent {
       students: 0,
       courses: 0,
       icon: '👨‍🏫',
-      status: 'Active'
+      status: 'Active',
     },
     {
       name: 'Kristin Watson',
@@ -78,13 +80,19 @@ export class CategoryManagementComponent {
       students: 7,
       courses: 7,
       icon: '👩‍🏫',
-      status: 'Blocked'
-    }
+      status: 'Blocked',
+    },
   ];
 
-  constructor() { }
+  constructor(private _modalService: ModalService) {}
 
- 
+  openModal() {
+    this._modalService.openModal();
+  }
+
+  closeModal() {
+    this._modalService.closeModal();
+  }
 
   onPageChanged(page: number) {
     this.currentPage = page;

@@ -1,0 +1,254 @@
+<section
+  class="min-h-screen flex items-center justify-center bg-gray-50"
+  *ngIf="!otp; else elseBlock"
+>
+  <div class="flex max-w-3xl p-3 shadow-lg bg-gray-100 rounded-2xl">
+    <div class="w-1/2 sm:block hidden">
+      <img
+        class="rounded-2xl object-cover min-h-[632px]"
+        src="images/EduSpaceSignUp.jpeg"
+        alt=""
+      />
+    </div>
+
+    <div class="sm:w-1/2 sm:px-5">
+      <h2 class="font-bold text-2xl">Register</h2>
+
+      <form
+        class="flex flex-col gap-2 text-sm"
+        [formGroup]="registerForm"
+        (ngSubmit)="sentOtp()"
+      >
+        <label
+          [style.color]="
+            isSubmitted && formControls['name'].errors ? 'red' : ''
+          "
+          class="mt-3 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["name"].errors?.hasOwnProperty("required")
+              ? "Name required"
+              : "Name"
+          }}</label
+        >
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="Jhon Lops"
+          class="rounded-xl p-2 border-gray-300 focus:ring-0"
+        />
+
+        <label
+          [style.color]="
+            isSubmitted && formControls['email'].errors ? 'red' : ''
+          "
+          class="mt-1 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["email"].errors?.hasOwnProperty("required")
+              ? "Email required"
+              : isSubmitted &&
+                formControls["email"].errors?.hasOwnProperty("pattern")
+              ? "Invalid email"
+              : "Email"
+          }}</label
+        >
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="example@gmail.com"
+          class="rounded-xl p-2 border-gray-300 focus:ring-0"
+        />
+
+        <label
+  [style.color]="isSubmitted && formControls['role'].errors ? 'red' : ''"
+  class="mt-1 text-gray-400 text-sm"
+>
+  {{
+    isSubmitted && formControls['role'].errors?.hasOwnProperty('required')
+      ? 'Role is required'
+      : 'Role'
+  }}
+</label>
+<select
+  formControlName="role"
+  class="rounded-xl p-2 mt-1 text-gray-400 text-sm bg-white border-gray-300 focus:ring-0"
+>
+  <option value="" disabled selected>Select your role</option>
+  <option *ngFor="let rolle of roles" [value]="rolle">{{ rolle }}</option>
+
+</select>
+
+        <label
+          [style.color]="
+            isSubmitted && formControls['password'].errors ? 'red' : ''
+          "
+          class="mt-1 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["password"].errors?.hasOwnProperty("required")
+              ? "Password required"
+              : isSubmitted &&
+                formControls["password"].errors?.hasOwnProperty("pattern")
+              ? "Minimun 4 characters required"
+              : "Password"
+          }}</label
+        >
+        <input
+          type="text"
+          formControlName="password"
+          placeholder="Password@123"
+          class="p-2 rounded-xl border-gray-300 focus:ring-0"
+        />
+
+        <label
+          [style.color]="
+            isSubmitted && formControls['confirmPassword'].errors ? 'red' : ''
+          "
+          class="mt-1 text-gray-400 text-sm"
+          >{{
+            isSubmitted &&
+            formControls["confirmPassword"].errors?.hasOwnProperty("required")
+              ? "Confirm password required"
+              : isSubmitted &&
+                formControls["confirmPassword"].errors?.hasOwnProperty("match")
+              ? "Password not matching"
+              : "Confirm password"
+          }}</label
+        >
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Password@123"
+          class="p-2 rounded-xl border-gray-300 focus:ring-0"
+        />
+        <button
+          class="bg-[#002D74] text-white rounded-xl py-2 mt-3 hover:scale-105 duration-300"
+        >
+          Register
+        </button>
+      </form>
+
+      <div
+        class="mt-2 text-gray-400 grid grid-cols-3 items-center justify-center"
+      >
+        <hr class="border-gray-400" />
+        <p class="text-sm text-center">OR</p>
+        <hr class="border-gray-400" />
+      </div>
+
+      <div class="mt-2">        
+        <asl-google-signin-button data-click_listener="signInWithGoogle()" type='standard' shape="circle" text="signup_with" size='medium' class="flex text-sm items-center justify-center border py-2 w-full rounded-xl hover:scale-105 duration-300"></asl-google-signin-button>
+ 
+      </div>
+      <div class="mt-4">
+        <hr />
+      </div>
+      <div class="flex text-xs mt-1.5 justify-between items-center">
+        <p>If you have account</p>
+        <button
+          class="py-2 px-8 border rounded-xl text-xs hover:scale-110 duration-300"
+          [routerLink]="'../signIn'"
+        >
+          Login
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+<ng-template #elseBlock>
+  <div
+    class="relative flex min-h-screen flex-col justify-center overflow-hidden shadow-lg bg-gray-100 py-12"
+  >
+    <div
+      class="relative mx-auto w-full max-w-md flex-col space-y-16 p-8 bg-white rounded-2xl shadow-lg"
+    >
+      <div
+        class="flex flex-col items-center justify-center space-y-1 text-center"
+        >
+        <h1 class="font-bold text-3xl pb-2">Verify OTP</h1>
+      <div class="text-3xl font-semibold">
+          <i class="bi bi-shield-fill-check text-blue-500 text-3xl"></i>
+        </div>
+        <div class="flex flex-row text-sm font-medium text-gray-400 ">
+          <p>Please enter OTP sent to email {{ email }}</p>
+        </div>
+      </div>
+      <div>
+        <form #form="ngForm" class="mt-5"  (ngSubmit)="onSubmit(form)">
+          <div class="flex flex-col space-y-16">
+            <div
+              class="mx-auto flex w-full max-w-xs flex-row items-center justify-between"
+            >
+              <div class="h-16 w-16">
+                <input
+                [(ngModel)]="text1"
+                  type="text"
+                  #txt1
+                  maxlength="1"
+                  name="text1"
+                  (keyup)="cursorChange($event, '', txt1, txt2)"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+              <div class="h-16 w-16">
+                <input
+                [(ngModel)]="text2"
+                  type="text"
+                  #txt2
+                  maxlength="1"
+                  name="text2"
+                  (keyup)="cursorChange($event, txt1, txt2, txt3)"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+              <div class="h-16 w-16">
+                <input
+                [(ngModel)]="text3"
+                  type="text"
+                  #txt3
+                  maxlength="1"
+                  name="text3"
+                  (keyup)="cursorChange($event, txt2, txt3, txt4)"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+              <div class="h-16 w-16">
+                <input
+                [(ngModel)]="text4"
+                  type="text"
+                  #txt4
+                  maxlength="1"
+                  name="text4"
+                  (keyup)="cursorChange($event, txt3, txt4, '')"
+                  class="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-center text-lg outline-none ring-blue-700 focus:bg-gray-50 focus:ring-1 shadow-md"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col space-y-5">
+              <div>
+                <button
+                  class="flex w-full flex-row items-center justify-center rounded-xl border border-none bg-blue-700 py-3 text-center text-sm text-white shadow-sm outline-none"
+                  type="submit"
+                >
+                   Submit
+                </button>
+              </div>
+              <div 
+                class="flex flex-row items-center justify-center space-x-1 text-center text-sm font-medium text-gray-500"
+              >
+                <p>Didn't receive OTP ?</p>
+                <p class="flex flex-row items-center text-blue-600 cursor-pointer"
+                (click)="sentOtp()"
+                *ngIf="resendOtp;else countDown"
+                  >Resend</p>
+                <ng-template #countDown><strong> {{timer}}</strong></ng-template>
+                
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

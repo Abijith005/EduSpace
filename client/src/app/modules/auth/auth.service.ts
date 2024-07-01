@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  IgenreralResponse,
-  IuserInformation,
   IuserLogin,
-  IuserRegisterData,
-} from '../../interfaces/interfaces';
+} from '../../interfaces/userLogin';
 import { AppState } from '../../store/app.state';
 import { selectUserResetState } from '../../store/userAuthSelector';
+import { IgenreralResponse } from '../../interfaces/generalResponse';
+import { IuserRegisterData } from '../../interfaces/userRegisterData';
+import { IuserInformation } from '../../interfaces/userInformation';
 
 
 @Injectable({

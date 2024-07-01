@@ -8,6 +8,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { TeacherCourseManageComponent } from './components/teacher-course-manage/teacher-course-manage.component';
 import { SharedModule } from '../shared/shared.module';
 import { TeacherProfileComponent } from './components/teacher-profile/teacher-profile.component';
+import { UploadCertificatesComponent } from './components/upload-certificates/upload-certificates.component';
+import { TeacherPaymentComponent } from './components/teacher-payment/teacher-payment.component';
 
 
 
@@ -16,7 +18,9 @@ import { TeacherProfileComponent } from './components/teacher-profile/teacher-pr
     TeacherNavbarComponent,
     TeacherDashBoardComponent,
     TeacherCourseManageComponent,
-    TeacherProfileComponent
+    TeacherProfileComponent,
+    UploadCertificatesComponent,
+    TeacherPaymentComponent
   ],
   imports: [
     CommonModule,TeacherRoutingModule,FormsModule,ReactiveFormsModule,NgApexchartsModule,SharedModule

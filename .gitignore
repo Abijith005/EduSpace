@@ -1,9 +1,14 @@
-server/user/.env
-server/user/node_modules
-server/auth/.env
-server/auth/node_modules
+server/service/auth/.env
+server/service/auth/node_modules
+server/service/student/.env
+server/service/student/node_modules
+/server/service/teacher/.env
+/server/service/teacher/node_modules
+server/service/admin/.env
+server/service/admin/node_modules
 server/apiGateway/.env
 server/apiGateway/node_modules
+
 
 
 client/node_modules
