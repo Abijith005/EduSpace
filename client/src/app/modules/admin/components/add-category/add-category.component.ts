@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AdminService } from '../../admin.service';
 import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AddCategoryComponent implements OnInit, OnDestroy {
   public categoryForm: FormGroup = new FormGroup({});
   private _ngUnsubscribe = new Subject<void>();
-
+  @Output() modalClosed = new EventEmitter();
   constructor(private _adminService: AdminService, private _fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -36,6 +36,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         console.log(res);
       });
+  }
+
+  closeModal() {
+    this.modalClosed.emit();
   }
 
   ngOnDestroy(): void {

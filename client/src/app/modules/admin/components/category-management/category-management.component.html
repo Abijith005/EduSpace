@@ -35,8 +35,7 @@
       </div>
 
       <button
-        data-modal-target="crud-modal"
-        data-modal-toggle="crud-modal"
+        (click)="openModal()"
         class="rounded-md border text-blue-600 px-4 py-0.5 hover:bg-blue-100 ring-1 ring-blue-600 jost-text"
       >
         Add Category
@@ -127,24 +126,12 @@
     </div>
   </div>
 
-  <div
-    id="crud-modal"
-    tabindex="-1"
-    data-modal-backdrop="static"
-    aria-hidden="true"
-    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 centtext-center-0 z-50 justify-center items-center w-full md:inset-0  max-h-full"
-  >
-    <app-add-category></app-add-category>
-  </div>
+
   
-  <!-- <div
+  <div
   *ngIf="isVisible$ | async"
-  id="crud-modal"
-  tabindex="-1"
-  data-modal-backdrop="static"
-  aria-hidden="true"
   class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60"
   >
   <app-add-category  (modalClosed)="closeModal()"></app-add-category>
-</div> -->
+</div>
 </div>
