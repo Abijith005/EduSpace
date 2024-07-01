@@ -11,6 +11,7 @@ export class CommonService {
       duration: 2000,
       detail: message,
       position: 'topCenter',
+      
     });
   }
   showError(message: string) {

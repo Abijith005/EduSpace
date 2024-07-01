@@ -5,7 +5,7 @@
   <div class="flex max-w-3xl p-3 shadow-lg bg-gray-100 rounded-2xl">
     <div class="w-1/2 sm:block hidden">
       <img
-        class="rounded-2xl object-cover min-h-[632px]"
+        class="rounded-2xl object-cover min-h-[600px]"
         src="images/EduSpaceSignUp.jpeg"
         alt=""
       />
@@ -35,7 +35,7 @@
           type="text"
           formControlName="name"
           placeholder="Jhon Lops"
-          class="rounded-xl p-2 border-gray-300 focus:ring-0"
+          class="rounded-xl p-2 border-gray-200 focus:ring-0"
         />
 
         <label
@@ -57,28 +57,8 @@
           type="email"
           formControlName="email"
           placeholder="example@gmail.com"
-          class="rounded-xl p-2 border-gray-300 focus:ring-0"
+          class="rounded-xl p-2 border-gray-200 focus:ring-0"
         />
-
-        <label
-  [style.color]="isSubmitted && formControls['role'].errors ? 'red' : ''"
-  class="mt-1 text-gray-400 text-sm"
->
-  {{
-    isSubmitted && formControls['role'].errors?.hasOwnProperty('required')
-      ? 'Role is required'
-      : 'Role'
-  }}
-</label>
-<select
-  formControlName="role"
-  class="rounded-xl p-2 mt-1 text-gray-400 text-sm bg-white border-gray-300 focus:ring-0"
->
-  <option value="" disabled selected>Select your role</option>
-  <option *ngFor="let rolle of roles" [value]="rolle">{{ rolle }}</option>
-
-</select>
-
         <label
           [style.color]="
             isSubmitted && formControls['password'].errors ? 'red' : ''
@@ -98,7 +78,7 @@
           type="text"
           formControlName="password"
           placeholder="Password@123"
-          class="p-2 rounded-xl border-gray-300 focus:ring-0"
+          class="p-2 rounded-xl border-gray-200 focus:ring-0"
         />
 
         <label
@@ -120,8 +100,36 @@
           type="password"
           formControlName="confirmPassword"
           placeholder="Password@123"
-          class="p-2 rounded-xl border-gray-300 focus:ring-0"
+          class="p-2 rounded-xl border-gray-200 focus:ring-0"
         />
+
+        <div class="flex items-center justify-around mt-4">
+          <button
+            type="button"
+            class="bb sm:h-8 h-6 sm:w-16 w-12"
+            [ngClass]="{ box: role === 'student' }"
+            (click)="selectRole('student')"
+          >
+            <h3 class="font-bold text-center text-xxs">STUDENT</h3>
+          </button>
+          <button
+            type="button"
+            class="bb sm:h-8 h-6 sm:w-16 w-12 text-xxs"
+            (click)="selectRole('teacher')"
+            [ngClass]="{ box: role === 'teacher' }"
+          >
+            <h3 class="font-bold text-center text-xxs ">TEACHER</h3>
+          </button>
+          <button
+            type="button"
+            class="bb sm:h-8 h-6 sm:w-16 w-12"
+            [ngClass]="{ box: role === 'admin' }"
+            (click)="selectRole('admin')"
+          >
+            <h3 class="font-bold text-center sm:text-sm text-xxs">ADMIN</h3>
+          </button>
+        </div>
+
         <button
           class="bg-[#002D74] text-white rounded-xl py-2 mt-3 hover:scale-105 duration-300"
         >
@@ -137,8 +145,8 @@
         <hr class="border-gray-400" />
       </div>
 
-      <div class="mt-2">        
-        <asl-google-signin-button data-click_listener="signInWithGoogle()" type='standard' shape="circle" text="signup_with" size='medium' class="flex text-sm items-center justify-center border py-2 w-full rounded-xl hover:scale-105 duration-300"></asl-google-signin-button>
+      <div class="mt-2 flex justify-center">        
+        <asl-google-signin-button data-click_listener="signInWithGoogle()" type='standard' shape="rectangular" text="signup_with" size='medium' class="py-1"></asl-google-signin-button>
  
       </div>
       <div class="mt-4">
@@ -147,7 +155,7 @@
       <div class="flex text-xs mt-1.5 justify-between items-center">
         <p>If you have account</p>
         <button
-          class="py-2 px-8 border rounded-xl text-xs hover:scale-110 duration-300"
+          class="py-2 px-8 border bg-white rounded-xl text-xs hover:scale-110 duration-300"
           [routerLink]="'../signIn'"
         >
           Login

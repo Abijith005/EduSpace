@@ -3,6 +3,7 @@ export interface AppState {
     name: string;
     email: string;
     profilePic: string;
+    role:string
   };
   resetPassword:{
     email:string,

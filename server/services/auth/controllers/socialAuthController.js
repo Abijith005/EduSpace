@@ -1,17 +1,19 @@
 import { userCredentialsValidation } from "../helpers/inputValidations.js";
 import { createAccessToken, createRefreshToken } from "../helpers/jwtSign.js";
 import studentModel from "../models/studentModel.js";
+import teacherModel from "../models/teacherModel.js";
 
 export const userSocialLogin = async (req, res) => {
   try {
-    const { name, email, profilePic,socialId } = req.body;
+    const { name, email, profilePic,socialId,role } = req.body;
     const validate = userCredentialsValidation({ name, email, profilePic,socialId });
     if (!validate.isValid) {
       return res
         .status(400)
         .json({ success: false, message: validate.message });
     }
-    let user = await studentModel.findOne({ email: email });
+    const model = role == "student" ? studentModel : teacherModel;
+    let user = await model.findOne({ email: email });
     if (user&&!user.socialId) {
       return res
         .status(409)
@@ -19,7 +21,7 @@ export const userSocialLogin = async (req, res) => {
     }
     let message="Login successfull"
     if (!user) {
-      user = await studentModel.create({ name, email, profilePic,socialId });
+      user = await model.create({ name, email, profilePic,socialId });
       message="User registration successfull"
     }
     const refreshToken = createRefreshToken({
@@ -37,6 +39,7 @@ export const userSocialLogin = async (req, res) => {
       message,
       accessToken,
       refreshToken,
+      userInfo:{name:user.name,email:user.email,profilePic:user.profilePic,role:role}
     });
   } catch (error) {
     console.log("Error \n", error);

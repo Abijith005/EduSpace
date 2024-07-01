@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CommonService } from '../../../../common.service';
+import { CommonService } from '../../../shared/toaster.service';
 import { AppState } from '../../../../store/app.state';
 import { resetPasswordOtp } from '../../../../store/userAuth.actions';
 @Component({

@@ -4,7 +4,7 @@ import { Observable, Subject, map, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AuthService } from '../../auth.service';
-import { CommonService } from '../../../../common.service';
+import { CommonService } from '../../../shared/toaster.service';
 import { AppState } from '../../../../store/app.state';
 import { selectUserResetState } from '../../../../store/userAuthSelector';
 
@@ -65,7 +65,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res.success) {
           this._commonSerivce.showSuccess(res.message);
-          this._router.navigate(['../../signIn'], {
+          this._router.navigate(['../../'], {
             relativeTo: this._activatedRoute,
             replaceUrl: true,
           });

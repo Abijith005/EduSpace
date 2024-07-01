@@ -1,20 +1,44 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { studentAuthGuard } from './guards/student-auth.guard';
 
 const routes: Routes = [
-  {path:'',pathMatch:'full',redirectTo:'auth'},
+  { path: '', pathMatch: 'full', redirectTo: 'auth' },
 
-  {path:'auth',loadChildren:()=>import('./modules/auth/auth.module').then(module=>module.AuthModule)},
-  
-  { path: 'student', loadChildren: () => import('./modules/student/student.module').then(module => module.StudentModule) },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./modules/auth/auth.module').then((module) => module.AuthModule),
+  },
 
-  {path:"admin",loadChildren:()=> import ('./modules/admin/admin.module').then(module=>module.AdminModule)},
+  {
+    path: 'student',
+    loadChildren: () =>
+      import('./modules/student/student.module').then(
+        (module) => module.StudentModule
+      ),
+    canActivate: [studentAuthGuard],
+  },
 
-  {path:"teacher", loadChildren:()=>import('./modules/teacher/teacher.module').then(module=>module.TeacherModule)}
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./modules/admin/admin.module').then(
+        (module) => module.AdminModule
+      ),
+  },
+
+  {
+    path: 'teacher',
+    loadChildren: () =>
+      import('./modules/teacher/teacher.module').then(
+        (module) => module.TeacherModule
+      ),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

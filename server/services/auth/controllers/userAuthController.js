@@ -56,14 +56,13 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    console.log(email,password);
+    console.log(email, password);
     const model =
       role == "student"
         ? studentModel
         : role == "teacher"
         ? teacherModel
         : adminModel;
-        console.log(role,'\n\n\n\n',model);
     const validate = userCredentialsValidation({ email, password });
     if (!validate.isValid) {
       return res
@@ -72,8 +71,10 @@ export const userLogin = async (req, res) => {
     }
 
     const user = await model.findOne({ email: email });
-
     if (user) {
+      if (user.socialId) {
+        return res.status(409).json({success:false,message:"Please login with Google"})
+      }
       const verifyPassword = await bcrypt.compare(password, user.password);
       if (verifyPassword) {
         const refreshToken = createRefreshToken({
@@ -91,6 +92,7 @@ export const userLogin = async (req, res) => {
           message: "Login successfull",
           accessToken,
           refreshToken,
+          userInfo:{name:user.name,email:user.email,profilePic:user.profilePic,role:role}
         });
       } else {
         return res
@@ -113,9 +115,7 @@ export const userLogin = async (req, res) => {
 export const userRegistrationOtp = async (req, res) => {
   try {
     const { email, role } = req.body;
-    console.log(role);
     const model = role == "student" ? studentModel : teacherModel;
-    console.log(model, role);
     const user = await model.findOne({ email: email });
     console.log(user);
     if (user) {
@@ -186,10 +186,12 @@ export const forgotPassword = async (req, res) => {
     }
 
     const user = await model.findOne({ email: email });
-    if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Email not found" });
+
+    if (!user || user?.socialId) {
+      const message = user?.socialId
+        ? "Please login with Google"
+        : "Email not found";
+      return res.status(401).json({ success: false, message });
     } else {
       const otp = await generateOtp();
       const data = await otpModel.findOne({

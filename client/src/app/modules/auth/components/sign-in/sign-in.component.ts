@@ -4,9 +4,15 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { CommonService } from '../../../../common.service';
+import {
+  GoogleLoginProvider,
+  SocialAuthService,
+} from '@abacritt/angularx-social-login';
+import { CommonService } from '../../../shared/toaster.service';
 import { IuserInformation } from '../../../../interfaces/userInformation';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../store/app.state';
+import { userLogin } from '../../../../store/userAuth.actions';
 
 @Component({
   selector: 'app-sign-in',
@@ -29,7 +35,8 @@ export class SignInComponent implements OnInit, OnDestroy {
     private _ngToaster: NgToastService,
     private _router: Router,
     private _toasterService: CommonService,
-    private _socialAuthService: SocialAuthService
+    private _socialAuthService: SocialAuthService,
+    private _store:Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -44,21 +51,28 @@ export class SignInComponent implements OnInit, OnDestroy {
       password: ['', [Validators.required, Validators.pattern(/^.{4,}$/)]],
     });
 
-    this._socialAuthService.authState.subscribe((res) => {
-      if (res) {
-        this.socialLogin = true;
-        const data = {
-          name: res.name!,
-          email: res.email,
-          profilePic: res.photoUrl,
-          socialId: res.id,
-        };
-        this.signInWithGoogle(data);
-      }
-    });
+    this._socialAuthService.authState
+      .pipe(takeUntil(this._ngUnsbscribe))
+      .subscribe((res) => {
+        if (res && this.role) {
+          this.socialLogin = true;
+          const data = {
+            name: res.name!,
+            email: res.email,
+            profilePic: res.photoUrl,
+            socialId: res.id,
+            role: this.role,
+          };
+          this.handleGoogleSignIn(data);
+        } else if (res && !this.role) {
+          this._toasterService.showError(
+            'Please select the role before signing in with Google'
+          );
+        }
+      });
   }
 
-  signInWithGoogle(data: IuserInformation) {
+  handleGoogleSignIn(data: IuserInformation) {
     this._authService
       .signInWithGoogle(data)
       .pipe(takeUntil(this._ngUnsbscribe))
@@ -66,13 +80,15 @@ export class SignInComponent implements OnInit, OnDestroy {
         if (res.success) {
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
+          this._store.dispatch(userLogin({userDatas:res.userInfo}))
           this._toasterService.showSuccess(res.message);
-          this._router.navigate(['/home']);
+          this._router.navigate([`./${this.role}`]);
         } else {
           this._toasterService.showError(res.message);
         }
       });
   }
+
   get formControls() {
     return this.loginForm.controls;
   }
@@ -106,8 +122,9 @@ export class SignInComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
-          localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('refreshToken', res.refreshToken);
+          localStorage.setItem('accessToken', res.accessToken!);
+          localStorage.setItem('refreshToken', res.refreshToken!);
+          this._store.dispatch(userLogin({userDatas:res.userinfo}))
           this._toasterService.showSuccess(res.message);
           this._router.navigate([`/${this.role}`]);
         } else {

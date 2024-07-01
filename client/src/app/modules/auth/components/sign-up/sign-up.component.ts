@@ -4,9 +4,11 @@ import { AuthService } from '../../auth.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { CommonService } from '../../../../common.service';
+import { CommonService } from '../../../shared/toaster.service';
 import { IuserInformation } from '../../../../interfaces/userInformation';
-
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../store/app.state';
+import { userLogin } from '../../../../store/userAuth.actions';
 
 @Component({
   selector: 'app-sign-up',
@@ -26,8 +28,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
   text3 = '';
   text4 = '';
   email = '';
-  socialLogin=false
-  roles=["Student","Teacher",]
+  socialLogin = false;
+  role = '';
+  roles = ['Student', 'Teacher'];
 
   private _ngUnsbscribe = new Subject<void>();
   constructor(
@@ -36,7 +39,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
     private _toasterService: CommonService,
     private _router: Router,
     private _activeRoute: ActivatedRoute,
-    private _socialAuthService: SocialAuthService
+    private _socialAuthService: SocialAuthService,
+    private _store:Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +53,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
           Validators.pattern(/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/),
         ],
       ],
-      role:['',Validators.required],
       password: ['', [Validators.required, Validators.pattern(/^.{4,}$/)]],
       confirmPassword: ['', [Validators.required]],
     });
@@ -57,20 +60,25 @@ export class SignUpComponent implements OnInit, OnDestroy {
     this._socialAuthService.authState
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        if (res) {
-          this.socialLogin=true
+        if (res && this.role) {
+          this.socialLogin = true;
           const data = {
             name: res.name!,
             email: res.email,
             profilePic: res.photoUrl,
             socialId: res.id,
+            role: this.role,
           };
-          this.signUpWithGoogle(data);
+          this.handleGoogleSignUp(data);
+        } else if (res && !this.role) {
+          this._toasterService.showError(
+            'Please select the role before signing in with Google'
+          );
         }
       });
   }
 
-  signUpWithGoogle(data: IuserInformation): void {
+  handleGoogleSignUp(data: IuserInformation): void {
     this._authService
       .signInWithGoogle(data)
       .pipe(takeUntil(this._ngUnsbscribe))
@@ -78,8 +86,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
         if (res.success) {
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
+          this._store.dispatch(userLogin({userDatas:res.userInfo}))
           this._toasterService.showSuccess(res.message);
-          this._router.navigate(['/home']);
+          this._router.navigate([`./${this.role}`]);
         } else {
           this._toasterService.showError(res.message);
         }
@@ -102,6 +111,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   sentOtp() {
+    const role = this.role;
+    console.log('sent otp', role, !role);
+
     this.isSubmitted = true;
     if (!this.registerForm.valid) {
       return;
@@ -113,15 +125,17 @@ export class SignUpComponent implements OnInit, OnDestroy {
       this.registerForm.get('confirmPassword')?.setErrors({ match: true });
       return;
     }
+    if (!role) {
+      this._toasterService.showError('Please select the role');
+      return;
+    }
     this.email = this.formControls['email'].value;
-    const role=this.formControls['role'].value
     this.resendOtp = false;
     this.resendOtpTimer();
     this._authService
-      .sendOtp(this.email,role)
+      .sendOtp(this.email, role)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        
         if (res.success) {
           this.otp = true;
           this._toasterService.showSuccess(res.message);
@@ -131,15 +145,17 @@ export class SignUpComponent implements OnInit, OnDestroy {
       });
   }
 
+  selectRole(newRole: string) {
+    this.role = newRole;
+  }
 
   onSubmit(form: NgForm) {
     const data = this.registerForm.getRawValue();
-    console.log(data);
-    
     let otpValue =
       form.value.text1 + form.value.text2 + form.value.text3 + form.value.text4;
 
     data.otp = otpValue;
+    data.role = this.role;
     this._authService
       .userRegister(data)
       .pipe(takeUntil(this._ngUnsbscribe))

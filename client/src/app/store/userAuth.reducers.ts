@@ -7,6 +7,7 @@ export const initialState: AppState = {
     name: '',
     email: '',
     profilePic: '',
+    role:''
   },
   resetPassword: {
     email: '',
