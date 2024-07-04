@@ -79,13 +79,17 @@ export const userLogin = async (req, res) => {
       if (verifyPassword) {
         const refreshToken = createRefreshToken({
           id: user.id,
+          name:user.name,
           email: user.email,
-          role: "user",
+          profilePic:user.profilePic,
+          role: role,
         });
         const accessToken = createAccessToken({
           id: user.id,
+          name:user.name,
           email: user.email,
-          role: "user",
+          profilePic:user.profilePic,
+          role: role,
         });
         return res.status(200).json({
           success: true,

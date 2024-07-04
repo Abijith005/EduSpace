@@ -8,13 +8,11 @@ export const getNewAccessToken = async (req, res) => {
     if (verify) {
       const { id, email, role } = verify;
       const token = createAccessToken({ id, email, role });
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "New access token created",
-          accessToken: token,
-        });
+      return res.status(200).json({
+        success: true,
+        message: "New access token created",
+        accessToken: token,
+      });
     } else {
       return res
         .status(401)
@@ -22,6 +20,25 @@ export const getNewAccessToken = async (req, res) => {
     }
   } catch (error) {
     console.log("Error \n", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Invalid token" });
+  }
+};
+
+export const decodeUserInfo = async (req, res) => {
+  try {
+    const {token} = req.params;
+    console.log(token);
+    const userInfo = verifyJwt(token);
+    const { name, email, profilePic, role } = userInfo;
+    console.log(userInfo,'no user info');
+    if (!userInfo) {
+      return res.status(401).json({ success: false, message: "invalid token" });
+    }
+    res
+      .status(200)
+      .json({ success: true, userInfo: { name, email, profilePic, role } });
+  } catch (error) {
+    console.log("Error \n", error);
+    res.status(500).json({ success: false, message: "Invalid token" });
   }
 };

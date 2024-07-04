@@ -28,18 +28,27 @@ app.use(
 
 app.use(
   "/api/v1/user",
-  authMiddleware("user"),
+  authMiddleware("student"),
   createProxyMiddleware({
-    target: process.env.USER_SERVICE_URL,
+    target: process.env.STUDENT_SERVICE_URL,
     changeOrigin: true,
   })
 );
 
 app.use(
   "/api/v1/admin",
-  // authMiddleware("admin"),
+  authMiddleware("admin"),
   createProxyMiddleware({
     target: process.env.ADMIN_SERVICE_URL,
+    origin: true,
+  })
+);
+
+app.use(
+  "/api/v1/teacher",
+  // authMiddleware("teacher"),
+  createProxyMiddleware({
+    target: process.env.TEACHER_SERVICE_URL,
     origin: true,
   })
 );

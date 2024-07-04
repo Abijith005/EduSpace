@@ -2,11 +2,18 @@ import { userCredentialsValidation } from "../helpers/inputValidations.js";
 import { createAccessToken, createRefreshToken } from "../helpers/jwtSign.js";
 import studentModel from "../models/studentModel.js";
 import teacherModel from "../models/teacherModel.js";
-
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export const userSocialLogin = async (req, res) => {
   try {
-    const { name, email, profilePic,socialId,role } = req.body;
-    const validate = userCredentialsValidation({ name, email, profilePic,socialId });
+    const result = await delay(3000);
+    console.log(result);
+    const { name, email, profilePic, socialId, role } = req.body;
+    const validate = userCredentialsValidation({
+      name,
+      email,
+      profilePic,
+      socialId,
+    });
     if (!validate.isValid) {
       return res
         .status(400)
@@ -14,32 +21,41 @@ export const userSocialLogin = async (req, res) => {
     }
     const model = role == "student" ? studentModel : teacherModel;
     let user = await model.findOne({ email: email });
-    if (user&&!user.socialId) {
+    if (user && !user.socialId) {
       return res
         .status(409)
         .json({ success: false, message: "Email already registered" });
     }
-    let message="Login successfull"
+    let message = "Login successfull";
     if (!user) {
-      user = await model.create({ name, email, profilePic,socialId });
-      message="User registration successfull"
+      user = await model.create({ name, email, profilePic, socialId });
+      message = "User registration successfull";
     }
     const refreshToken = createRefreshToken({
       id: user.id,
+      name: user.name,
       email: user.email,
-      role: "user",
+      profilePic: user.profilePic,
+      role: role,
     });
     const accessToken = createAccessToken({
       id: user.id,
+      name: user.name,
       email: user.email,
-      role: "user",
+      profilePic: user.profilePic,
+      role: role,
     });
     return res.status(200).json({
       success: true,
       message,
       accessToken,
       refreshToken,
-      userInfo:{name:user.name,email:user.email,profilePic:user.profilePic,role:role}
+      userInfo: {
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic,
+        role: role,
+      },
     });
   } catch (error) {
     console.log("Error \n", error);
@@ -48,5 +64,3 @@ export const userSocialLogin = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
-
- 

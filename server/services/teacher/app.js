@@ -4,10 +4,13 @@ import morgan from "morgan";
 import cors from "cors";
 import "dotenv/config.js";
 import dbConnect from "./config/dbConnect.js";
+import profileRoutes from "../teacher/routes/profileRoutes.js";
+import s3Config from "./config/s3BucketConfig.js";
+
 
 const app = express();
 const port = process.env.PORT;
- 
+
 dbConnect()
 app.use(helmet());
 app.use(morgan("dev"));
@@ -21,9 +24,8 @@ app.use(
   })
 );
 
-// cronJob();
 
-// app.use("/api/v1/admin/categories",categoryRoutes);
+app.use("/api/v1/teacher/profile",profileRoutes);
 app.listen(port, () => {
   console.log(`auth service running in port ${port}`);
 });
