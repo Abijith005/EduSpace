@@ -84,10 +84,19 @@ export class UploadCertificatesComponent {
       return this._toasterService.showError('Upload file');
     }
 
-    this._teacherService.uploadCertificates({
-      category: this.category,
-      certificates: this.files,
-    }).subscribe(res=>{});
+    this._teacherService
+      .uploadCertificates({
+        category: this.category,
+        certificates: this.files,
+      })
+      .subscribe((res) => {
+        if (res.success) {
+          this.closeModal()
+          this._toasterService.showSuccess(res.message);
+        } else {
+          this._toasterService.showError(res.message);
+        }
+      });
 
     // let uploaded = 0;
     // const interval = setInterval(() => {
