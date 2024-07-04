@@ -1,13 +1,19 @@
 import { createReducer, on } from '@ngrx/store';
-import { resetPasswordOtp, userLogin } from './userAuth.actions';
-import { AppState } from './app.state';
+import {
+  checkAuthStatusFailure,
+  checkAuthStatusSuccess,
+  resetPasswordOtp,
+  userLogOut,
+  userLogin,
+} from './auth.actions';
+import { AuthState } from './auth.state';
 
-export const initialState: AppState = {
+export const initialState: AuthState = {
   userData: {
     name: '',
     email: '',
     profilePic: '',
-    role:''
+    role: '',
   },
   resetPassword: {
     email: '',
@@ -36,5 +42,20 @@ export const userAuthReducer = createReducer(
         isReset: true,
       },
     };
+  }),
+  on(userLogOut, (state) => {
+    return initialState;
+  }),
+  on(checkAuthStatusSuccess, (state, { userDatas }) => {
+    return {
+      ...state,
+      userData: {
+        ...userDatas,
+      },
+      isLoggedIn: true,
+    };
+  }),
+  on(checkAuthStatusFailure, (state) => {
+    return initialState;
   })
 );

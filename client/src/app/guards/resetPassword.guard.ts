@@ -5,19 +5,31 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthService } from '../modules/auth/auth.service';
+import { Store } from '@ngrx/store';
+import { AuthState } from '../store/auth/auth.state';
+import { selectUserResetState } from '../store/auth/auth.selector';
+import {  take } from 'rxjs';
 
 export const authGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {
-  const authService = inject(AuthService);
   const router = inject(Router);
+  const store = inject(Store<AuthState>);
+  let result = false;
 
-  if (authService.isResetPassword()) {
-    return true;
-  } else {
+  store
+    .select(selectUserResetState)
+    .pipe(take(1))
+    .subscribe((res) => {
+      if (res.isReset) {
+        result = true;
+      }
+    });
+
+  if (!result) {
     router.navigate(['']);
-    return false;
   }
+  
+  return result;
 };

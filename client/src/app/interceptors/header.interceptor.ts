@@ -10,14 +10,13 @@ import { environments } from '../../environments/environments';
 
 @Injectable()
 export class HeaderInterceptor implements HttpInterceptor {
-  constructor(  ) {}
+  constructor( ) {}
 
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     const baseUrl = environments.apiUrl;
-    
     let modifiedRequest = request.clone({
       url: baseUrl + request.url,
       withCredentials: true,
@@ -30,6 +29,8 @@ export class HeaderInterceptor implements HttpInterceptor {
         },
       });
     }
+    console.log(modifiedRequest);
+    
     return next.handle(modifiedRequest);
   }
 }

@@ -13,6 +13,6 @@ import { LoadingComponent } from './components/loading/loading.component';
   imports: [
     CommonModule
   ],
-  exports:[PaginationComponent]
+  exports:[PaginationComponent,LoadingComponent]
 })
 export class SharedModule { }

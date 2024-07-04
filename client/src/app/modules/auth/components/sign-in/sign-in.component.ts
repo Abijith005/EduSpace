@@ -8,11 +8,11 @@ import {
   GoogleLoginProvider,
   SocialAuthService,
 } from '@abacritt/angularx-social-login';
-import { CommonService } from '../../../shared/toaster.service';
+import { ToasterService } from '../../../shared/toaster.service';
 import { IuserInformation } from '../../../../interfaces/userInformation';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/app.state';
-import { userLogin } from '../../../../store/userAuth.actions';
+import { AuthState } from '../../../../store/auth/auth.state';
+import { userLogin } from '../../../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-sign-in',
@@ -34,9 +34,9 @@ export class SignInComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _ngToaster: NgToastService,
     private _router: Router,
-    private _toasterService: CommonService,
+    private _toasterService: ToasterService,
     private _socialAuthService: SocialAuthService,
-    private _store:Store<AppState>
+    private _store:Store<AuthState>
   ) {}
 
   ngOnInit(): void {

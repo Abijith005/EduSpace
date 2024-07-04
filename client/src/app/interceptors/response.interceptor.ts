@@ -6,10 +6,14 @@ import {
   HttpInterceptor,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { Observable, catchError, finalize, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../modules/auth/auth.service';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
+import { Store } from '@ngrx/store';
+import { SharedState } from '../store/shared/shared.state';
+import { setLoading } from '../store/shared/shared.actions';
+import { selectSharedState } from '../store/shared/shared.selector';
 
 @Injectable()
 export class ResponseInterceptor implements HttpInterceptor {
@@ -17,16 +21,18 @@ export class ResponseInterceptor implements HttpInterceptor {
   constructor(
     private _authService: AuthService,
     private _router: Router,
-    private _ngToaster: NgToastService
+    private _ngToaster: NgToastService,
+    private _store: Store<SharedState>
   ) {}
 
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const isAuthRoute = request.url.includes('auth');
+    let isAuthRoute = request.url.includes('auth');
+    this._store.dispatch(setLoading({ isLoading: true }));
     return next.handle(request).pipe(
-      catchError((error: any) => {        
+      catchError((error: any) => {
         if (
           error instanceof HttpErrorResponse &&
           error.status === 401 &&
@@ -46,7 +52,7 @@ export class ResponseInterceptor implements HttpInterceptor {
                   },
                 });
                 return next.handle(request);
-              } else {                
+              } else {
                 return throwError(() => new Error(res.message));
               }
             })
@@ -62,7 +68,7 @@ export class ResponseInterceptor implements HttpInterceptor {
           localStorage.removeItem('refreshToken');
           this._router.navigate(['']);
         }
-        
+
         this.refresh = false;
         this._ngToaster.error({
           position: 'topCenter',
@@ -70,6 +76,9 @@ export class ResponseInterceptor implements HttpInterceptor {
           detail: error.error.message,
         });
         return throwError(error);
+      }),
+      finalize(() => {
+        this._store.dispatch(setLoading({ isLoading: false }));
       })
     );
   }

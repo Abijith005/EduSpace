@@ -4,9 +4,9 @@ import { Observable, Subject, map, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AuthService } from '../../auth.service';
-import { CommonService } from '../../../shared/toaster.service';
-import { AppState } from '../../../../store/app.state';
-import { selectUserResetState } from '../../../../store/userAuthSelector';
+import { ToasterService } from '../../../shared/toaster.service';
+import { AuthState } from '../../../../store/auth/auth.state';
+import { selectUserResetState } from '../../../../store/auth/auth.selector';
 
 @Component({
   selector: 'app-reset-password',
@@ -25,8 +25,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _commonSerivce: CommonService,
-    private _store: Store<AppState>
+    private _commonSerivce: ToasterService,
+    private _store: Store<AuthState>
   ) {}
 
   ngOnInit(): void {

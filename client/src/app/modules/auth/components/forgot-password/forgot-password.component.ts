@@ -4,9 +4,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CommonService } from '../../../shared/toaster.service';
-import { AppState } from '../../../../store/app.state';
-import { resetPasswordOtp } from '../../../../store/userAuth.actions';
+import { ToasterService } from '../../../shared/toaster.service';
+import { AuthState } from '../../../../store/auth/auth.state';
+import { resetPasswordOtp } from '../../../../store/auth/auth.actions';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
@@ -30,10 +30,10 @@ export class ForgotPasswordComponent {
   constructor(
     private _fb: FormBuilder,
     private _authService: AuthService,
-    private _toasterService: CommonService,
+    private _toasterService: ToasterService,
     private _router: Router,
     private _activeRoute: ActivatedRoute,
-    private _store:Store<AppState>
+    private _store:Store<AuthState>
   ) {}
 
   ngOnInit(): void {

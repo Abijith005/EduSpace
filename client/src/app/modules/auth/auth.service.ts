@@ -2,21 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IuserLogin } from '../../interfaces/userLogin';
-import { AppState } from '../../store/app.state';
+import { AuthState } from '../../store/auth/auth.state';
 import {
   selectUserAuthState,
   selectUserResetState,
-} from '../../store/userAuthSelector';
+} from '../../store/auth/auth.selector';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { IuserRegisterData } from '../../interfaces/userRegisterData';
 import { IuserInformation } from '../../interfaces/userInformation';
 import { ItokenData } from '../../interfaces/tokenInterface';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private _http: HttpClient, private _store: Store<AppState>) {}
+  constructor(private _http: HttpClient, private _store: Store<AuthState>) {}
   number = 1;
   userRegister(registerData: IuserRegisterData) {
     return this._http.post<IgenreralResponse>(
@@ -66,23 +67,15 @@ export class AuthService {
     );
   }
 
-  isResetPassword() {
-    let state;
-    this._store.select(selectUserResetState).subscribe((res) => {
-      state = res.isReset;
-    });
-
-    return state;
-  }
-
-  isLogin() {
-    let login;
-    let role;
-    this._store.select(selectUserAuthState).subscribe((res) => {
-      login = res.isLoggedIn;
-      role = res.userData.role;
-    });
-    return { login, role };
+  getUserInfo(token: string | null) {
+    if (!token) {
+      console.log(token,'not token');
+      
+      return of({ success: false } as { success: boolean, userInfo?: IuserInformation } & IgenreralResponse);
+    }
+    return this._http.get<{ userInfo: IuserInformation } & IgenreralResponse>(
+      `/v1/auth/token/userInfo/${token}`
+    );
   }
 
   signInWithGoogle(data: IuserInformation) {

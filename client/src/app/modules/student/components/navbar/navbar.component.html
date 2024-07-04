@@ -1,23 +1,28 @@
 <nav class="bg-white fixed top-0 w-full shadow-md z-50 mb-16">
   <div class="container mx-auto px-4 py-3 flex justify-between items-center">
     <div class="flex justify-between space-x-3">
-      <img
-        src="images/Log.ico"
-        class="h-10 w-10"
-        alt=""
-      />
-      <a href="#" class="text-black font-bold text-3xl exo-text">EduSpace</a>
+      <img src="images/Log.ico" class="h-10 w-10" alt="" />
+      <a class="text-black font-bold text-3xl exo-text">EduSpace</a>
     </div>
     <div class="hidden md:flex items-center space-x-6">
-      <a href="#" class="hover:text-orange-400 transition duration-300 text-decoration">Home</a>
-      <a href="#" class="hover:text-orange-400 transition duration-300">Courses</a>
-      <a href="#" class="hover:text-orange-400 transition duration-300">Instructors</a>
-      <a href="#" class="hover:text-orange-400 transition duration-300">Discussions</a>
-      <a href="#" class="hover:text-orange-400 transition duration-300">Subscriptions</a>
+      <a class="hover:text-orange-400 transition duration-300 text-decoration"
+        >Home</a
+      >
+      <a class="hover:text-orange-400 transition duration-300">Courses</a>
+      <a class="hover:text-orange-400 transition duration-300">Instructors</a>
+      <a class="hover:text-orange-400 transition duration-300">Discussions</a>
+      <a class="hover:text-orange-400 transition duration-300">Subscriptions</a>
     </div>
     <div class="flex justify-around items-center space-x-2">
-      <a href="#" class="text-black hover:text-white">Login / Register</a>
-      <img src="images/user.png" class="h-5 w-5" alt="" />
+      <ng-container *ngIf="userInfo$ | async as userInfo">
+        <a class="text-black">{{ userInfo.name | titlecase }}</a>
+        <img
+        (click)="logout()"
+          [src]="userInfo.profilePic || 'images/user.png'"
+          class="h-5 w-5 rounded-full"
+          alt="User Profile Picture"
+        />
+      </ng-container>
     </div>
     <button class="md:hidden text-gray-400 hover:text-white">
       <svg
@@ -38,6 +43,6 @@
   </div>
 </nav>
 
-<div style="margin-top: 4.09rem;" >
+<div style="margin-top: 4.09rem">
   <router-outlet></router-outlet>
 </div>

@@ -4,11 +4,11 @@ import { AuthService } from '../../auth.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { CommonService } from '../../../shared/toaster.service';
+import { ToasterService } from '../../../shared/toaster.service';
 import { IuserInformation } from '../../../../interfaces/userInformation';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/app.state';
-import { userLogin } from '../../../../store/userAuth.actions';
+import { AuthState } from '../../../../store/auth/auth.state';
+import { userLogin } from '../../../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-sign-up',
@@ -36,11 +36,11 @@ export class SignUpComponent implements OnInit, OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _authService: AuthService,
-    private _toasterService: CommonService,
+    private _toasterService: ToasterService,
     private _router: Router,
     private _activeRoute: ActivatedRoute,
     private _socialAuthService: SocialAuthService,
-    private _store:Store<AppState>
+    private _store:Store<AuthState>
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +84,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
+          console.log(res.userInfo);
+          
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
           this._store.dispatch(userLogin({userDatas:res.userInfo}))

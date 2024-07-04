@@ -1,4 +1,4 @@
-export interface AppState {
+export interface AuthState {
   userData: {
     name: string;
     email: string;
