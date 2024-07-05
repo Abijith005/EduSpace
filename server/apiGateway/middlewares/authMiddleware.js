@@ -5,7 +5,7 @@ const authMiddleware = (role) => {
     try {
       const token = req.headers.authorization.split(" ")[1];
       const verify = verifyJwt(token);
-      if (verify&&verify.role===role) {
+      if (verify&&role.includes(verify.role)) {
         next();
       } else {
         res

@@ -20,5 +20,5 @@ app.use(
 // app.all("/api/v1//hello", );
 
 app.listen(port, () => {
-  console.log(`user service running in port ${port}`);
+  console.log(`student service running in port ${port}`);
 });

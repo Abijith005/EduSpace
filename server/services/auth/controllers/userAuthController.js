@@ -73,30 +73,38 @@ export const userLogin = async (req, res) => {
     const user = await model.findOne({ email: email });
     if (user) {
       if (user.socialId) {
-        return res.status(409).json({success:false,message:"Please login with Google"})
+        return res
+          .status(409)
+          .json({ success: false, message: "Please login with Google" });
       }
       const verifyPassword = await bcrypt.compare(password, user.password);
       if (verifyPassword) {
         const refreshToken = createRefreshToken({
           id: user.id,
-          name:user.name,
+          name: user.name,
           email: user.email,
-          profilePic:user.profilePic,
+          profilePic: user.profilePic,
           role: role,
         });
         const accessToken = createAccessToken({
           id: user.id,
-          name:user.name,
+          name: user.name,
           email: user.email,
-          profilePic:user.profilePic,
+          profilePic: user.profilePic,
           role: role,
         });
+        const userInfo = {
+          name: user.name,
+          email: user.email,
+          profilePic: user.profilePic,
+          role: role,
+        };
         return res.status(200).json({
           success: true,
           message: "Login successfull",
           accessToken,
           refreshToken,
-          userInfo:{name:user.name,email:user.email,profilePic:user.profilePic,role:role}
+          userInfo
         });
       } else {
         return res

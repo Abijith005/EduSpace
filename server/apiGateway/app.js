@@ -9,9 +9,13 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
+const clientUrl = process.env.CLIENT_URL;
+const adminUrl = process.env.ADMIN_SERVICE_URL;
+const teacherUrl = process.env.TEACHER_SERVICE_URL;
+
 app.use(
   cors({
-    origin: ["http://localhost:4200"],
+    origin: [clientUrl,teacherUrl,adminUrl],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
   })
@@ -28,7 +32,7 @@ app.use(
 
 app.use(
   "/api/v1/user",
-  authMiddleware("student"),
+  authMiddleware(["student","admin"]),
   createProxyMiddleware({
     target: process.env.STUDENT_SERVICE_URL,
     changeOrigin: true,
@@ -37,18 +41,18 @@ app.use(
 
 app.use(
   "/api/v1/admin",
-  authMiddleware("admin"),
+  authMiddleware(["admin"]),
   createProxyMiddleware({
-    target: process.env.ADMIN_SERVICE_URL,
+    target: adminUrl,
     origin: true,
   })
 );
 
 app.use(
   "/api/v1/teacher",
-  // authMiddleware("teacher"),
+  authMiddleware(["teacher","admin"]),
   createProxyMiddleware({
-    target: process.env.TEACHER_SERVICE_URL,
+    target: teacherUrl,
     origin: true,
   })
 );

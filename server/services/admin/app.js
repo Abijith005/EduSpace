@@ -4,6 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import "dotenv/config.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import certificatesRoutes from "./routes/certificateRoute.js";
 import dbConnect from "./config/dbConnect.js";
 
 const app = express();
@@ -24,6 +25,8 @@ app.use(
 
 
 app.use("/api/v1/admin/categories",categoryRoutes);
+app.use("/api/v1/admin/certificates",certificatesRoutes);
+
 app.listen(port, () => {
-  console.log(`auth service running in port ${port}`);
+  console.log(`admin service running in port ${port}`);
 });

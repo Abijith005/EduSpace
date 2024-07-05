@@ -1,5 +1,5 @@
 import express from "express";
-import { uploadCertificates } from "../controllers/profileController.js";
+import { getCertificates, uploadCertificates } from "../controllers/profileController.js";
 import uploadPdf from "../helpers/certificateUpload.js";
 import multer from "multer";
 
@@ -37,4 +37,6 @@ router.post(
   uploadCertificates
 );
 
+
+router.get('/all',getCertificates)
 export default router;
