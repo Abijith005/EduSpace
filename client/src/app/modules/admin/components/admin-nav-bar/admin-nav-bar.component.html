@@ -18,10 +18,13 @@
       <a [ngClass]="{'active-link':selectedItem==3}" (click)="selectItem(3)" [routerLink]="'category_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
         <i class="fas fa-list-alt mr-2"></i> Categories
       </a>
-      <a [ngClass]="{'active-link':selectedItem==4}" (click)="selectItem(4)" [routerLink]="'payment_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a [ngClass]="{'active-link':selectedItem==4}" (click)="selectItem(4)" [routerLink]="'permission_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+        <i class="fas fa-key mr-2"></i> Permissions
+      </a>
+      <a [ngClass]="{'active-link':selectedItem==5}" (click)="selectItem(5)" [routerLink]="'payment_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
         <i class="fas fa-credit-card mr-2"></i> Payments
       </a>
-      <a [ngClass]="{'active-link':selectedItem==5}" (click)="selectItem(5)" [routerLink]="''" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a [ngClass]="{'active-link':selectedItem==6}" (click)="selectItem(6)" [routerLink]="''" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
         <i class="fas fa-sign-out-alt mr-2"></i> Logout
       </a>
     </div>

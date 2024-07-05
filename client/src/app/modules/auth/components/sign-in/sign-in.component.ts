@@ -122,6 +122,8 @@ export class SignInComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
+          console.log('loginnnnnnnnnnnnn',res);
+          
           localStorage.setItem('accessToken', res.accessToken!);
           localStorage.setItem('refreshToken', res.refreshToken!);
           this._store.dispatch(userLogin({userDatas:res.userinfo}))

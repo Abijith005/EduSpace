@@ -6,6 +6,7 @@ import { CategoryManagementComponent } from './components/category-management/ca
 import { InstructorManagementComponent } from './components/instructor-management/instructor-management.component';
 import { StudentManagementComponent } from './components/student-management/student-management.component';
 import { PaymentManagemetComponent } from './components/payment-managemet/payment-managemet.component';
+import { PermissionManagementComponent } from './components/permission-management/permission-management.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
           {path:'',redirectTo:'dashBoard',pathMatch:'full'},
           { path: 'dashBoard', component: AdminDashboardComponent },
           { path: 'category_manage', component: CategoryManagementComponent },
+          { path: 'permission_manage', component: PermissionManagementComponent },
           { path: 'instructor_manage',component: InstructorManagementComponent },
           { path: 'student_manage', component: StudentManagementComponent },
           { path: 'payment_manage', component: PaymentManagemetComponent },

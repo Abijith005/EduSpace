@@ -12,7 +12,7 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () =>
       import('./modules/auth/auth.module').then((module) => module.AuthModule),
-    // canActivate: [authModuleGuard],
+    canActivate: [authModuleGuard],
   },
 
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
       import('./modules/student/student.module').then(
         (module) => module.StudentModule
       ),
-    // canActivate: [studentModuleGuard],
+    canActivate: [studentModuleGuard],
   },
 
   {
@@ -30,7 +30,7 @@ const routes: Routes = [
       import('./modules/admin/admin.module').then(
         (module) => module.AdminModule
       ),
-    // canActivate: [adminModuleGuard],
+    canActivate: [adminModuleGuard],
   },
 
   {
@@ -39,7 +39,7 @@ const routes: Routes = [
       import('./modules/teacher/teacher.module').then(
         (module) => module.TeacherModule
       ),
-    // canActivate: [teacherModuleGuard],
+    canActivate: [teacherModuleGuard],
   },
 ];
 

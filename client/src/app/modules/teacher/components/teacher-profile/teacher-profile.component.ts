@@ -7,10 +7,10 @@ import { ModalService } from '../../../shared/modal.service';
   styleUrl: './teacher-profile.component.css',
 })
 export class TeacherProfileComponent {
-  isVisible$ = this._modalService.isVisible$;
-
+  
   constructor(private _modalService: ModalService) {}
-
+  
+  isVisible$ = this._modalService.isVisible$;
   openModal() {
     this._modalService.openModal();
   }

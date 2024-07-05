@@ -11,6 +11,8 @@ import { CategoryManagementComponent } from './components/category-management/ca
 import { PaymentManagemetComponent } from './components/payment-managemet/payment-managemet.component';
 import { StudentManagementComponent } from './components/student-management/student-management.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PermissionManagementComponent } from './components/permission-management/permission-management.component';
+import { CertificateViewComponent } from './components/certificate-view/certificate-view.component';
 
 
 
@@ -24,6 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CategoryManagementComponent,
     PaymentManagemetComponent,
     StudentManagementComponent,
+    PermissionManagementComponent,
+    CertificateViewComponent,
     
   ],
   imports: [
