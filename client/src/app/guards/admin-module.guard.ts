@@ -13,10 +13,9 @@ export const adminModuleGuard: CanActivateFn = (route, state) => {
     .select(selectRouteInfo)
     .pipe(take(1))
     .subscribe((res) => {
-      console.log(res, 'from admin guard');
-      
       if (res.isLoggedIn && res.userData.role === 'admin') {
         result = true;
+      } else {
         router.navigate(['auth']);
       }
     });

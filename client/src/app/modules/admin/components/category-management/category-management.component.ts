@@ -1,90 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalService } from '../../../shared/modal.service';
-interface Category {
-  name: string;
-  instructors: number;
-  students: number;
-  courses: number;
-  icon: string;
-  status: string;
-}
+import { AdminService } from '../../admin.service';
+import { Subject, takeUntil } from 'rxjs';
+import { IcategoryResponse } from '../../../../interfaces/categoryResponse';
+
 @Component({
   selector: 'app-category-management',
   templateUrl: './category-management.component.html',
   styleUrl: './category-management.component.css',
 })
-export class CategoryManagementComponent {
+export class CategoryManagementComponent implements OnInit, OnDestroy {
   isVisible$ = this._modalService.isVisible$;
-  totalPages = 10;
+  totalPages!: number;
   currentPage = 1;
-  categories: Category[] = [
-    {
-      name: 'Photography',
-      instructors: 117,
-      students: 100,
-      courses: 100,
-      icon: '📷',
-      status: 'Active',
-    },
-    {
-      name: 'Videography',
-      instructors: 10,
-      students: 100,
-      courses: 100,
-      icon: '🎥',
-      status: 'Blocked',
-    },
-    {
-      name: 'Web Design',
-      instructors: 15,
-      students: 77,
-      courses: 77,
-      icon: '💻',
-      status: 'Blocked',
-    },
-    {
-      name: 'Digital Marketing',
-      instructors: 7,
-      students: 6,
-      courses: 6,
-      icon: '📈',
-      status: 'Active',
-    },
-    {
-      name: 'Jerome Bell',
-      instructors: 20,
-      students: 85,
-      courses: 85,
-      icon: '👨‍🏫',
-      status: 'Active',
-    },
-    {
-      name: 'Kathryn Murphy',
-      instructors: 3,
-      students: 12,
-      courses: 12,
-      icon: '👩‍🏫',
-      status: 'Active',
-    },
-    {
-      name: 'Jacob Jones',
-      instructors: 0,
-      students: 0,
-      courses: 0,
-      icon: '👨‍🏫',
-      status: 'Active',
-    },
-    {
-      name: 'Kristin Watson',
-      instructors: 50,
-      students: 7,
-      courses: 7,
-      icon: '👩‍🏫',
-      status: 'Blocked',
-    },
-  ];
+  limit = 8;
+  categories!: IcategoryResponse[];
 
-  constructor(private _modalService: ModalService) {}
+  private _ngUnsbscribe = new Subject<void>();
+  constructor(
+    private _modalService: ModalService,
+    private _adminService: AdminService
+  ) {}
+
+  ngOnInit(): void {
+    this._adminService
+      .getAllCategories(this.currentPage, this.limit)
+      .pipe(takeUntil(this._ngUnsbscribe))
+      .subscribe((res) => {
+        this.categories = res.data;
+        this.totalPages = res.totalPages;
+      });
+  }
 
   openModal() {
     this._modalService.openModal();
@@ -96,5 +42,18 @@ export class CategoryManagementComponent {
 
   onPageChanged(page: number) {
     this.currentPage = page;
+    this._adminService
+      .getAllCategories(this.currentPage, this.limit)
+      .pipe(takeUntil(this._ngUnsbscribe))
+      .subscribe((res) => {
+        console.log(res);
+
+        this.categories = res.data;
+        console.log(this.categories);
+      });
+  }
+  ngOnDestroy(): void {
+    this._ngUnsbscribe.next();
+    this._ngUnsbscribe.complete();
   }
 }

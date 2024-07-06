@@ -121,12 +121,10 @@ export class SignInComponent implements OnInit, OnDestroy {
       .userLogin(data)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        if (res.success) {
-          console.log('loginnnnnnnnnnnnn',res);
-          
+        if (res.success) {          
           localStorage.setItem('accessToken', res.accessToken!);
           localStorage.setItem('refreshToken', res.refreshToken!);
-          this._store.dispatch(userLogin({userDatas:res.userinfo}))
+          this._store.dispatch(userLogin({userDatas:res.userInfo}))
           this._toasterService.showSuccess(res.message);
           this._router.navigate([`/${this.role}`]);
         } else {

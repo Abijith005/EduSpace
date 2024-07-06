@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { AdminService } from '../../admin.service';
 import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToasterService } from '../../../shared/toaster.service';
 
 @Component({
   selector: 'app-add-category',
@@ -12,13 +13,15 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   public categoryForm: FormGroup = new FormGroup({});
   private _ngUnsubscribe = new Subject<void>();
   @Output() modalClosed = new EventEmitter();
-  constructor(private _adminService: AdminService, private _fb: FormBuilder) {}
+  constructor(private _adminService: AdminService, private _fb: FormBuilder,private _toasterService:ToasterService) {}
 
   ngOnInit(): void {
    this.categoryForm= this._fb.group({
       title: ['', [Validators.required]],
       icon: ['', Validators.required],
     });
+
+    
   }
 
   get formcontrols() {
@@ -34,7 +37,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       .addCategory(data)
       .pipe(takeUntil(this._ngUnsubscribe))
       .subscribe((res) => {
-        console.log(res);
+       this._toasterService.toasterFunction(res)
+       if (res.success) {
+        this.closeModal()
+       }
       });
   }
 

@@ -10,9 +10,10 @@ export const resetPasswordOtp = createAction(
   props<{ email: string }>()
 );
 export const userLogOut = createAction('[auth] user logout');
+
 export const checkAuthStatusSuccess = createAction(
   '[auth] check auth status success',
   props<{ userDatas: IuserInformation }>()
 );
 
-export const checkAuthStatusFailure=createAction('[auth] check auth failure')
+export const checkAuthStatusFailure = createAction('[auth] check auth failure');

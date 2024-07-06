@@ -23,7 +23,6 @@ export const studentModuleGuard: CanActivateFn = (route, state) => {
     
     router.navigate(['auth']);
   }
-  console.log(result,'this is result from student guard');
   
   return result;
 };

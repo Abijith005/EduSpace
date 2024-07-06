@@ -87,26 +87,34 @@
             <td
               class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
             >
-              {{ category.name }}
+              {{ category.title }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ category.instructors }}
+              {{ category.totalInstructors }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ category.students }}
+              {{ category.totalCourses }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ category.courses }}
+              {{ category.totalCourses }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              <i [ngClass]="category.icon"></i>
+              <i [ngClass]="category.icon" class="text-orange-500"></i>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <span
+                *ngIf="category.activeStatus; else template"
                 class="px-3.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
               >
                 Active
               </span>
+              <ng-template #template>
+                <span
+                  class="px-3.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-red-600 text-red-500"
+                >
+                  Block
+                </span>
+              </ng-template>
             </td>
             <td
               class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium cursor-pointer"
@@ -126,12 +134,10 @@
     </div>
   </div>
 
-
-  
   <div
-  *ngIf="isVisible$ | async"
-  class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60"
+    *ngIf="isVisible$ | async"
+    class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60"
   >
-  <app-add-category  (modalClosed)="closeModal()"></app-add-category>
-</div>
+    <app-add-category (modalClosed)="closeModal()"></app-add-category>
+  </div>
 </div>

@@ -35,7 +35,7 @@ export class AuthService {
 
   userLogin(loginData: IuserLogin) {
     return this._http.post<
-      IgenreralResponse & { userinfo: IuserInformation } & ItokenData
+      IgenreralResponse & { userInfo: IuserInformation } & ItokenData
     >(`/v1/auth/user/login`, loginData);
   }
 
