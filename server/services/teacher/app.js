@@ -5,29 +5,26 @@ import cors from "cors";
 import "dotenv/config.js";
 import dbConnect from "./config/dbConnect.js";
 import profileRoutes from "../teacher/routes/profileRoutes.js";
-import s3Config from "./config/s3BucketConfig.js";
-
 
 const app = express();
 const port = process.env.PORT;
-const clientUrl=process.env.CLIENT_URL
-const adminUrl=process.env.ADMIN_SERVICE_URL
+const clientUrl = process.env.CLIENT_URL;
+const adminUrl = process.env.ADMIN_SERVICE_URL;
 
-dbConnect()
+dbConnect();
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: [clientUrl,adminUrl],
+    origin: [clientUrl, adminUrl],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
   })
 );
 
-
-app.use("/api/v1/teacher/certificates",profileRoutes);
+app.use("/api/v1/teacher/profile", profileRoutes);
 
 app.listen(port, () => {
   console.log(`teacher service running in port ${port}`);

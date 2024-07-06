@@ -9,8 +9,8 @@ class TeacherCommunicator {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
-  async getCertificates(token) {
-    const response = await this.teacherService.get("/certificates/all");
+  async getCertificates(currentPage,limit) {
+    const response = await this.teacherService.get(`/profile/certificates/all?currentPage=${currentPage}&limit=${limit}`);
     return response.data;
   }
 }

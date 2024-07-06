@@ -6,6 +6,7 @@ import "dotenv/config.js";
 import userAuthRoutes from "./routes/userAuthRoutes.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
 import socialAuthRoutes from "./routes/socialAuth.js"
+import dataRoutes from "./routes/dataRoutes.js"
 import cronJob from "./helpers/cronJob.js";
 import dbConnect from "./config/dbConnect.js";
 
@@ -30,6 +31,7 @@ cronJob();
 app.use("/api/v1/auth/user", userAuthRoutes);
 app.use("/api/v1/auth/socialAuth",socialAuthRoutes)
 app.use("/api/v1/auth/token", tokenRoutes);
+app.use("/api/v1/auth/data",dataRoutes)
 app.listen(port, () => {
   console.log(`auth service running in port ${port}`);
 });

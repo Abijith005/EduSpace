@@ -4,7 +4,7 @@ export const createRefreshToken = (payload) => {
     const secret = process.env.JWT_SIGNATURE;
     const token = jwt.sign(payload, secret, {
       algorithm: "HS256",
-      expiresIn: "1m",
+      expiresIn: "1d",
     });
 
     return token;
@@ -19,7 +19,7 @@ export const createAccessToken = (payload) => {
     const secret = process.env.JWT_SIGNATURE;
     const token = jwt.sign(payload, secret, {
       algorithm: "HS256",
-      expiresIn: "5s",
+      expiresIn: "15m",
     });
     return token;
   } catch (error) {

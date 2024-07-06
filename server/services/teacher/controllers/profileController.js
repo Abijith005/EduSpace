@@ -25,10 +25,17 @@ export const uploadCertificates = async (req, res) => {
   }
 };
 
-export const getCertificates = async (req, res) => {
+export const getRequests = async (req, res) => {
   try {
-    const requests = await requestModel.find().lean();
-    res.status(200).json({ success: true, requests: requests });
+    const { currentPage, limit } = req.query;
+    const totalData = await requestModel.countDocuments();
+    const skip = (currentPage - 1) * limit;
+    const requests = await requestModel
+      .find()
+      .limit(limit * currentPage)
+      .skip(skip)
+      .lean();
+    res.status(200).json({ success: true, requests, totalData });
   } catch (error) {
     console.log("Error \n", error);
     return res

@@ -56,7 +56,6 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    console.log(email, password);
     const model =
       role == "student"
         ? studentModel
@@ -94,9 +93,9 @@ export const userLogin = async (req, res) => {
           role: role,
         });
         const userInfo = {
-          name: user.name,
+          name: user.name||'',
           email: user.email,
-          profilePic: user.profilePic,
+          profilePic: user.profilePic||'',
           role: role,
         };
         return res.status(200).json({

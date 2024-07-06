@@ -1,19 +1,27 @@
-import { inputValidation } from "../helpers/inptValidation.js";
-import categoryModel from "../models/categoryModel.js";
+import CourseCommunicator from "../communicator/courseCommunicator.js";
 
-export const addCategory = async (req,res) => {
+export const addCategory = async (req, res) => {
   try {
-    const { title, icon } = req.body;
-    const validate = inputValidation(req.body);
-    if (!validate.isValid) {
-      return res
-        .status(400)
-        .json({ success: false, message: validate.message });
-    }
-    await categoryModel.create({ title, icon });
-    return res.json({ success: true, message: "Category added successfully" });
+    const token = req.headers.authorization.split(" ")[1];
+    const communicator = new CourseCommunicator(token);
+    const response = await communicator.createCategory(req.body);
+    res.status(response.status).json(response.data);
   } catch (error) {
     console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getAllCategories = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+    const token = req.headers.authorization.split(" ")[1];
+    const communicator = new CourseCommunicator(token);
+    const response = await communicator.getAllCategory(page, limit);
+    res.status(response.status).json(response.data);
+  } catch (error) {
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
