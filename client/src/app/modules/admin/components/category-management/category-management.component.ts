@@ -27,7 +27,9 @@ export class CategoryManagementComponent implements OnInit, OnDestroy {
       .getAllCategories(this.currentPage, this.limit)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        this.categories = res.data;
+        console.log(res.totalPages,res);
+        
+        this.categories = res.categories;
         this.totalPages = res.totalPages;
       });
   }
@@ -46,10 +48,8 @@ export class CategoryManagementComponent implements OnInit, OnDestroy {
       .getAllCategories(this.currentPage, this.limit)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        console.log(res);
-
-        this.categories = res.data;
-        console.log(this.categories);
+        this.categories = res.categories;
+        this.totalPages = res.totalPages;
       });
   }
   ngOnDestroy(): void {

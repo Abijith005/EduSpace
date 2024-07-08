@@ -1,22 +1,43 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { NgToastService } from 'ng-angular-popup';
 import { ToasterService } from '../../../shared/toaster.service';
 import { TeacherService } from '../../teacher.service';
+import { Subject, takeUntil } from 'rxjs';
+import { IcategoryData } from '../../../../interfaces/categoryData';
 
 @Component({
   selector: 'app-upload-certificates',
   templateUrl: './upload-certificates.component.html',
   styleUrl: './upload-certificates.component.css',
 })
-export class UploadCertificatesComponent {
+export class UploadCertificatesComponent implements OnInit, OnDestroy {
   files: File[] = [];
-  // uploadProgress = 0;
-  category = '';
+  categories!: IcategoryData[];
+  Selectedategory = '';
+  private _ngUnsubscribe = new Subject<void>();
   @Output() modalClosed = new EventEmitter();
   constructor(
     private _teacherService: TeacherService,
     private _toasterService: ToasterService
   ) {}
+
+  ngOnInit(): void {
+    this._teacherService
+      .getAllCategories()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((res) => {
+        console.log(res
+          ,'categoriesssssssssssssssssssssssssssss');
+        
+        this.categories = res.categories;
+      });
+  }
 
   onFileSelected(event: any) {
     if (this.files.length >= 3) {
@@ -66,6 +87,9 @@ export class UploadCertificatesComponent {
       }
     }
   }
+  selectCategory(categoryId: string) {
+    this.Selectedategory = categoryId;
+  }
 
   removeFile(file: File) {
     this.files = this.files.filter((f) => f !== file);
@@ -77,7 +101,7 @@ export class UploadCertificatesComponent {
   }
 
   uploadFiles() {
-    if (!this.category) {
+    if (!this.Selectedategory) {
       return this._toasterService.showError('Select category');
     }
     if (this.files.length <= 0) {
@@ -86,29 +110,25 @@ export class UploadCertificatesComponent {
 
     this._teacherService
       .uploadCertificates({
-        category: this.category,
+        category: this.Selectedategory,
         certificates: this.files,
       })
       .subscribe((res) => {
         if (res.success) {
-          this.closeModal()
+          this.closeModal();
           this._toasterService.showSuccess(res.message);
         } else {
           this._toasterService.showError(res.message);
         }
       });
-
-    // let uploaded = 0;
-    // const interval = setInterval(() => {
-    //   uploaded += 10;
-    //   this.uploadProgress = (uploaded / this.files.length) * 100;
-    //   if (uploaded >= 100) {
-    //     clearInterval(interval);
-    //   }
-    // }, 500);
   }
 
   closeModal() {
     this.modalClosed.emit();
+  }
+
+  ngOnDestroy(): void {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 }

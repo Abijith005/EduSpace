@@ -13,17 +13,17 @@ export class AdminService {
 
   getAllCategories(page: number, limit: number) {
     return this._http.get<
-      IgenreralResponse & { data: IcategoryResponse[]; totalPages: number }
-    >(`/v1/admin/categories/all?page=${page}&limit=${limit}`);
+      IgenreralResponse & { categories: IcategoryResponse[]; totalPages: number }
+    >(`/v1/course/categories/all?page=${page}&limit=${limit}`);
   }
 
   addCategory(data: IcategoryData) {
-    return this._http.post<IgenreralResponse>('/v1/admin/categories/add', data);
+    return this._http.post<IgenreralResponse>('/v1/course/categories/create', data);
   }
 
   getAllRequests(page: number, limit: number) {
     return this._http.get<IgenreralResponse&{requests:ICategoryRequest[],totalPages:number}>(
-      `/v1/admin/requests/all?currentPage=${page}&limit=${limit}`
+      `/v1/teacher/profile/requests/all?currentPage=${page}&limit=${limit}`
     );
   }
 }

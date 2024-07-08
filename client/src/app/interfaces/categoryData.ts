@@ -1,4 +1,5 @@
-export interface IcategoryData{
-    name:string,
-    icon:string
+export interface IcategoryData {
+  _id?: string;
+  title: string;
+  icon: string;
 }

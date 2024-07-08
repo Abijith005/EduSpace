@@ -12,10 +12,9 @@
     </div>
     <div class="py-6">
         <label class="block text-gray-700  text- font-bold">Category</label>
-        <select [(ngModel)]="category" class="w-full mt-2 p-2 bg-gray-50  text-sm border-none rounded-lg" >
+        <select class="w-full mt-2 p-2 bg-gray-50  text-sm border-none rounded-lg" >
             <option value="" disabled selected hidden >Select category</option>
-          <option>category1 </option>
-          <option>category2</option>
+          <option (click)="selectCategory(item._id!)" *ngFor="let item of categories">{{item.title}}</option>
         </select>
       </div>
     <div
