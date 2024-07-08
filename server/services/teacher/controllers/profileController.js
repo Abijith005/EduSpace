@@ -1,8 +1,11 @@
+import jwtDecode from "../helpers/jwtDecode.js";
 import requestModel from "../models/categoryRequestModeldel.js";
 
 export const uploadCertificates = async (req, res) => {
   try {
     const { category } = req.body;
+    const token=req.headers.authorization.split(' ')[1]
+    const userId= jwtDecode(token).id
     const certificates = req.files.map((file) => ({
       url: file.location,
       key: file.key,
@@ -10,7 +13,7 @@ export const uploadCertificates = async (req, res) => {
     }));
     console.log(certificates);
     await requestModel.create({
-      userId: "131",
+      userId: userId,
       category: category,
       certificates: certificates,
     });

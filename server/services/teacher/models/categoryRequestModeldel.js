@@ -4,7 +4,6 @@ const requestSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      // type:String,
       required: [true, "User id required"],
     },
     category: {

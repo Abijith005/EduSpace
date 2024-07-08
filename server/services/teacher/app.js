@@ -4,7 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import "dotenv/config.js";
 import dbConnect from "./config/dbConnect.js";
-import profileRoutes from "../teacher/routes/profileRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -25,6 +25,7 @@ app.use(
 );
 
 app.use("/api/v1/teacher/profile", profileRoutes);
+// app.use("/api/v1/user/teacher/categories", categoryRoutes);
 
 app.listen(port, () => {
   console.log(`teacher service running in port ${port}`);

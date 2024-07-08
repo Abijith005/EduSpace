@@ -17,8 +17,8 @@ export const getRequests = async (req, res) => {
     const courseCommunicate = new CourseCommunicator(token);
     const authCommunicate = new AuthCommunicator();
     const categories = await courseCommunicate.getCategoryByIds(categoryIds);
-    const users = await authCommunicate.getUsersByIds(userIds);
-    console.log(categories,user);
+    // const users = await authCommunicate.getUsersByIds(userIds);
+    console.log(categories,'categorieeeeeeeeeeeeeeeeeeeeeeeeeeee');
     res.status(200).json(response);
   } catch (error) {
     console.log("Error \n", error);

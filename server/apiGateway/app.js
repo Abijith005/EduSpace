@@ -16,7 +16,7 @@ const courseUrl = process.env.COURSE_SERVICE_URL;
 
 app.use(
   cors({
-    origin: [clientUrl, teacherUrl, adminUrl],
+    origin: ["http://localhost:4200", teacherUrl, adminUrl],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
   })

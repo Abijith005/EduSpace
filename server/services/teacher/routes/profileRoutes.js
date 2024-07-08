@@ -38,5 +38,5 @@ router.post(
 );
 
 
-router.get('/certificates/all',getRequests)
+router.get('/requests/all',getRequests)
 export default router;

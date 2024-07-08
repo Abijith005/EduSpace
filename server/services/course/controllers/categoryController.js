@@ -22,18 +22,24 @@ export const createCategory = async (req, res) => {
   }
 };
 
-export const getAllCategories = async (req, res) => {
+export const getCategories = async (req, res) => {
   try {
     const { page, limit } = req.query;
-    const skip = (page - 1) * limit;
-    const totalDocs = await categoryModel.countDocuments();
-    const totalPages = Math.ceil(totalDocs / limit);
-    const data = await categoryModel
-      .find()
-      .skip(skip)
-      .limit(page * limit)
-      .lean();
-    res.status(200).json({ success: true, data, totalPages });
+    let categories;
+    let totalPages;
+    if (page && limit) {
+      const skip = (page - 1) * limit;
+      const totalDocs = await categoryModel.countDocuments();
+      totalPages = Math.ceil(totalDocs / limit);
+      categories = await categoryModel
+        .find()
+        .skip(skip)
+        .limit(page * limit)
+        .lean();
+    } else {
+      categories = await categoryModel.find().lean();
+    }
+    res.status(200).json({ success: true, categories, totalPages });
   } catch (error) {
     console.log("Error \n", error);
     return res
