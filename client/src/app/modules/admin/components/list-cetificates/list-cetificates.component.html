@@ -29,7 +29,10 @@
       *ngFor="let certificate of certificates"
       class="flex flex-col gap-3 items-center"
     >
-      <div class="border rounded-lg p-4 flex flex-col items-center">
+      <div
+        class="border rounded-lg p-4 flex flex-col items-center"
+        (click)="viewCertificate(certificate.url)"
+      >
         <svg
           class="h-16 w-16 text-red-500"
           fill="currentColor"
@@ -39,7 +42,11 @@
             d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-4H8V8h5v2z"
           />
         </svg>
-        <span class="mt-2 text-sm font-medium">{{ certificate.key }}</span>
+        <div class="w-40 flex justify-center">
+          <span class="mt-2 text-sm font-medium truncate overflow-hidden"
+            >Abijith Surendran.pdf</span
+          >
+        </div>
       </div>
       <div class="flex space-x-3">
         <div class="mt-2 flex space-x-2 items-center">
@@ -70,10 +77,22 @@
 
   <div class="flex justify-end px-2 mt-12">
     <button
+    (click)="updateCertificates()"
       type="submit"
       class="bg-blue-700 text-white px-4 py-1.5 rounded-md ring-1 text-sm"
     >
       Update
     </button>
   </div>
+</div>
+
+<div
+  *ngIf="isNestedVisible$ | async"
+  class="fixed inset-0 z-30 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60 min-w-full"
+>
+  <app-pdf-viewer
+    [certificate]="selectedCertificate"
+    (pdfModalClosed)="closePdfModal()"
+  >
+  </app-pdf-viewer>
 </div>

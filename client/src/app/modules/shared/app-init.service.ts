@@ -52,8 +52,6 @@ export class AppInitializerService {
       this.authService.getUserInfo(token).pipe(
         retry(3),
         map((response) => {
-          console.log(response, '123465498');
-
           if (response.success && response.userInfo) {
             this.store.dispatch(
               checkAuthStatusSuccess({ userDatas: response.userInfo })

@@ -42,7 +42,7 @@
         </select>
       </div>
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto min-h-[50vh]">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr class="">
@@ -85,18 +85,34 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200 poppins-text">
-          <tr class="text-center" *ngFor="let reuest of data">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
-            <td class="px-6 py-4 whitespace-nowrap">Photography</td>
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
-            <td
-              class="px-6 py-4 whitespace-nowrap flex items-center justify-center"
-            >
-              verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
+          <tr class="text-center" *ngFor="let request of requests">
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ request.userDetails.name | titlecase }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ request.categoryDetails.title }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ request.createdAt | date }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
+              {{ request.status | titlecase }}
+            
+              <ng-container *ngIf="request.status === 'pending'">
+                <i class="fas fa-hourglass-half text-orange-500 ml-2"></i>
+              </ng-container>
+            
+              <ng-container *ngIf="request.status === 'rejected'">
+                <i class="fas fa-times-circle text-red-700 ml-2"></i>
+              </ng-container>
+            
+              <ng-container *ngIf="request.status !== 'pending' && request.status !== 'rejected'">
+                <i class="fas fa-check-circle text-green-500 ml-2"></i>
+              </ng-container>
             </td>
             <td
               class="px-6 py-4 whitespace-nowrap cursor-pointer"
-              (click)="openModal()"
+              (click)="openModal(request)"
             >
               <span
                 class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
@@ -105,9 +121,40 @@
               </span>
             </td>
             <td
-              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium cursor-pointer"
+              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium cursor-pointer relative"
             >
-              <!-- <i class="fas fa-ellipsis-v"></i> -->
+              <div class="relative">
+                <button
+                  class="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  (click)="toggleDropdown(request._id)"
+                  [ngClass]="{
+                    'cursor-pointer': request.status == 'pending',
+                    'cursor-not-allowed opacity-50': request.status != 'pending'
+                  }"
+                [disabled]="request.status!='isPending'"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div
+                  *ngIf="dropdownOpen && request._id === currentRequestId"
+                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
+                >
+                  <ul>
+                    <li
+                      class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
+                      (click)="updateRequestStatus(request._id, 'approved')"
+                      >
+                      Approve
+                    </li>
+                    <li
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
+                    (click)="updateRequestStatus(request._id, 'rejected')"
+                    >
+                      Reject
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -127,5 +174,9 @@
   *ngIf="isVisible$ | async"
   class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60"
 >
-  <app-certificate-view (modalClosed)="closeModal()"></app-certificate-view>
+  <app-list-cetificates
+    [certificates]="certificates"
+    [requestId]="selectedRequestId!"
+    (modalClosed)="closeModal()"
+  ></app-list-cetificates>
 </div>

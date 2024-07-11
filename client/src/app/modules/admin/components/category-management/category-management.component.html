@@ -116,10 +116,31 @@
                 </span>
               </ng-template>
             </td>
+
             <td
-              class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium cursor-pointer"
+              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium cursor-pointer relative"
             >
-              <i class="fas fa-ellipsis-v"></i>
+              <div class="relative">
+                <button
+                  class="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  (click)="toggleDropdown(category._id)"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div
+                  *ngIf="dropdownOpen && category._id === currentCategoryId"
+                  class="absolute right-1 mt-2 w-48 bg-gray-100 rounded-md shadow-lg z-50"
+                >
+                  <ul>
+                    <li
+                      class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
+                      (click)="updateCategoryStatus(category._id,!category.activeStatus)"
+                    >
+                      {{ category.activeStatus == true ? "Block" : "Unblock" }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>

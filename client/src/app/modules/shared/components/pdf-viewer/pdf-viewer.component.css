@@ -1,0 +1,16 @@
+.custom-cursor {
+    cursor: default !important;
+  }
+  
+  .custom-cursor .ng2-pdf-viewer-container {
+    cursor: default !important;
+  }
+  
+  .custom-cursor .textLayer {
+    cursor: default !important;
+  }
+  
+  .custom-cursor .canvasWrapper {
+    cursor: default !important;
+  }
+  

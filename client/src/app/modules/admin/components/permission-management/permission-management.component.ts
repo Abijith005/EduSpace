@@ -2,7 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalService } from '../../../shared/modal.service';
 import { AdminService } from '../../admin.service';
 import { Subject, takeUntil } from 'rxjs';
-import { ICategoryRequest } from '../../../../interfaces/categoryRequest';
+import {
+  ICategoryRequest,
+  ICertificate,
+} from '../../../../interfaces/categoryRequest';
+import { ToasterService } from '../../../shared/toaster.service';
 
 @Component({
   selector: 'app-permission-management',
@@ -10,48 +14,50 @@ import { ICategoryRequest } from '../../../../interfaces/categoryRequest';
   styleUrl: './permission-management.component.css',
 })
 export class PermissionManagementComponent implements OnInit, OnDestroy {
-  totalPages!:number
+  totalPages!: number;
   currentPage = 1;
-  limit=8
-  data!:ICategoryRequest[]
+  limit = 8;
+  requests!: ICategoryRequest[];
+  certificates!: ICertificate[];
+  selectedRequestId: string | null = null;
+  dropdownOpen = false;
+  currentRequestId: string | null = null;
   private _ngUnsbscribe = new Subject<void>();
 
   constructor(
     private _modalService: ModalService,
-    private _adminService: AdminService
+    private _adminService: AdminService,
+    private _toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
     this._adminService
-      .getAllRequests(this.currentPage,this.limit)
+      .getAllRequests(this.currentPage, this.limit)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        console.log(res);
-        
-        this.data=res.requests
-        this.totalPages=res.totalPages        
+        this.requests = res.requests;
+        this.totalPages = res.totalPages;
       });
   }
 
   isVisible$ = this._modalService.isVisible$;
-  isDropdownOpen = false;
 
-  toggleDropdown() {
-    console.log('isdeorpwon', this.isDropdownOpen);
-
-    this.isDropdownOpen = !this.isDropdownOpen;
+  updateRequestStatus(requestId: string, status: string) {
+    this._adminService
+      .updateRequest({ requestId, status })
+      .pipe(takeUntil(this._ngUnsbscribe))
+      .subscribe((res) => {
+        if (res.success) {
+          this.dropdownOpen = false;
+        }
+        this._toasterService.toasterFunction(res);
+      });
   }
 
-  verify() {
-    // Verify logic here
-    this.isDropdownOpen = false;
-  }
-
-  reject() {
-    // Reject logic here
-    this.isDropdownOpen = false;
-  }
-  openModal() {
+  rejectRequest(requestId: string) {}
+  openModal(request: ICategoryRequest) {
+    this.certificates = request.certificates;
+    this.selectedRequestId = request._id;
     this._modalService.openModal();
   }
 
@@ -60,6 +66,11 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   }
   onPageChanged(page: number) {
     this.currentPage = page;
+  }
+
+  toggleDropdown(requestId: string) {
+    this.dropdownOpen = !this.dropdownOpen;
+    this.currentRequestId = requestId;
   }
 
   ngOnDestroy(): void {

@@ -6,6 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ModalService {
   private isVisible = new BehaviorSubject<boolean>(false);
+  private isNestedVisible = new BehaviorSubject<boolean>(false);
+  isNestedVisible$ = this.isNestedVisible.asObservable();
   isVisible$ = this.isVisible.asObservable();
   constructor() {}
 
@@ -16,6 +18,15 @@ export class ModalService {
 
   closeModal() {
     this.isVisible.next(false);
+    document.body.classList.remove('open-modal');
+  }
+
+  openNestedModal() {
+    this.isNestedVisible.next(true);
+    document.body.classList.add('open-modal');
+  }
+  closeNestedModal() {
+    this.isNestedVisible.next(false);
     document.body.classList.remove('open-modal');
   }
 }

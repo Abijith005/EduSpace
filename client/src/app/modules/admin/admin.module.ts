@@ -5,20 +5,19 @@ import { AdminNavBarComponent } from './components/admin-nav-bar/admin-nav-bar.c
 import { SharedModule } from '../shared/shared.module';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
-import { NgApexchartsModule } from "ng-apexcharts";
+import { NgApexchartsModule } from 'ng-apexcharts';
 import { InstructorManagementComponent } from './components/instructor-management/instructor-management.component';
 import { CategoryManagementComponent } from './components/category-management/category-management.component';
 import { PaymentManagemetComponent } from './components/payment-managemet/payment-managemet.component';
 import { StudentManagementComponent } from './components/student-management/student-management.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermissionManagementComponent } from './components/permission-management/permission-management.component';
-import { CertificateViewComponent } from './components/certificate-view/certificate-view.component';
-
-
+import { ListCetificatesComponent } from './components/list-cetificates/list-cetificates.component';
+// import {RemoveTimestampPipe} from '../../pipes/remove-timestamp.pipe'
 
 
 @NgModule({
-  declarations: [ 
+  declarations: [
     AdminNavBarComponent,
     AddCategoryComponent,
     AdminDashboardComponent,
@@ -27,11 +26,16 @@ import { CertificateViewComponent } from './components/certificate-view/certific
     PaymentManagemetComponent,
     StudentManagementComponent,
     PermissionManagementComponent,
-    CertificateViewComponent,
-    
+    ListCetificatesComponent,
+    // RemoveTimestampPipe
   ],
   imports: [
-    CommonModule,AdminRoutingModule,SharedModule,NgApexchartsModule,FormsModule,ReactiveFormsModule
-  ]
+    CommonModule,
+    AdminRoutingModule,
+    SharedModule,
+    NgApexchartsModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
-export class AdminModule { }
+export class AdminModule {}

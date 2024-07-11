@@ -3,6 +3,7 @@ import { ModalService } from '../../../shared/modal.service';
 import { AdminService } from '../../admin.service';
 import { Subject, takeUntil } from 'rxjs';
 import { IcategoryResponse } from '../../../../interfaces/categoryResponse';
+import { ToasterService } from '../../../shared/toaster.service';
 
 @Component({
   selector: 'app-category-management',
@@ -15,11 +16,14 @@ export class CategoryManagementComponent implements OnInit, OnDestroy {
   currentPage = 1;
   limit = 8;
   categories!: IcategoryResponse[];
+  dropdownOpen = false;
+  currentCategoryId: string | null = null;
 
   private _ngUnsbscribe = new Subject<void>();
   constructor(
     private _modalService: ModalService,
-    private _adminService: AdminService
+    private _adminService: AdminService,
+    private _toasterService: ToasterService
   ) {}
 
   ngOnInit(): void {
@@ -27,8 +31,6 @@ export class CategoryManagementComponent implements OnInit, OnDestroy {
       .getAllCategories(this.currentPage, this.limit)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        console.log(res.totalPages,res);
-        
         this.categories = res.categories;
         this.totalPages = res.totalPages;
       });
@@ -40,6 +42,23 @@ export class CategoryManagementComponent implements OnInit, OnDestroy {
 
   closeModal() {
     this._modalService.closeModal();
+  }
+
+  toggleDropdown(requestId: string) {
+    this.dropdownOpen = !this.dropdownOpen;
+    this.currentCategoryId = requestId;
+  }
+
+  updateCategoryStatus(categoryId: string, status: boolean) {
+    this._adminService
+      .updateCategoryStatus({ categoryId, status })
+      .pipe(takeUntil(this._ngUnsbscribe))
+      .subscribe((res) => {
+        this._toasterService.toasterFunction(res);
+        if (res.success) {
+          this.dropdownOpen = false;
+        }
+      });
   }
 
   onPageChanged(page: number) {
