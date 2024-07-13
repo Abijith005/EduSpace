@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { TeacherProfileComponent } from './components/teacher-profile/teacher-profile.component';
 import { UploadCertificatesComponent } from './components/upload-certificates/upload-certificates.component';
 import { TeacherPaymentComponent } from './components/teacher-payment/teacher-payment.component';
+import { CourseUploadFormComponent } from './components/course-upload-form/course-upload-form.component';
 
 
 
@@ -20,7 +21,8 @@ import { TeacherPaymentComponent } from './components/teacher-payment/teacher-pa
     TeacherCourseManageComponent,
     TeacherProfileComponent,
     UploadCertificatesComponent,
-    TeacherPaymentComponent
+    TeacherPaymentComponent,
+    CourseUploadFormComponent
   ],
   imports: [
     CommonModule,TeacherRoutingModule,FormsModule,ReactiveFormsModule,NgApexchartsModule,SharedModule

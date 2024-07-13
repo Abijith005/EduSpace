@@ -4,6 +4,8 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { LoadingComponent } from './components/loading/loading.component';
 import { PdfViewerComponent } from './components/pdf-viewer/pdf-viewer.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { RemoveTimestampPipe } from './pipes/remove-timestamp.pipe';
+import { ObjectUrlPipe } from './pipes/object-url.pipe';
 
 
 
@@ -14,11 +16,13 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     PaginationComponent,
     LoadingComponent,
     PdfViewerComponent,
+    RemoveTimestampPipe,
+    ObjectUrlPipe,
   ],
   imports: [
     CommonModule,
     NgxExtendedPdfViewerModule
   ],
-  exports:[PaginationComponent,LoadingComponent,PdfViewerComponent,]
+  exports:[PaginationComponent,LoadingComponent,PdfViewerComponent,ObjectUrlPipe,RemoveTimestampPipe]
 })
 export class SharedModule { }

@@ -16,7 +16,6 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { AppInitializerService } from './modules/shared/app-init.service';
 import { SharedModule } from './modules/shared/shared.module';
 import { sharedReducer } from './store/shared/shared.reducer';
-import { RemoveTimestampPipe } from './pipes/remove-timestamp.pipe';
 
 
 
@@ -27,7 +26,6 @@ export function initializeApp(appInitService: AppInitializerService) {
 @NgModule({
   declarations: [
     AppComponent,
-    RemoveTimestampPipe,
   ],
   imports: [
     BrowserModule,
@@ -42,8 +40,6 @@ export function initializeApp(appInitService: AppInitializerService) {
     FontAwesomeModule,
     FontAwesomeModule,
     SharedModule,
-    
-
     
   ],
   providers: [

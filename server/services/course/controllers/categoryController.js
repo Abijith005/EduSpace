@@ -48,12 +48,24 @@ export const getCategories = async (req, res) => {
   }
 };
 
-export const getCategoriesByIds = async (req, res) => {
+export const getCategoriesByIds = async (categoryIds) => {
   try {
-    const { ids } = req.query;
-    const categoryIds = ids.split(",");
-    const categories = await categoryModel.find({ _id: categoryIds }).lean();
-    res.status(200).json({ success: true, categories });
+    return await categoryModel.find({ _id: { $in: categoryIds } }).lean();
+  } catch (error) {
+    console.log("Error \n", error);
+  }
+};
+
+export const updateCategoryStatus = async (req, res) => {
+  try {
+    const { categoryId, status } = req.body;
+    await categoryModel.findByIdAndUpdate(
+      { _id: categoryId },
+      { $set: { activeStatus: status } }
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Category status updated successfully" });
   } catch (error) {
     console.log("Error \n", error);
     return res

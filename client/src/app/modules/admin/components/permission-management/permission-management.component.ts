@@ -54,7 +54,6 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
       });
   }
 
-  rejectRequest(requestId: string) {}
   openModal(request: ICategoryRequest) {
     this.certificates = request.certificates;
     this.selectedRequestId = request._id;

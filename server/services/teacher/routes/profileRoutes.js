@@ -1,6 +1,11 @@
 import express from "express";
-import { getRequests, uploadCertificates } from "../controllers/profileController.js";
-import uploadPdf from "../helpers/certificateUpload.js";
+import {
+  getRequests,
+  updateCertificates,
+  updateRequestStatus,
+  uploadCertificates,
+} from "../controllers/profileController.js";
+import uploadPdf from "../s3UploadMiddelwares/certificateUpload.js";
 import multer from "multer";
 
 const router = express.Router();
@@ -32,11 +37,14 @@ router.post(
         .status(500)
         .json({ success: false, message: "Internal server error" });
     }
-    next(); 
+    next();
   },
   uploadCertificates
 );
 
+router.get("/requests/all", getRequests);
 
-router.get('/requests/all',getRequests)
+router.put("/requests/updateCertificates", updateCertificates);
+
+router.put("/requests/updateRequestStatus", updateRequestStatus);
 export default router;

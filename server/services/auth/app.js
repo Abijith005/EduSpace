@@ -5,15 +5,16 @@ import cors from "cors";
 import "dotenv/config.js";
 import userAuthRoutes from "./routes/userAuthRoutes.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
-import socialAuthRoutes from "./routes/socialAuth.js"
-import dataRoutes from "./routes/dataRoutes.js"
+import socialAuthRoutes from "./routes/socialAuth.js";
 import cronJob from "./helpers/cronJob.js";
 import dbConnect from "./config/dbConnect.js";
+import startRPCServer from "./services/rpcServer.js";
+import { getUsersByIds } from "./controllers/dataController.js";
 
 const app = express();
 const port = process.env.PORT;
- 
-dbConnect()
+
+dbConnect();
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
@@ -29,9 +30,11 @@ app.use(
 cronJob();
 
 app.use("/api/v1/auth/user", userAuthRoutes);
-app.use("/api/v1/auth/socialAuth",socialAuthRoutes)
+app.use("/api/v1/auth/socialAuth", socialAuthRoutes);
 app.use("/api/v1/auth/token", tokenRoutes);
-app.use("/api/v1/auth/data",dataRoutes)
+
+startRPCServer("authQueue", getUsersByIds);
+
 app.listen(port, () => {
   console.log(`auth service running in port ${port}`);
 });

@@ -25,8 +25,7 @@ app.use(
 );
 
 app.use("/api/v1/teacher/profile", profileRoutes);
-// app.use("/api/v1/user/teacher/categories", categoryRoutes);
 
-app.listen(port, () => {
-  console.log(`teacher service running in port ${port}`);
-});
+  app.listen(port, () => {
+    console.log(`teacher service running in port ${port}`);
+  });

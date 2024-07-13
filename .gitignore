@@ -4,8 +4,8 @@ server/services/student/.env
 server/services/student/node_modules
 server/services/teacher/.env
 server/services/teacher/node_modules
-server/services/admin/.env
-server/services/admin/node_modules
+server/services/course/.env
+server/services/course/node_modules
 server/apiGateway/.env
 server/apiGateway/node_modules
 

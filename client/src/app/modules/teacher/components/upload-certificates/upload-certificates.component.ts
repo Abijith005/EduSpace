@@ -32,9 +32,6 @@ export class UploadCertificatesComponent implements OnInit, OnDestroy {
       .getAllCategories()
       .pipe(takeUntil(this._ngUnsubscribe))
       .subscribe((res) => {
-        console.log(res
-          ,'categoriesssssssssssssssssssssssssssss');
-        
         this.categories = res.categories;
       });
   }

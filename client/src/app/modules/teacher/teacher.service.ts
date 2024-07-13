@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { IcategoryData } from '../../interfaces/categoryData';
+import { ICourseDetails } from '../../interfaces/courseDetails';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,19 @@ export class TeacherService {
     return this._http.post<IgenreralResponse>(
       `/v1/teacher/profile/upload/certificates`,
       uploadData
+    );
+  }
+
+  getAllCourses(page: number, limit: number, search: string, filter: string) {
+    return this._http.get<IgenreralResponse&{courses:ICourseDetails[]}>(
+      `/v1/course/manageCourse/all?page=${page}&limit=${limit}&search=${search}&filter=${filter}&id=true`
+    );
+  }
+
+  uploadCourse(data: FormData) {
+    return this._http.post<IgenreralResponse>(
+      `/v1/course/manageCourse/uploadCourse`,
+      data
     );
   }
 }
