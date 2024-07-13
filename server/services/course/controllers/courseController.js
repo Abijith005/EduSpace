@@ -13,7 +13,6 @@ export const uploadCourse = async (req, res) => {
     }
     const token = req.headers.authorization.split(" ")[1];
     req.body.user_id = jwtDecode(token).id;
-    console.log();
     await sendUploadTaskToQueue(req.files, req.body);
     res.status(200).send({
       success: true,
@@ -31,23 +30,25 @@ export const getAllCourses = async (req, res) => {
   try {
     const { page, limit, search, filter, id } = req.query;
     let totalDocs;
+    let query = { title: { $regex: search, $options: "i" } };
+
     if (id) {
       const token = req.headers.authorization.split(" ")[1];
       const user_id = jwtDecode(token).id;
       totalDocs = await cousreModel.find({ user_id: user_id }).countDocuments();
+      query = { ...query, user_id: user_id };
     } else {
       totalDocs = await cousreModel.countDocuments();
     }
 
     const skip = (page - 1) * limit;
     const datas = await cousreModel
-      .find({ title: { $regex: search, $options: "i" } })
+      .find(query)
       .skip(skip)
       .limit(page * limit)
       .lean();
 
-      return res.status(200).json({success:true,courses:datas})
-
+    return res.status(200).json({ success: true, courses: datas });
   } catch (error) {
     console.log("Error \n", error);
     return res
