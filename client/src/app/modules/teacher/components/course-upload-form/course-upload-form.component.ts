@@ -44,7 +44,7 @@ export class CourseUploadFormComponent implements OnInit, OnDestroy {
     });
 
     this._teacherService
-      .getAllCategories()
+      .getAllowedCategories()
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         this.categories = res.categories;

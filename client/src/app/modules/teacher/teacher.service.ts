@@ -16,6 +16,12 @@ export class TeacherService {
     );
   }
 
+  getAllowedCategories() {
+    return this._http.get<IgenreralResponse & { categories: IcategoryData[] }>(
+      `/v1/course/categories/allowed`
+    );
+  }
+
   uploadCertificates(data: { category: string; certificates: File[] }) {
     const uploadData = new FormData();
     uploadData.append('category', data.category);

@@ -46,7 +46,7 @@ export class AdminService {
     );
   }
 
-  updateRequest(data: { requestId: string; status: string }) {
+  updateRequest(data: { requestId: string; status: string,category?:string}) {
     return this._http.put<IgenreralResponse>(
       `/v1/teacher/profile/requests/updateRequestStatus`,
       data

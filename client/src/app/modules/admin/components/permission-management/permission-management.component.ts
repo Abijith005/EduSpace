@@ -42,9 +42,9 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
 
   isVisible$ = this._modalService.isVisible$;
 
-  updateRequestStatus(requestId: string, status: string) {
+  updateRequestStatus(requestId: string, status: string, category?: string) {
     this._adminService
-      .updateRequest({ requestId, status })
+      .updateRequest({ requestId, status, category })
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
@@ -68,6 +68,7 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   }
 
   toggleDropdown(requestId: string) {
+    
     this.dropdownOpen = !this.dropdownOpen;
     this.currentRequestId = requestId;
   }

@@ -1,4 +1,4 @@
-import connectRabbitMQ from "../../config/rabbitmq.js";
+import { connectRabbitMQ } from "../../config/rabbitmq.js";
 import generateTimeUuid from "../../helpers/generateUuid.js";
 
 const sendRPCRequest = async (queue, message) => {

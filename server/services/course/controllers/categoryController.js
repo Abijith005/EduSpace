@@ -1,5 +1,7 @@
 import { inputValidation } from "../helpers/inptValidation.js";
+import jwtDecode from "../helpers/jwtDecode.js";
 import categoryModel from "../models/categoryModel.js";
+import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 
 export const createCategory = async (req, res) => {
   try {
@@ -66,6 +68,27 @@ export const updateCategoryStatus = async (req, res) => {
     res
       .status(200)
       .json({ success: true, message: "Category status updated successfully" });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getAllowedCategories = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const user_id = jwtDecode(token).id;
+    const [userDetails] = await sendRPCRequest(
+      "authQueue",
+      JSON.stringify([user_id])
+    );
+    const { categories } = userDetails;
+    const allowedCategories = await categoryModel.find({
+      _id: { $in: categories },
+    });
+    res.status(200).json({ success: true, categories: allowedCategories });
   } catch (error) {
     console.log("Error \n", error);
     return res

@@ -3,7 +3,8 @@
 // import { getUserDetails } from "../consumers/userDetailsConsumer.js";
 import jwtDecode from "../helpers/jwtDecode.js";
 import requestModel from "../models/categoryRequestModeldel.js";
-import sendRPCRequest from "../service/rpcClient.js";
+import { sendUserUpdateTask } from "../rabbitmq/producers/userUpdateProducer.js";
+import sendRPCRequest from "../rabbitmq/service/rpcClient.js";
 
 export const uploadCertificates = async (req, res) => {
   try {
@@ -15,7 +16,6 @@ export const uploadCertificates = async (req, res) => {
       key: file.key,
       verified: false,
     }));
-    console.log(certificates);
     await requestModel.create({
       userId: userId,
       category: category,
@@ -105,11 +105,20 @@ export const updateCertificates = async (req, res) => {
 
 export const updateRequestStatus = async (req, res) => {
   try {
-    const { requestId, status } = req.body;
+    const token = req.headers.authorization.split(" ")[1];
+    const user_id = jwtDecode(token).id;
+    const { requestId, status, category } = req.body;
     await requestModel.findByIdAndUpdate(
       { _id: requestId },
       { $set: { status: status } }
     );
+
+    if (status === "approved") {
+      const queue = "user_update_queue";
+      const query={_id:user_id}
+      const update={$push:{category:category}}
+      sendUserUpdateTask(queue,{query,update});
+    }
     res
       .status(200)
       .json({ success: true, message: "Request status updated successfully" });

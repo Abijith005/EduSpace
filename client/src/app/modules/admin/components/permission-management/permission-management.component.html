@@ -131,7 +131,7 @@
                     'cursor-pointer': request.status == 'pending',
                     'cursor-not-allowed opacity-50': request.status != 'pending'
                   }"
-                [disabled]="request.status!='isPending'"
+                [disabled]="request.status!='pending'"
                 >
                   <i class="fas fa-ellipsis-v"></i>
                 </button>
@@ -142,7 +142,7 @@
                   <ul>
                     <li
                       class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
-                      (click)="updateRequestStatus(request._id, 'approved')"
+                      (click)="updateRequestStatus(request._id, 'approved',request.categoryDetails._id)"
                       >
                       Approve
                     </li>
