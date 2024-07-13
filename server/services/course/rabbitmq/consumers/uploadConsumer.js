@@ -40,9 +40,7 @@ const uploadFileToS3 = async (filePath, filename, category, title) => {
 
 const processMessage = async (msg, channel) => {
   try {
-    console.log("consuming the message");
     const { files, data } = JSON.parse(msg.content.toString());
-    console.log(data);
 
     const uploadResults = {
       videos: [],
@@ -75,14 +73,7 @@ const processMessage = async (msg, channel) => {
     channel.ack(msg);
   } catch (error) {
     console.error("Failed to process message:", error);
-  } finally {
-    try {
-      await channel.close();
-      await channel.connection.close();
-    } catch (closeError) {
-      console.error("Failed to close channel/connection:", closeError);
-    }
-  }
+  } 
 };
 
 const startConsumer = async () => {
