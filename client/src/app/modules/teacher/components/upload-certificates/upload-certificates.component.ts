@@ -5,11 +5,10 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { NgToastService } from 'ng-angular-popup';
-import { ToasterService } from '../../../shared/toaster.service';
 import { TeacherService } from '../../teacher.service';
 import { Subject, takeUntil } from 'rxjs';
 import { IcategoryData } from '../../../../interfaces/categoryData';
+import { ToasterService } from '../../../shared/toaster.service';
 
 @Component({
   selector: 'app-upload-certificates',

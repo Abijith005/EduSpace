@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ModalService } from '../../../shared/modal.service';
+import { Subject, takeUntil } from 'rxjs';
 import { TeacherService } from '../../teacher.service';
 import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { ModalService } from '../../../shared/modal.service';
 
 @Component({
   selector: 'app-teacher-course-manage',
@@ -29,7 +29,9 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
       .getAllCourses(this.currentPage, this.limit, this.search, this.filter)
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
-        this.courses=res.courses      
+        this.courses=res.courses  
+        console.log(res);
+            
           
       });
   }

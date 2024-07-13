@@ -6,10 +6,10 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ToasterService } from '../../../shared/toaster.service';
 import { TeacherService } from '../../teacher.service';
 import { Subject, takeUntil } from 'rxjs';
 import { IcategoryData } from '../../../../interfaces/categoryData';
+import { ToasterService } from '../../../shared/toaster.service';
 @Component({
   selector: 'app-course-upload-form',
   templateUrl: './course-upload-form.component.html',
