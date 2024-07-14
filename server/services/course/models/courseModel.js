@@ -23,7 +23,7 @@ const courseSchema = new mongoose.Schema(
     },
     category_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "categories",
       required: [true, "Category id is required"],
     },
     title: {

@@ -30,7 +30,9 @@ export class ResponseInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     let isAuthRoute = request.url.includes('auth');
-    this._store.dispatch(setLoading({ isLoading: true }));
+    let loading = setTimeout(() => {
+      this._store.dispatch(setLoading({ isLoading: true }));
+    }, 300);
     return next.handle(request).pipe(
       catchError((error: any) => {
         if (
@@ -78,6 +80,7 @@ export class ResponseInterceptor implements HttpInterceptor {
         return throwError(error);
       }),
       finalize(() => {
+        clearTimeout(loading)
         this._store.dispatch(setLoading({ isLoading: false }));
       })
     );

@@ -105,9 +105,7 @@ export const updateCertificates = async (req, res) => {
 
 export const updateRequestStatus = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const user_id = jwtDecode(token).id;
-    const { requestId, status, category } = req.body;
+    const { requestId, status, category, user_id } = req.body;
     await requestModel.findByIdAndUpdate(
       { _id: requestId },
       { $set: { status: status } }
@@ -115,9 +113,9 @@ export const updateRequestStatus = async (req, res) => {
 
     if (status === "approved") {
       const queue = "user_update_queue";
-      const query={_id:user_id}
-      const update={$push:{category:category}}
-      sendUserUpdateTask(queue,{query,update});
+      const query = { _id: user_id };
+      const update = { $push: { categories: category } };
+      sendUserUpdateTask(queue, { query, update });
     }
     res
       .status(200)

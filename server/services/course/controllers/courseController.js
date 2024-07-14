@@ -30,25 +30,39 @@ export const getAllCourses = async (req, res) => {
   try {
     const { page, limit, search, filter, id } = req.query;
     let totalDocs;
-    let query = { title: { $regex: search, $options: "i" } };
+
+    const searchKeywords = search.split(" ");
+
+    let query = {
+      $or: searchKeywords.map((keyword) => ({
+        title: { $regex: keyword, $options: "i" },
+      })),
+    };
+
+    if (filter) {
+      query.category_id = filter;
+    }
 
     if (id) {
       const token = req.headers.authorization.split(" ")[1];
       const user_id = jwtDecode(token).id;
-      totalDocs = await cousreModel.find({ user_id: user_id }).countDocuments();
       query = { ...query, user_id: user_id };
+      totalDocs = await cousreModel
+        .countDocuments(query);
     } else {
-      totalDocs = await cousreModel.countDocuments();
+      totalDocs = await cousreModel.countDocuments(query);
     }
 
+    const totalPages = Math.ceil(totalDocs / limit);
     const skip = (page - 1) * limit;
     const datas = await cousreModel
       .find(query)
       .skip(skip)
       .limit(page * limit)
+      .populate("category_id", { _id: 1, title: 1 })
       .lean();
-
-    return res.status(200).json({ success: true, courses: datas });
+      const user_ids=[...new Set(datas.map(item=>item.user_id.toString()))]
+    return res.status(200).json({ success: true, courses: datas, totalPages });
   } catch (error) {
     console.log("Error \n", error);
     return res

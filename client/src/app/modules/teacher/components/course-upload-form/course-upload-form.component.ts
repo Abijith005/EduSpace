@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -16,10 +17,10 @@ import { ToasterService } from '../../../shared/toaster.service';
   styleUrl: './course-upload-form.component.css',
 })
 export class CourseUploadFormComponent implements OnInit, OnDestroy {
+  @Input() categories!: IcategoryData[]
   @Output() modalClosed = new EventEmitter();
   courseDetailsForm!: FormGroup;
-  isSubmitted: boolean = false;
-  categories!: IcategoryData[];
+  isSubmitted: boolean = false;;
   previewVideoFiles: File[] = [];
   previewImageFiles: File[] = [];
   videoFiles: File[] = [];
@@ -42,13 +43,6 @@ export class CourseUploadFormComponent implements OnInit, OnDestroy {
         [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)],
       ],
     });
-
-    this._teacherService
-      .getAllowedCategories()
-      .pipe(takeUntil(this._ngUnsubscribe$))
-      .subscribe((res) => {
-        this.categories = res.categories;
-      });
   }
 
   get formContols() {

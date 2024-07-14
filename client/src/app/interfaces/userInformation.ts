@@ -1,6 +1,7 @@
 export interface IuserInformation {
-    email: string;
-    name: string;
-    profilePic: string;
-    role:string
-  }
+  _id?: string;
+  email: string;
+  name: string;
+  profilePic: string;
+  role: string;
+}

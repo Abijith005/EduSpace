@@ -13,9 +13,13 @@ export const consumeUserUpdate = async () => {
         console.log(JSON.parse(msg.content.toString()));
         const message = JSON.parse(msg.content.toString());
         const { query, update } = message;
-        await teacherModel.findByIdAndUpdate(query, update);
-        console.log('updated user');
+        console.log(query,update);
+      const updateddd=  await teacherModel.updateOne(query, update);
+        console.log('updated user',updateddd);
+        channel.ack(msg)
       }
     });
   } catch (error) {}
 };
+
+

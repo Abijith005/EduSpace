@@ -37,7 +37,7 @@ export class TeacherService {
   }
 
   getAllCourses(page: number, limit: number, search: string, filter: string) {
-    return this._http.get<IgenreralResponse&{courses:ICourseDetails[]}>(
+    return this._http.get<IgenreralResponse & { courses: ICourseDetails[],totalPages:number }>(
       `/v1/course/manageCourse/all?page=${page}&limit=${limit}&search=${search}&filter=${filter}&id=true`
     );
   }

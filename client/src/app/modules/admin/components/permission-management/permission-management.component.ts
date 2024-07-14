@@ -42,9 +42,9 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
 
   isVisible$ = this._modalService.isVisible$;
 
-  updateRequestStatus(requestId: string, status: string, category?: string) {
+  updateRequestStatus(requestId: string, status: string, category: string,user_id:string) {
     this._adminService
-      .updateRequest({ requestId, status, category })
+      .updateRequest({ requestId, status, category,user_id })
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {

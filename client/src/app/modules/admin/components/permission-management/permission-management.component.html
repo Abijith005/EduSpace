@@ -142,13 +142,13 @@
                   <ul>
                     <li
                       class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
-                      (click)="updateRequestStatus(request._id, 'approved',request.categoryDetails._id)"
+                      (click)="updateRequestStatus(request._id, 'approved',request.categoryDetails._id,request.userDetails._id!)"
                       >
                       Approve
                     </li>
                     <li
                     class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
-                    (click)="updateRequestStatus(request._id, 'rejected')"
+                    (click)="updateRequestStatus(request._id, 'rejected',request.categoryDetails._id,request.userDetails._id!)"
                     >
                       Reject
                     </li>

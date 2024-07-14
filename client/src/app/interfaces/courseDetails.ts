@@ -1,3 +1,4 @@
+import { IcategoryData } from "./categoryData";
 
 interface FileDetails {
   url: string;
@@ -7,7 +8,7 @@ interface FileDetails {
 export interface ICourseDetails {
   _id: string;
   user_id: string;
-  category_id: string;
+  category_id: IcategoryData;
   title: string;
   price: number;
   about: string;
