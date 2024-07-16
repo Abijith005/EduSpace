@@ -32,7 +32,9 @@
     <div class="grid grid-cols-9 gap-4 mb-6">
       <div class="col-span-4">
         <label
-          [style.color]="isSubmitted && formContols['title'].errors ? 'red' : ''"
+          [style.color]="
+            isSubmitted && formContols['title'].errors ? 'red' : ''
+          "
           class="block text-sm font-medium text-gray-700"
           >{{
             isSubmitted &&
@@ -61,12 +63,13 @@
               : "Category"
           }}</label
         >
+
         <select
           formControlName="category"
           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-0"
         >
-          <option value="" disabled selected class="text-gray-200">
-            Select Category
+          <option value="" selected class="text-gray-200">
+            {{ courseData.category_id.title }}
           </option>
           <option *ngFor="let category of categories" [value]="category._id">
             {{ category.title | titlecase }}
@@ -339,19 +342,18 @@
     <button
       (click)="closeModal()"
       type="button"
-      class="px-6 py-2 ring-1 ring-red-600 text-red-600 text-sm rounded-md shadow-sm "
-      style="line-height: 1;"
+      class="px-6 py-2 ring-1 ring-red-600 text-red-600 text-sm rounded-md shadow-sm"
+      style="line-height: 1"
     >
       Cancel
     </button>
     <button
       (click)="onSubmit()"
       type="submit"
-      class="px-6 py-2 ring-1 ring-green-500 text-green-500 text-sm rounded-md shadow-sm "
-      style="line-height: 1;"
+      class="px-6 py-2 ring-1 ring-green-500 text-green-500 text-sm rounded-md shadow-sm"
+      style="line-height: 1"
     >
       Update
     </button>
   </div>
-  
 </div>

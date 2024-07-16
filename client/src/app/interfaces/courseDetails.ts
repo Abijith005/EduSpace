@@ -1,4 +1,5 @@
 import { IcategoryData } from "./categoryData";
+import { IuserInformation } from "./userInformation";
 
 interface FileDetails {
   url: string;
@@ -7,7 +8,7 @@ interface FileDetails {
 
 export interface ICourseDetails {
   _id: string;
-  user_id: string;
+  user_id: IuserInformation;
   category_id: IcategoryData;
   title: string;
   price: number;

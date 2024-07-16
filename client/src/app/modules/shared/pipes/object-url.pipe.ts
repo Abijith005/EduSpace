@@ -1,12 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'objectUrl'
+  name: 'objectUrl',
 })
 export class ObjectUrlPipe implements PipeTransform {
 
-  transform(file: File): string {
-    return URL.createObjectURL(file);
+  transform(value: File | { url: string, key: string }): string {
+    if ('url' in value) {
+      return value.url;
+    } else if (value instanceof File) {
+      return URL.createObjectURL(value);
+    } else {
+      return '';
+    }
   }
-
 }

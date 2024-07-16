@@ -19,6 +19,8 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
   courses!: ICourseDetails[];
   categoires!: IcategoryData[];
   isVisible$ = this._modalService.isVisible$;
+  isUpdateVisible$ = this._modalService.isUpdateVisible$;
+  updateData!:ICourseDetails
 
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
@@ -41,7 +43,7 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
       .getAllCourses(this.currentPage, this.limit, this.search, this.filter)
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
-        this.courses = res.courses;
+        this.courses = res.courses;        
         this.totalPages = res.totalPages;
       });
   }
@@ -59,16 +61,24 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
     clearTimeout(this.debounce);
     this.debounce = setTimeout(() => {
       this.getAllCourses();
-      console.log('debounce workssssssssssssss', this.search);
     }, 500);
   }
 
-  openModal() {
+  openUploadModal() {
     this._modalService.openModal();
   }
 
-  closeModal() {
+  closeUploadModal() {
     this._modalService.closeModal();
+  }
+
+  openUpdateModal(course:ICourseDetails) {
+    this.updateData=course
+    this._modalService.openUpdateComponent();
+  }
+
+  closeUpdateModal() {
+    this._modalService.closeUpdateComponent();
   }
 
   onPageChanged(page: number) {

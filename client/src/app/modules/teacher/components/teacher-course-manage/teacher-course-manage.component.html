@@ -44,7 +44,7 @@
       </select>
     </div>
     <button
-      (click)="openModal()"
+      (click)="openUploadModal()"
       class="rounded-md border text-blue-600 py-0.5 px-5 hover:bg-blue-100 ring-1 ring-blue-600 jost-text"
     >
       <i class="fas fa-upload"></i>
@@ -68,7 +68,7 @@
       >
       <div class="flex-grow p-4 pb-0">
         <p class="text-gray-500 text-sm text-left jost-text">
-          by {{ course.user_id | titlecase }}
+          by {{ course.user_id.name| titlecase }}
         </p>
         <h2
           class="font-bold text-lg text-left exo-text whitespace-nowrap text-ellipsis overflow-hidden w-full"
@@ -96,7 +96,7 @@
           >
           <span class="text-green-500 font-bold jost-text">Free</span>
         </div>
-        <button class="exo-text font-bold">View More</button>
+        <button (click)="openUpdateModal(course)" class="exo-text font-bold">View More</button>
       </div>
     </div>
   </div>
@@ -116,6 +116,18 @@
 >
   <app-course-upload-form
     [categories]="categoires"
-    (modalClosed)="closeModal()"
+    (modalClosed)="closeUploadModal()"
   ></app-course-upload-form>
+</div>
+
+
+<div
+  *ngIf="isUpdateVisible$ | async"
+  class="fixed inset-0 z-30 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60 min-w-full"
+>
+  <app-teacher-update-course
+    [categories]="categoires"
+    [courseDataInput]="updateData"
+    (modalClosed)="closeUpdateModal()"
+  ></app-teacher-update-course>
 </div>
