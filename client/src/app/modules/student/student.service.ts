@@ -20,4 +20,8 @@ export class StudentService {
       `/v1/course/manageCourse/all?page=${page}&limit=${limit}&search=${search}&filter=${filter}`
     );
   }
+
+  getAllCategoriesCourseCount() {
+    return this._http.get<IgenreralResponse&{data:{title:string,count:number}[]}>('/v1/course/categories/courseCount');
+  }
 }

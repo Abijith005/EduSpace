@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { StudentService } from '../../student.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
 
 @Component({
@@ -23,21 +22,20 @@ export class StudentCourseListComponent {
     noSwitching: true,
     translate: (value: number): string => {
       return '₹' + value;
-    }
+    },
   };
 
-  constructor(private _studentService: StudentService ,) {
-    
-  }
+  constructor(private _studentService: StudentService) {}
 
   getAllCourses() {
-    
     this._studentService
       .getAllCourses(this.currentPage, this.limit, this.search, this.filter)
       .subscribe((res) => {
         console.log(res);
       });
   }
+
+ 
 
   courseCategories = [
     { name: 'Commercial', count: 15, selected: false },
@@ -69,10 +67,8 @@ export class StudentCourseListComponent {
     { stars: [1], emptyStars: [1, 1, 1, 1], count: 1025, selected: false },
   ];
 
-
-
   onPageChanged(page: number) {
-    console.log(this.maxValue,this.value);
+    console.log(this.maxValue, this.value);
 
     this.currentPage = page;
     // this.getAllCourses();
