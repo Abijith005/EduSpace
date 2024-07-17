@@ -16,6 +16,7 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { AppInitializerService } from './modules/shared/app-init.service';
 import { SharedModule } from './modules/shared/shared.module';
 import { sharedReducer } from './store/shared/shared.reducer';
+import {NgxSliderModule} from "@angular-slider/ngx-slider"
 
 
 
@@ -40,6 +41,7 @@ export function initializeApp(appInitService: AppInitializerService) {
     FontAwesomeModule,
     FontAwesomeModule,
     SharedModule,
+    NgxSliderModule
     
   ],
   providers: [

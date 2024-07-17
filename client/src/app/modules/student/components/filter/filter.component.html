@@ -1,0 +1,78 @@
+    <div class="mb-6 flex justify-between items-center gap-2 w-full">
+      <input
+        class="rounded-md py-2 px-3 drop-shadow-md text-gray-700 placeholder-gray-400 focus:ring-0 focus:ring-black jost-text w-9/12 text-xs border border-gray-300"
+        type="text"
+        placeholder="Key Word"
+        [(ngModel)]="searchKey"
+      />
+      <button class="px-4 py-2 bg-black text-white rounded-md w-1/4 text-xs jost-text hover:bg-gray-800 transition">Apply</button>
+    </div>
+  
+    <!-- Course Category Section -->
+    <div class="mb-6">
+      <h2 class="font-semibold text-lg mb-3 text-black exo-text">Course Category</h2>
+      <div class="category-list" style="max-height: 145px; overflow-y: auto;">
+      <div *ngFor="let category of courseCategories">
+        <label class="flex items-center text-gray-600 jost-text">
+          <input
+            type="checkbox"
+            class="mr-2"
+            [(ngModel)]="category.selected"
+          />
+          {{ category.name }}
+          <span class="ml-auto text-gray-500 text-xs jost-text">{{ category.count }}</span>
+        </label>
+      </div>
+      </div>
+    </div>
+  
+    <!-- Instructors Section -->
+    <div class="mb-6">
+      <div class="flex justify-between items-center w-full gap-2 mb-3">
+        <h2 class="font-semibold text-lg text-black exo-text">Instructors</h2>
+        <input
+          class="rounded-md py-2 px-3 drop-shadow-md text-gray-700 placeholder-gray-400 focus:ring-0 focus:ring-black jost-text w-9/12 text-xs border border-gray-300"
+          type="text"
+          placeholder="Instructor"
+          (keyup)="instructorSearch()"
+          [(ngModel)]="searchInstructor"
+        />
+      </div>
+      <div class="instructor-list" style="max-height: 145px; overflow-y: auto;">
+        <div *ngFor="let instructor of instructorList">
+          <label class="flex items-center text-gray-600 jost-text">
+            <input
+              type="checkbox"
+              class="mr-2"
+              [(ngModel)]="instructor.selected"
+            />
+            {{ instructor.name }}
+            <span class="ml-auto text-gray-500 text-xs jost-text">{{ instructor.count }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Price Section -->
+    <div class="mb-6">
+      <h2 class="font-semibold text-lg mb-3 text-black exo-text">Price</h2>
+      <div class="custom-slider">
+        <ngx-slider [(value)]="value" class="text-sm jost-text" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+      </div>
+    </div>
+  
+    <!-- Review Section -->
+    <div class="mb-6">
+      <h2 class="font-semibold text-lg mb-3 text-black exo-text">Review</h2>
+      <div *ngFor="let review of reviews">
+        <label class="flex items-center text-gray-600 jost-text">
+          <input type="checkbox" class="mr-2" [(ngModel)]="review.selected" />
+          <span class="flex items-center jost-text">
+            <span *ngFor="let star of review.stars" class="text-yellow-500">&#9733;</span>
+            <span *ngFor="let empty of review.emptyStars" class="text-gray-300">&#9733;</span>
+          </span>
+          <span class="ml-auto text-gray-500 text-xs">({{ review.count }})</span>
+        </label>
+      </div>
+    </div>
+  

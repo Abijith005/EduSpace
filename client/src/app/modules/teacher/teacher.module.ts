@@ -24,7 +24,7 @@ import { TeacherUpdateCourseComponent } from './components/teacher-update-course
     UploadCertificatesComponent,
     TeacherPaymentComponent,
     CourseUploadFormComponent,
-    TeacherUpdateCourseComponent
+    TeacherUpdateCourseComponent,
   ],
   imports: [
     CommonModule,TeacherRoutingModule,FormsModule,ReactiveFormsModule,NgApexchartsModule,SharedModule

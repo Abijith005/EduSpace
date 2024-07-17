@@ -50,7 +50,12 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
     });
     this.courseData = JSON.parse(JSON.stringify(this.courseDataInput));
 
-    this.courseDetailsForm.patchValue(this.courseData);
+    this.courseDetailsForm.patchValue({
+      category: this.courseData.category_id._id,
+      title:this.courseData.title,
+      price:this.courseData.price,
+      about:this.courseData.about
+    });
     this.previewImageFiles = this.courseData.previewImage;
     this.previewVideoFiles = this.courseData.previewVideo;
     this.videoFiles = this.courseData.videos;
@@ -113,6 +118,7 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
   }
 
   handleFileRemoval(fileCategory: string, fileArray: any[], index: number) {
+
     if (!this.deletedFiles[fileCategory]) {
       this.deletedFiles[fileCategory] = [];
     }
@@ -124,7 +130,12 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+
     this.isSubmitted = true;
+
+    console.log(this.courseDetailsForm.value);
+
+    return
 
     if (this.courseDetailsForm.invalid) {
       return;
