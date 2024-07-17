@@ -10,6 +10,7 @@ import cronJob from "./helpers/cronJob.js";
 import dbConnect from "./config/dbConnect.js";
 import startRPCServer from "./services/rpcServer.js";
 import { getUsersByIds } from "./controllers/dataController.js";
+import { consumeUserUpdate } from "./rabbitmq/consumers/userUpdateConsumer.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -34,6 +35,7 @@ app.use("/api/v1/auth/socialAuth", socialAuthRoutes);
 app.use("/api/v1/auth/token", tokenRoutes);
 
 startRPCServer("authQueue", getUsersByIds);
+consumeUserUpdate()
 
 app.listen(port, () => {
   console.log(`auth service running in port ${port}`);

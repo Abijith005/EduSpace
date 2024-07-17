@@ -11,6 +11,7 @@ import { UploadCertificatesComponent } from './components/upload-certificates/up
 import { TeacherPaymentComponent } from './components/teacher-payment/teacher-payment.component';
 import { CourseUploadFormComponent } from './components/course-upload-form/course-upload-form.component';
 import { TeacherCourseManageComponent } from './components/teacher-course-manage/teacher-course-manage.component';
+import { TeacherUpdateCourseComponent } from './components/teacher-update-course/teacher-update-course.component';
 
 
 
@@ -22,7 +23,8 @@ import { TeacherCourseManageComponent } from './components/teacher-course-manage
     TeacherProfileComponent,
     UploadCertificatesComponent,
     TeacherPaymentComponent,
-    CourseUploadFormComponent
+    CourseUploadFormComponent,
+    TeacherUpdateCourseComponent,
   ],
   imports: [
     CommonModule,TeacherRoutingModule,FormsModule,ReactiveFormsModule,NgApexchartsModule,SharedModule

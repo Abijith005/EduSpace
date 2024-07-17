@@ -18,7 +18,7 @@ import { ToasterService } from '../../../shared/toaster.service';
 export class UploadCertificatesComponent implements OnInit, OnDestroy {
   files: File[] = [];
   categories!: IcategoryData[];
-  Selectedategory = '';
+  selectedCategory = '';
   private _ngUnsubscribe = new Subject<void>();
   @Output() modalClosed = new EventEmitter();
   constructor(
@@ -83,8 +83,11 @@ export class UploadCertificatesComponent implements OnInit, OnDestroy {
       }
     }
   }
-  selectCategory(categoryId: string) {
-    this.Selectedategory = categoryId;
+  selectCategory(event: Event) {
+    const category = event.target as HTMLInputElement;
+    if (category.value) {
+      this.selectedCategory = category.value;
+    }
   }
 
   removeFile(file: File) {
@@ -97,7 +100,9 @@ export class UploadCertificatesComponent implements OnInit, OnDestroy {
   }
 
   uploadFiles() {
-    if (!this.Selectedategory) {
+    console.log(this.selectedCategory);
+
+    if (!this.selectedCategory) {
       return this._toasterService.showError('Select category');
     }
     if (this.files.length <= 0) {
@@ -106,7 +111,7 @@ export class UploadCertificatesComponent implements OnInit, OnDestroy {
 
     this._teacherService
       .uploadCertificates({
-        category: this.Selectedategory,
+        category: this.selectedCategory,
         certificates: this.files,
       })
       .subscribe((res) => {

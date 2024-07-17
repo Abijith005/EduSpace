@@ -42,17 +42,17 @@
     </div>
   </div>
   <div class="grid grid-cols-5 gap-16">
-    <div
+    <div *ngFor="let category of categories"
       class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
       style="border-top: 0.1px solid #d1d5db"
     >
-      <i class="fas fa-palette text-orange-500 text-4xl mb-4"></i>
+      <i [ngClass]="category.icon" class="fas fa-palette text-orange-500 text-4xl mb-4"></i>
       <h3
         class="text-lg font-bold mb-2 group-hover:text-orange-500 duration-200 exo-text"
       >
-        Art & Design
+        {{category.title}}
       </h3>
-      <p class="text-gray-600 jost-text">38 Courses</p>
+      <p class="text-gray-600 jost-text">{{category.totalCourses}}</p>
     </div>
     <div
       class="bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"

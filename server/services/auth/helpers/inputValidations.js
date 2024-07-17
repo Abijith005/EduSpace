@@ -6,7 +6,7 @@ export function userCredentialsValidation(data) {
     
     const validationRules = [
       {
-        condition: name !== undefined && !name.match(/^[a-zA-Z\s'-]+$/),
+        condition: name !== undefined && !name.match(/^[a-zA-Z0-9\s'-]+$/),
         message: "Validation error!! Invalid name format"
       },
       {

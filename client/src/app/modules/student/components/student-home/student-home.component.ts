@@ -1,24 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AuthState } from '../../../../store/auth/auth.state';
 import { selectUserInfo } from '../../../../store/auth/auth.selector';
 import { Subject, takeUntil } from 'rxjs';
+import { StudentService } from '../../student.service';
+import { IcategoryResponse } from '../../../../interfaces/categoryResponse';
 
 @Component({
   selector: 'app-student-home',
   templateUrl: './student-home.component.html',
-  styleUrls: ['./student-home.component.css']
+  styleUrls: ['./student-home.component.css'],
 })
-export class StudentHomeComponent{
+export class StudentHomeComponent implements OnInit, OnDestroy {
+  private _ngUnsubscribe$ = new Subject<void>();
 
+  categories!: IcategoryResponse[];
 
- 
+  constructor(private _studentService: StudentService) {}
 
-  scrollTop(){
+  ngOnInit(): void {
+    this._studentService
+      .getAllCategories()
+      .pipe(takeUntil(this._ngUnsubscribe$))
+      .subscribe((res) => {
+        this.categories = res.categories;
+      });
+  }
+
+  scrollTop() {
     window.scroll({
-      top:0,
-      left:0,
-      behavior:"smooth"
-    })
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._ngUnsubscribe$.next();
+    this._ngUnsubscribe$.complete();
   }
 }

@@ -16,6 +16,12 @@ export class TeacherService {
     );
   }
 
+  getAllowedCategories() {
+    return this._http.get<IgenreralResponse & { categories: IcategoryData[] }>(
+      `/v1/course/categories/allowed`
+    );
+  }
+
   uploadCertificates(data: { category: string; certificates: File[] }) {
     const uploadData = new FormData();
     uploadData.append('category', data.category);
@@ -31,7 +37,9 @@ export class TeacherService {
   }
 
   getAllCourses(page: number, limit: number, search: string, filter: string) {
-    return this._http.get<IgenreralResponse&{courses:ICourseDetails[]}>(
+    return this._http.get<
+      IgenreralResponse & { courses: ICourseDetails[]; totalPages: number }
+    >(
       `/v1/course/manageCourse/all?page=${page}&limit=${limit}&search=${search}&filter=${filter}&id=true`
     );
   }
@@ -39,6 +47,15 @@ export class TeacherService {
   uploadCourse(data: FormData) {
     return this._http.post<IgenreralResponse>(
       `/v1/course/manageCourse/uploadCourse`,
+      data
+    );
+  }
+
+  updateCourse(data: FormData, course_id: string) {
+    console.log(data);
+    
+    return this._http.put<IgenreralResponse>(
+      `/v1/course/manageCourse/updateCourse/${course_id}`,
       data
     );
   }

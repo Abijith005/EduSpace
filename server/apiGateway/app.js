@@ -60,7 +60,7 @@ app.use(
 
 app.use(
   "/api/v1/course",
-  authMiddleware(["teacher", "admin"]),
+  authMiddleware(["teacher", "admin", "student"]),
   createProxyMiddleware({
     target: courseUrl,
     origin: true,

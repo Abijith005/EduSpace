@@ -6,9 +6,10 @@
     </div>
     <div class="hidden md:flex items-center space-x-6">
       <a class="hover:text-orange-400 transition duration-300 text-decoration"
+      [routerLink]="'./'"
         >Home</a
       >
-      <a class="hover:text-orange-400 transition duration-300">Courses</a>
+      <a class="hover:text-orange-400 transition duration-300" [routerLink]="'./course'">Courses</a>
       <a class="hover:text-orange-400 transition duration-300">Instructors</a>
       <a class="hover:text-orange-400 transition duration-300">Discussions</a>
       <a class="hover:text-orange-400 transition duration-300">Subscriptions</a>
@@ -46,3 +47,5 @@
 <div style="margin-top: 4.09rem">
   <router-outlet></router-outlet>
 </div>
+
+

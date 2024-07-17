@@ -2,7 +2,7 @@ import fs from "fs";
 import s3Config from "../../config/s3BucketConfig.js";
 import { connectRabbitMQ } from "../../config/rabbitmq.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import cousreModel from "../../models/courseModel.js";
+import courseModel from "../../models/courseModel.js";
 
 const bucket = process.env.S3_BUCKET;
 const region = process.env.S3_REGION;
@@ -26,7 +26,7 @@ const uploadFileToS3 = async (filePath, filename, category, title) => {
     fs.unlink(filePath, (err) => {
       if (err) {
         console.error("Error deleting file:", err);
-        throw err;  
+        throw err;
       }
       console.log("File deleted successfully");
     });
@@ -40,6 +40,8 @@ const uploadFileToS3 = async (filePath, filename, category, title) => {
 
 const processMessage = async (msg, channel) => {
   try {
+    const categories = ['videos', 'notes', 'previewVideo', 'previewImage'];
+
     const { files, data } = JSON.parse(msg.content.toString());
 
     const uploadResults = {
@@ -61,19 +63,40 @@ const processMessage = async (msg, channel) => {
       }
     };
 
-    await processFiles(files.videos, "videos");
-    await processFiles(files.notes, "notes");
-    await processFiles(files.previewVideo, "previewVideo");
-    await processFiles(files.previewImage, "previewImage");
+    for (const category of categories) {
+      if (files[category]) {
+        await processFiles(files[category], category);
+      }
+    }
 
-    await cousreModel.create({ ...data, ...uploadResults });
+    if (data.update) {
+      const updateOperations = { $set: {} };
 
-    fs.re;
+      updateOperations.$set.title = data.title;
+      updateOperations.$set.price = data.price;
+      updateOperations.$set.about = data.about;
+      updateOperations.$set.category_id = data.category_id;
+
+      for (const category of categories) {
+        if (uploadResults[category].length > 0) {
+          if (!updateOperations.$push) updateOperations.$push = {};
+          updateOperations.$push[category] = { $each: uploadResults[category] };
+        }
+      }
+
+
+      await courseModel.findByIdAndUpdate(
+        { _id: data.course_id },
+        updateOperations
+      );
+    } else {
+      await courseModel.create({ ...data, ...uploadResults });
+    }
 
     channel.ack(msg);
   } catch (error) {
     console.error("Failed to process message:", error);
-  } 
+  }
 };
 
 const startConsumer = async () => {
