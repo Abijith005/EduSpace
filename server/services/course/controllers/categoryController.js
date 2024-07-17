@@ -1,6 +1,7 @@
 import { inputValidation } from "../helpers/inptValidation.js";
 import jwtDecode from "../helpers/jwtDecode.js";
 import categoryModel from "../models/categoryModel.js";
+import cousreModel from "../models/courseModel.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 
 export const createCategory = async (req, res) => {
@@ -89,6 +90,37 @@ export const getAllowedCategories = async (req, res) => {
       _id: { $in: categories },
     });
     res.status(200).json({ success: true, categories: allowedCategories });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getCoursePerCategory = async (req, res) => {
+  try {
+    const data = await cousreModel.aggregate([
+      {
+        $group: { _id: "$category_id", count: { $sum: 1 } },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          foreignField: "_id",
+          localField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $project: {
+          title: { $arrayElemAt: ["$category.title", 0] },
+          count: 1,
+          _id: 0,
+        },
+      },
+    ]);
+    res.status(200).json({ success: true, data: data });
   } catch (error) {
     console.log("Error \n", error);
     return res
