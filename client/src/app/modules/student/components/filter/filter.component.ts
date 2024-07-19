@@ -1,20 +1,39 @@
 import { Options } from '@angular-slider/ngx-slider';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { StudentService } from '../../student.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, min, takeUntil } from 'rxjs';
+import { IfilterSelectionItems } from '../../../../interfaces/filterSelectionList';
 
+interface filterValues {
+  searchKey: string;
+  category_ids: string[];
+  instructor_ids: string[];
+  ratingRange: { min: number; max: number };
+  priceRange: { min: number; max: number };
+}
 @Component({
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css',
 })
 export class FilterComponent implements OnInit, OnDestroy {
+  @Output() onApplyFilter = new EventEmitter<filterValues>();
+
   searchKey = '';
   searchInstructor = '';
-  instructorList!: { name: string; count: number; selected: boolean }[];
-  courseCategories!: { title: string; count: number; selected: boolean }[];
-  maxValue: number = 2000;
-  value: number = 0;
+  instructorList!: IfilterSelectionItems[];
+  courseCategories!: IfilterSelectionItems[];
+  instructors!: IfilterSelectionItems[];
+  ratings!: IfilterSelectionItems[];
+  priceRange = { min: 0, max: 0 };
   timer: any;
   options: Options = {
     floor: 0,
@@ -27,59 +46,55 @@ export class FilterComponent implements OnInit, OnDestroy {
   };
 
   private _ngUnsubscribe$ = new Subject<void>();
-  constructor(private _studentService: StudentService) {}
+  constructor(
+    private _studentService: StudentService,
+    private _cdRef: ChangeDetectorRef,
+    private _ngZone: NgZone
+  ) {}
 
   ngOnInit(): void {
-    this.instructorList = this.instructors;
+    this.getFilterDatas();
+  }
+
+  getFilterDatas() {
     this._studentService
-      .getAllCategoriesCourseCount()
+      .getAllFilterDatas()
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
-        const data = res.data;
-        this.courseCategories = data.map((item) => ({
+        const categoryData = res.data.categoryData;
+        this.courseCategories = categoryData.map((item) => ({
           ...item,
           selected: false,
         }));
+
+        const ratingsData = res.data.ratingData;
+
+        this.ratings = ratingsData.map((item) => ({
+          ...item,
+          selected: false,
+        }));
+
+        const instructorsData = res.data.instructorData;
+        this.instructors = instructorsData.map((item) => ({
+          ...item,
+          selected: false,
+        }));
+        this.instructorList = this.instructors;
+
+        this.updateSliderOptions(res.data.priceRange.maxPrice);
       });
   }
-  // courseCategories = [
-  //   { name: 'Commercial', count: 15, selected: false },
-  //   { name: 'Office', count: 15, selected: false },
-  //   { name: 'Shop', count: 15, selected: false },
-  //   { name: 'Educate', count: 15, selected: false },
-  //   { name: 'Academy', count: 15, selected: false },
-  //   { name: 'Single family home', count: 15, selected: false },
-  //   { name: 'Studio', count: 15, selected: false },
-  //   { name: 'University', count: 15, selected: false },
-  // ];
 
-  instructors = [
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'John Doe', count: 15, selected: false },
-  ];
-
-  reviews = [
-    { stars: [1, 1, 1, 1, 1], emptyStars: [], count: 1025, selected: false },
-    { stars: [1, 1, 1, 1], emptyStars: [1], count: 1025, selected: false },
-    { stars: [1, 1, 1], emptyStars: [1, 1], count: 1025, selected: false },
-    { stars: [1, 1], emptyStars: [1, 1, 1], count: 1025, selected: false },
-    { stars: [1], emptyStars: [1, 1, 1, 1], count: 1025, selected: false },
-  ];
+  updateSliderOptions(maxPrice: number) {
+    this.priceRange.max = maxPrice;
+    this._ngZone.run(() => {
+      this.options = {
+        ...this.options,
+        ceil: maxPrice,
+      };
+      this._cdRef.detectChanges();
+    });
+  }
 
   selected(list: string, index: number) {
     const listArray = this[list as keyof this] as Array<{
@@ -104,17 +119,59 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   instructorSearch() {
     clearTimeout(this.timer);
+    const keys = this.searchInstructor.split(' ');
     this.timer = setTimeout(() => {
-      console.log(keys);
-
-      this.instructorList = this.instructors.filter((item) => {
+      this.instructorList = this.instructors.filter((item: any) => {
         return keys.some((keyword) => {
           const regex = new RegExp(keyword, 'i');
           return regex.test(item.name);
         });
       });
+
+      this.instructorList.sort((a, b) =>
+        a.selected === b.selected ? 0 : a.selected ? -1 : 1
+      );
     }, 300);
-    const keys = this.searchInstructor.split(' ');
+  }
+
+  searchFucntion() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      if (!this.searchKey.trim()) {
+        this.applyFilter();
+      }
+    }, 300);
+  }
+
+  applyFilter() {
+    const category_ids = this.courseCategories
+      .filter((item) => item.selected)
+      .map((item) => item._id!);
+    const instructor_ids = this.instructors
+      .filter((item) => item.selected)
+      .map((item) => item._id!);
+
+    const ratingRange = this.ratings.reduce(
+      (acc, value) => {
+        if (value.selected) {
+          const rating = value.rating ?? 0;
+          return {
+            min: rating < acc.min ? rating : acc.min,
+            max: rating > acc.max ? rating : acc.max,
+          };
+        }
+        return acc;
+      },
+      { min: 0, max: 5 }
+    );
+
+    this.onApplyFilter.emit({
+      searchKey: this.searchKey,
+      category_ids: category_ids,
+      instructor_ids: instructor_ids,
+      ratingRange: ratingRange,
+      priceRange: this.priceRange,
+    });
   }
 
   ngOnDestroy(): void {

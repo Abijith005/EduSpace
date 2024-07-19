@@ -1,76 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../student.service';
-import { Options } from '@angular-slider/ngx-slider';
+import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { Subject, takeUntil } from 'rxjs';
+import { IFilterValues } from '../../../../interfaces/filterValues';
 
 @Component({
   selector: 'app-student-course-list',
   templateUrl: './student-course-list.component.html',
   styleUrl: './student-course-list.component.css',
 })
-export class StudentCourseListComponent {
+export class StudentCourseListComponent implements OnInit {
   totalPages: number = 10;
   currentPage = 1;
-  search = '';
-  filter = '';
-  limit = 6;
-  maxValue: number = 200;
-  value: number = 100;
-  options: Options = {
-    floor: 0,
-    ceil: 200,
-    step: 50,
-    noSwitching: true,
-    translate: (value: number): string => {
-      return '₹' + value;
-    },
+  searchKey = '';
+  filter: IFilterValues = {
+    searchKey: '',
+    category_ids: [],
+    instructor_ids: [],
+    ratingRange: { min: null, max: null },
+    priceRange: { min: null, max: null },
   };
+  limit = 6;
+  courses!: ICourseDetails[];
 
+  private _ngUnsubscribe$ = new Subject<void>();
   constructor(private _studentService: StudentService) {}
+
+  ngOnInit(): void {
+    this.getAllCourses();
+  }
 
   getAllCourses() {
     this._studentService
-      .getAllCourses(this.currentPage, this.limit, this.search, this.filter)
+      .getAllCourses(this.currentPage, this.limit, this.searchKey, this.filter)
+      .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
-        console.log(res);
+        this.courses = res.courses;
+        this.totalPages = res.totalPages;
       });
   }
 
- 
+  onApplyFilter(filterDatas: IFilterValues) {
+    this.filter = filterDatas;
+    this.searchKey = filterDatas.searchKey;
 
-  courseCategories = [
-    { name: 'Commercial', count: 15, selected: false },
-    { name: 'Office', count: 15, selected: false },
-    { name: 'Shop', count: 15, selected: true },
-    { name: 'Educate', count: 15, selected: false },
-    { name: 'Academy', count: 15, selected: true },
-    { name: 'Single family home', count: 15, selected: false },
-    { name: 'Studio', count: 15, selected: false },
-    { name: 'University', count: 15, selected: false },
-  ];
-
-  instructors = [
-    { name: 'Kenny White', count: 15, selected: false },
-    { name: 'John Doe', count: 15, selected: false },
-  ];
-
-  prices = [
-    { name: 'All', count: 15, selected: true },
-    { name: 'Free', count: 15, selected: false },
-    { name: 'Paid', count: 15, selected: false },
-  ];
-
-  reviews = [
-    { stars: [1, 1, 1, 1, 1], emptyStars: [], count: 1025, selected: false },
-    { stars: [1, 1, 1, 1], emptyStars: [1], count: 1025, selected: true },
-    { stars: [1, 1, 1], emptyStars: [1, 1], count: 1025, selected: false },
-    { stars: [1, 1], emptyStars: [1, 1, 1], count: 1025, selected: false },
-    { stars: [1], emptyStars: [1, 1, 1, 1], count: 1025, selected: false },
-  ];
+    this.getAllCourses();
+  }
 
   onPageChanged(page: number) {
-    console.log(this.maxValue, this.value);
-
     this.currentPage = page;
-    // this.getAllCourses();
+    this.getAllCourses();
   }
 }

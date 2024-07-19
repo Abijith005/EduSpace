@@ -5,11 +5,21 @@
       <a class="text-black font-bold text-3xl exo-text">EduSpace</a>
     </div>
     <div class="hidden md:flex items-center space-x-6">
-      <a class="hover:text-orange-400 transition duration-300 text-decoration"
-      [routerLink]="'./'"
-        >Home</a
+      <ul>
+        <li *ngfor="let item of navItems">
+          {{item}}
+          <a
+            class="hover:text-orange-400 transition duration-300 text-decoration"
+            [routerLink]="item.link"
+            >{{ item.title }}</a
+          >
+        </li>
+      </ul>
+      <a
+        class="hover:text-orange-400 transition duration-300"
+        [routerLink]="'./course'"
+        >Courses</a
       >
-      <a class="hover:text-orange-400 transition duration-300" [routerLink]="'./course'">Courses</a>
       <a class="hover:text-orange-400 transition duration-300">Instructors</a>
       <a class="hover:text-orange-400 transition duration-300">Discussions</a>
       <a class="hover:text-orange-400 transition duration-300">Subscriptions</a>
@@ -18,7 +28,7 @@
       <ng-container *ngIf="userInfo$ | async as userInfo">
         <a class="text-black">{{ userInfo.name | titlecase }}</a>
         <img
-        (click)="logout()"
+          (click)="logout()"
           [src]="userInfo.profilePic || 'images/user.png'"
           class="h-5 w-5 rounded-full"
           alt="User Profile Picture"
@@ -47,5 +57,3 @@
 <div style="margin-top: 4.09rem">
   <router-outlet></router-outlet>
 </div>
-
-

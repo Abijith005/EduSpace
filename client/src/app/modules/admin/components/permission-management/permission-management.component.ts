@@ -31,6 +31,12 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.getAllcategories();
+  }
+
+  isVisible$ = this._modalService.isVisible$;
+
+  getAllcategories() {
     this._adminService
       .getAllRequests(this.currentPage, this.limit)
       .pipe(takeUntil(this._ngUnsbscribe))
@@ -40,11 +46,14 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
       });
   }
 
-  isVisible$ = this._modalService.isVisible$;
-
-  updateRequestStatus(requestId: string, status: string, category: string,user_id:string) {
+  updateRequestStatus(
+    requestId: string,
+    status: string,
+    category: string,
+    user_id: string
+  ) {
     this._adminService
-      .updateRequest({ requestId, status, category,user_id })
+      .updateRequest({ requestId, status, category, user_id })
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
@@ -65,10 +74,10 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   }
   onPageChanged(page: number) {
     this.currentPage = page;
+    this.getAllcategories();
   }
 
   toggleDropdown(requestId: string) {
-    
     this.dropdownOpen = !this.dropdownOpen;
     this.currentRequestId = requestId;
   }

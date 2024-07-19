@@ -1,29 +1,3 @@
-// import { Injectable } from '@angular/core';
-// import { Store } from '@ngrx/store';
-// import { AuthState } from '../../store/auth/auth.state';
-// import { AuthService } from '../auth/auth.service';
-// import { checkAuthStatusSuccess } from '../../store/auth/auth.actions';
-
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class AppInitService {
-//   constructor(
-//     private authService: AuthService,
-//     private _store: Store<{ auth: AuthState }>
-//   ) {}
-
-//   initApp(): Promise<void> {
-//     return new Promise((resolve) => {
-//       this.authService.getUserInfo().subscribe((res) => {
-//         this._store.dispatch(
-//           checkAuthStatusSuccess({ userDatas: res.userInfo })
-//         );
-//       });
-//       resolve();
-//     });
-//   }
-// }
 
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';

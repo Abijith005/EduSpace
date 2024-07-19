@@ -98,33 +98,6 @@ export const getAllowedCategories = async (req, res) => {
   }
 };
 
-export const getCoursePerCategory = async (req, res) => {
-  try {
-    const data = await cousreModel.aggregate([
-      {
-        $group: { _id: "$category_id", count: { $sum: 1 } },
-      },
-      {
-        $lookup: {
-          from: "categories",
-          foreignField: "_id",
-          localField: "_id",
-          as: "category",
-        },
-      },
-      {
-        $project: {
-          title: { $arrayElemAt: ["$category.title", 0] },
-          count: 1,
-          _id: 0,
-        },
-      },
-    ]);
-    res.status(200).json({ success: true, data: data });
-  } catch (error) {
-    console.log("Error \n", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
-  }
-};
+
+
+
