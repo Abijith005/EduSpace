@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Observable, Subject, map } from 'rxjs';
+import { Observable, Subject, filter, map } from 'rxjs';
 import { AuthState } from '../../../../store/auth/auth.state';
 import { Store } from '@ngrx/store';
 import { selectUserInfo } from '../../../../store/auth/auth.selector';
 import { IuserInformation } from '../../../../interfaces/userInformation';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -13,9 +13,10 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent {
   userInfo$!: Observable<{ name: string; profilePic: string }>;
+  currentUrl = '';
   navItems = [
     { title: 'Home', link: './' },
-    { title: 'Courses', link: './courses' },
+    { title: 'Courses', link: './course' },
     { title: 'Instructors', link: './instructors' },
     { title: 'Discussions', link: './discussions' },
     { title: 'Subscriptions', link: './subscriptions' },
@@ -35,6 +36,29 @@ export class NavbarComponent {
         profilePic: userInfo.profilePic,
       }))
     );
+
+    this.currentUrl = this._router.url;
+
+    this._router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.currentUrl = event.urlAfterRedirects;
+      });
+  }
+
+  isActiveLink(link: string) {
+    const url = this.currentUrl.split('/')[2];
+
+    const formattedLink = link.replace('./', '');
+    if (!url && !formattedLink) {
+      return true;
+    }
+
+    return url === formattedLink;
   }
 
   logout() {

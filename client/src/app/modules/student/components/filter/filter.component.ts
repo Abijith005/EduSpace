@@ -156,20 +156,25 @@ export class FilterComponent implements OnInit, OnDestroy {
         if (value.selected) {
           const rating = value.rating ?? 0;
           return {
-            min: rating < acc.min ? rating : acc.min,
-            max: rating > acc.max ? rating : acc.max,
+            min: Math.min(acc.min, rating),
+            max: Math.max(acc.max, rating),
           };
         }
         return acc;
       },
-      { min: 0, max: 5 }
+      { min: Infinity, max: -Infinity } 
     );
+
+    const finalRatingRange = {
+      min: ratingRange.min === Infinity ? 0 : ratingRange.min,
+      max: ratingRange.max === -Infinity ? 5 : ratingRange.max,
+    };
 
     this.onApplyFilter.emit({
       searchKey: this.searchKey,
       category_ids: category_ids,
       instructor_ids: instructor_ids,
-      ratingRange: ratingRange,
+      ratingRange: finalRatingRange,
       priceRange: this.priceRange,
     });
   }

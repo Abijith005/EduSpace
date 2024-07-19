@@ -61,4 +61,10 @@ export class StudentService {
       IgenreralResponse & { data: { rating: number; count: number }[] }
     >(`/v1/course/manageCourse/courseCount/rating`);
   }
+
+
+  getCourseDetails(course_id:string){
+    return this._http.get<IgenreralResponse&{courseDetails:ICourseDetails}>(`/v1/course/manageCourse/courseDetails/${course_id}`)
+  }
+
 }

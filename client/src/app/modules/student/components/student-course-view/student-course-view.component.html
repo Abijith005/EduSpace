@@ -4,7 +4,7 @@
       <div class="flex justify-between items-start">
         <div class="max-w-2xl">
           <h1 class="text-3xl font-bold exo-text">
-            Advanced Funnels with Google Analytics
+            {{courseDetails.title}}
           </h1>
           <div class="flex items-center mt-4">
             <img
@@ -12,12 +12,12 @@
               alt="Anna John"
               class="w-10 h-10 rounded-full"
             />
-            <span class="ml-4 font-semibold exo-text">Anna John</span>
+            <span class="ml-4 font-semibold exo-text">{{courseDetails.user_id}}</span>
           </div>
         </div>
         <div class="flex items-center mb-2">
           <span class="text-yellow-500">⭐⭐⭐☆☆</span>
-          <span class="ml-2 text-gray-600 jost-text">(157 Reviews)</span>
+          <span class="ml-2 text-gray-600 jost-text">({{courseDetails.rating}} Reviews)</span>
         </div>
       </div>
 
@@ -39,7 +39,7 @@
   <div class="mt-6 container mx-auto flex justify-between items-center">
     <div class="drop-shadow-md">
       <video
-        src="/images/rm3.mp4"
+        [src]="courseDetails.previewVideo[0].url"
         alt="Course Image"
         class="w-full rounded shadow-lg"
         controls
@@ -47,7 +47,7 @@
     </div>
 
     <div class="border p-8 rounded-md shadow-lg text-center w-96">
-      <div class="text-2xl font-bold exo-text">₹ 99.00 INR</div>
+      <div class="text-2xl font-bold exo-text">₹ {{courseDetails.price}}.00 INR</div>
       <p class="text-gray-600 mt-2 text-justify jost-text text-xxs">
         Provide most popular courses that you want to join and let's start the
         course for the most way in here
@@ -56,7 +56,7 @@
         class="mt-4 ring-1 text-green-500 py-2 w-full exo-text rounded"
         style="color: #40c003"
       >
-        Buy ₹ 99 INR
+        Buy ₹ {{courseDetails.price}} INR
       </button>
       <ul class="text-left mt-6 space-y-4">
         <li class="flex items-center">

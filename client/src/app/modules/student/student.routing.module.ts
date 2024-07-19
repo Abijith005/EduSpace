@@ -13,7 +13,7 @@ const routes: Routes = [
     component: NavbarComponent,
     children: [{ path: '', component: StudentHomeComponent },
     {path:'course',component:StudentCourseListComponent},
-    {path:'view',component:StudentCourseViewComponent,children:[
+    {path:'course/view/:id',component:StudentCourseViewComponent,children:[
       {path:'',redirectTo:'about',pathMatch:'full'},
       {path:'about',component:StudentAboutCourseComponent},
       {path:'reviews',component:StudentViewReviewComponent}
