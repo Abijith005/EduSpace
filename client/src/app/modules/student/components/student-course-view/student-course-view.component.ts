@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, map, of, takeUntil, tap } from 'rxjs';
 import { StudentService } from '../../student.service';
 import { ICourseDetails } from '../../../../interfaces/courseDetails';
 
@@ -17,8 +17,9 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
 
   currentUrl = '';
   course_id = '';
-  courseDetails!: ICourseDetails;
-
+  // courseDetails!: ICourseDetails;
+  courseDetails$ = of<ICourseDetails | null>(null);
+  isLoading$ = of(true);
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
     private _router: Router,
@@ -26,10 +27,10 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
     private _studentService: StudentService
   ) {}
   ngOnInit(): void {
-    this.currentUrl = this._router.url;
-    this.getCourseDetails();
-
     this.course_id = this._activatedRoute.snapshot.paramMap.get('id')!;
+    this.currentUrl = this._router.url;
+
+    this.getCourseDetails();
 
     this._router.events
       .pipe(
@@ -43,13 +44,13 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
   }
 
   getCourseDetails() {
-    this._studentService
+    this.courseDetails$ = this._studentService
       .getCourseDetails(this.course_id)
-      .pipe(takeUntil(this._ngUnsubscribe$))
-      .subscribe((res) => {
-        this.courseDetails = res.courseDetails;
-        console.log(this.courseDetails);
-      });
+      .pipe(
+        takeUntil(this._ngUnsubscribe$),
+        tap(() => (this.isLoading$ = of(false))),
+        map((response) => response.courseDetails)
+      );
   }
 
   isActive(link: string): boolean {
