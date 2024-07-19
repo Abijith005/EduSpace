@@ -1,7 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AuthState } from '../../../../store/auth/auth.state';
-import { selectUserInfo } from '../../../../store/auth/auth.selector';
 import { Subject, takeUntil } from 'rxjs';
 import { StudentService } from '../../student.service';
 import { IcategoryResponse } from '../../../../interfaces/categoryResponse';
