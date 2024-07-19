@@ -6,6 +6,7 @@ import { PdfViewerComponent } from './components/pdf-viewer/pdf-viewer.component
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { RemoveTimestampPipe } from './pipes/remove-timestamp.pipe';
 import { ObjectUrlPipe } from './pipes/object-url.pipe';
+import { RatingStarPipe } from './pipes/rating-star.pipe';
 
 
 
@@ -18,11 +19,12 @@ import { ObjectUrlPipe } from './pipes/object-url.pipe';
     PdfViewerComponent,
     RemoveTimestampPipe,
     ObjectUrlPipe,
+    RatingStarPipe,
   ],
   imports: [
     CommonModule,
     NgxExtendedPdfViewerModule
   ],
-  exports:[PaginationComponent,LoadingComponent,PdfViewerComponent,ObjectUrlPipe,RemoveTimestampPipe]
+  exports:[PaginationComponent,LoadingComponent,PdfViewerComponent,ObjectUrlPipe,RemoveTimestampPipe,RatingStarPipe]
 })
 export class SharedModule { }

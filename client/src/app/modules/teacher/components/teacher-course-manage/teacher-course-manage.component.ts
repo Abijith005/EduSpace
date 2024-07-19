@@ -4,6 +4,7 @@ import { TeacherService } from '../../teacher.service';
 import { ICourseDetails } from '../../../../interfaces/courseDetails';
 import { ModalService } from '../../../shared/modal.service';
 import { IcategoryData } from '../../../../interfaces/categoryData';
+import { IFilterValues } from '../../../../interfaces/filterValues';
 
 @Component({
   selector: 'app-teacher-course-manage',
@@ -14,13 +15,19 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
   totalPages!: number;
   currentPage = 1;
   limit = 6;
+  filter: IFilterValues = {
+    searchKey: '',
+    category_ids: [],
+    instructor_ids: [],
+    ratingRange: { min: -Infinity, max: Infinity },
+    priceRange: { min: -Infinity, max: Infinity },
+  };
   search = '';
-  filter = '';
   courses!: ICourseDetails[];
   categoires!: IcategoryData[];
   isVisible$ = this._modalService.isVisible$;
   isUpdateVisible$ = this._modalService.isUpdateVisible$;
-  updateData!:ICourseDetails
+  updateData!: ICourseDetails;
 
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
@@ -43,17 +50,19 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
       .getAllCourses(this.currentPage, this.limit, this.search, this.filter)
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
-        this.courses = res.courses;        
+        this.courses = res.courses;
         this.totalPages = res.totalPages;
       });
   }
 
   onFilterSelect(event: Event) {
     const category = event.target as HTMLInputElement;
-    if (category) {
-      this.filter = category.value;
-      this.getAllCourses();
+    const categories = [];
+    if (category.value) {
+      categories.push(category.value);
     }
+    this.filter.category_ids = categories;
+    this.getAllCourses();
   }
 
   debounce!: any;
@@ -72,8 +81,8 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
     this._modalService.closeModal();
   }
 
-  openUpdateModal(course:ICourseDetails) {
-    this.updateData=course
+  openUpdateModal(course: ICourseDetails) {
+    this.updateData = course;
     this._modalService.openUpdateComponent();
   }
 

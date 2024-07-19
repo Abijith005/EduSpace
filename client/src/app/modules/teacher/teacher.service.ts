@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { IcategoryData } from '../../interfaces/categoryData';
 import { ICourseDetails } from '../../interfaces/courseDetails';
+import { IFilterValues } from '../../interfaces/filterValues';
 
 @Injectable({
   providedIn: 'root',
@@ -36,12 +37,22 @@ export class TeacherService {
     );
   }
 
-  getAllCourses(page: number, limit: number, search: string, filter: string) {
+  getAllCourses(
+    page: number,
+    limit: number,
+    search: string,
+    filter: IFilterValues
+  ) {
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      search,
+      filter: JSON.stringify(filter),
+      id: 'true',
+    }).toString();
     return this._http.get<
       IgenreralResponse & { courses: ICourseDetails[]; totalPages: number }
-    >(
-      `/v1/course/manageCourse/all?page=${page}&limit=${limit}&search=${search}&filter=${filter}&id=true`
-    );
+    >(`/v1/course/manageCourse/all?${queryParams}`);
   }
 
   uploadCourse(data: FormData) {
@@ -53,7 +64,7 @@ export class TeacherService {
 
   updateCourse(data: FormData, course_id: string) {
     console.log(data);
-    
+
     return this._http.put<IgenreralResponse>(
       `/v1/course/manageCourse/updateCourse/${course_id}`,
       data
