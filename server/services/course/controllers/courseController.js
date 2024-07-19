@@ -4,6 +4,9 @@ import cousreModel from "../models/courseModel.js";
 import sendUploadTaskToQueue from "../rabbitmq/producers/uploadProducer.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 import s3Config from "../config/s3BucketConfig.js";
+import mongoose from "mongoose";
+
+const ObjectId = mongoose.Types.ObjectId;
 
 export const uploadCourse = async (req, res) => {
   try {
@@ -43,7 +46,36 @@ export const getAllCourses = async (req, res) => {
     };
 
     if (filter) {
-      query.category_id = filter;
+      const parsedFilter = JSON.parse(filter);
+      console.log(parsedFilter);
+      const { category_ids, instructor_ids, priceRange,ratingRange } = parsedFilter;
+
+      if (category_ids && Array.isArray(category_ids)) {
+        parsedFilter.category_ids = category_ids.map((id) => new ObjectId(id));
+      }
+
+      if (instructor_ids && Array.isArray(instructor_ids)) {
+        parsedFilter.instructor_ids = instructor_ids.map(
+          (id) => new ObjectId(id)
+        );
+      }
+
+      if (parsedFilter.category_ids.length > 0) {
+        query.category_id = { $in: parsedFilter.category_ids };
+      }
+
+      if (parsedFilter.instructor_ids.length > 0) {
+        query.user_id = { $in: parsedFilter.instructor_ids };
+      }
+
+      if (priceRange.min&&priceRange.max) {
+        query.price={$gte:priceRange.min,$lte:priceRange.max}
+      }
+
+      if (ratingRange.min&&ratingRange.max) {
+        
+      }
+     
     }
 
     if (id) {
@@ -120,7 +152,6 @@ export const updateCourse = async (req, res) => {
         }
       }
 
-
       const command = new DeleteObjectsCommand({
         Bucket: process.env.S3_BUCKET,
         Delete: {
@@ -135,6 +166,116 @@ export const updateCourse = async (req, res) => {
     return res.status(200).send({
       success: true,
       message: "Course updates succesfully",
+    });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+
+export const getAllCourseStats = async (req,res) => {
+  try {
+    // Fetch min and max price
+    const priceRange = await cousreModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          minPrice: { $min: "$price" },
+          maxPrice: { $max: "$price" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+        },
+      },
+    ]);
+
+    // Get count of courses per category
+    const categoryData = await cousreModel.aggregate([
+      {
+        $group: { _id: "$category_id", count: { $sum: 1 } },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          foreignField: "_id",
+          localField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $project: {
+          titleUpper: { $toUpper: { $arrayElemAt: ["$category.title", 0] } },
+          title: { $arrayElemAt: ["$category.title", 0] },
+          count: 1,
+          _id: 1,
+        },
+      },
+      {
+        $sort: { titleUpper: 1 },
+      },
+      {
+        $project: {
+          title: 1,
+          count: 1,
+        },
+      },
+    ]);
+
+    // Get count of courses per teacher
+    const teacherData = await cousreModel.aggregate([
+      { $group: { _id: "$user_id", count: { $sum: 1 } } },
+      {
+        $project: {
+          _id: 1,
+          count: 1,
+        },
+      },
+    ]);
+    const teacherIds = teacherData.map((item) => item._id);
+    const userDetails = await sendRPCRequest(
+      "authQueue",
+      JSON.stringify(teacherIds)
+    );
+
+    const instructorData = teacherData.map((item) => {
+      const userData = userDetails.find((e) => e._id == item._id);
+      return { ...item, name: userData.name };
+    });
+
+    // Get rating count
+    const ratingData = await cousreModel.aggregate([
+      { $project: { roundedRating: { $ceil: "$rating" } } },
+      {
+        $group: { _id: "$roundedRating", count: { $sum: 1 } },
+      },
+      {
+        $project: {
+          _id: 0,
+          rating: "$_id",
+          count: 1,
+        },
+      },
+      { $sort: { rating: 1 } },
+    ]);
+
+    for (let i = 0; i <= 5; i++) {
+      if (!ratingData[i] || ratingData[i].rating != i) {
+        ratingData.splice(i, 0, { rating: i, count: 0 });
+      }
+    }
+    res.status(200).json({
+      success: true,
+      data: {
+        priceRange:priceRange[0],
+        categoryData,
+        instructorData,
+        ratingData,
+      },
     });
   } catch (error) {
     console.log("Error \n", error);
