@@ -48,7 +48,8 @@ export const getAllCourses = async (req, res) => {
     if (filter) {
       const parsedFilter = JSON.parse(filter);
       console.log(parsedFilter);
-      const { category_ids, instructor_ids, priceRange,ratingRange } = parsedFilter;
+      const { category_ids, instructor_ids, priceRange, ratingRange } =
+        parsedFilter;
 
       if (category_ids && Array.isArray(category_ids)) {
         parsedFilter.category_ids = category_ids.map((id) => new ObjectId(id));
@@ -68,14 +69,13 @@ export const getAllCourses = async (req, res) => {
         query.user_id = { $in: parsedFilter.instructor_ids };
       }
 
-      if (priceRange.min&&priceRange.max) {
-        query.price={$gte:priceRange.min,$lte:priceRange.max}
+      if (priceRange.min && priceRange.max) {
+        query.price = { $gte: priceRange.min, $lte: priceRange.max };
       }
 
-      if (ratingRange.min&&ratingRange.max) {
-        
+      if (ratingRange.min && ratingRange.max) {
+        query.rating = { $gte: ratingRange.min, $lte: ratingRange.max };
       }
-     
     }
 
     if (id) {
@@ -175,8 +175,7 @@ export const updateCourse = async (req, res) => {
   }
 };
 
-
-export const getAllCourseStats = async (req,res) => {
+export const getAllCourseStats = async (req, res) => {
   try {
     // Fetch min and max price
     const priceRange = await cousreModel.aggregate([
@@ -271,12 +270,30 @@ export const getAllCourseStats = async (req,res) => {
     res.status(200).json({
       success: true,
       data: {
-        priceRange:priceRange[0],
+        priceRange: priceRange[0],
         categoryData,
         instructorData,
         ratingData,
       },
     });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getCourseDetails = async (req, res) => {
+  try {
+    const { course_id } = req.params;
+    const courseDetails = await cousreModel.findById({ _id: course_id }).lean();
+    const userDetails = await sendRPCRequest(
+      "authQueue",
+      JSON.stringify([courseDetails.user_id])
+    );
+    courseDetails.user_id = userDetails[0].name;
+    res.status(200).json({ success: true, courseDetails: courseDetails });
   } catch (error) {
     console.log("Error \n", error);
     return res
