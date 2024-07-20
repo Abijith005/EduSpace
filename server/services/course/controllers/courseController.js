@@ -292,7 +292,7 @@ export const getCourseDetails = async (req, res) => {
       "authQueue",
       JSON.stringify([courseDetails.user_id])
     );
-    courseDetails.user_id = userDetails[0].name;
+    courseDetails.user_id = {name:userDetails[0].name};
     res.status(200).json({ success: true, courseDetails: courseDetails });
   } catch (error) {
     console.log("Error \n", error);
