@@ -42,7 +42,6 @@ export class StudentCourseListComponent implements OnInit {
 
   onApplyFilter(filterDatas: IFilterValues) {
     this.filter = filterDatas;
-    console.log(filterDatas);
     
     this.searchKey = filterDatas.searchKey;
 

@@ -4,7 +4,7 @@
       <div class="flex justify-between items-start">
         <div class="max-w-2xl">
           <h1 class="text-3xl font-bold exo-text">
-            {{ courseDetails.title }}
+            {{ courseDetails.title | titlecase }}
           </h1>
           <div class="flex items-center mt-4">
             <img
@@ -13,7 +13,7 @@
               class="w-10 h-10 rounded-full"
             />
             <span class="ml-4 font-semibold exo-text">{{
-              courseDetails.user_id
+              courseDetails.user_id.name | titlecase
             }}</span>
           </div>
         </div>
@@ -58,7 +58,9 @@
         Provide most popular courses that you want to join and let's start the
         course for the most way in here
       </p>
+      <div #paymentRef></div>
       <button
+      (click)="buy()"
         class="mt-4 ring-1 text-green-500 py-2 w-full exo-text rounded"
         style="color: #40c003"
       >

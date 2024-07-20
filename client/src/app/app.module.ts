@@ -16,7 +16,7 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { AppInitializerService } from './modules/shared/app-init.service';
 import { SharedModule } from './modules/shared/shared.module';
 import { sharedReducer } from './store/shared/shared.reducer';
-import {NgxSliderModule} from "@angular-slider/ngx-slider"
+import {NgxSliderModule} from "@angular-slider/ngx-slider";
 
 
 
