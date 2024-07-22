@@ -7,16 +7,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import {  Subject, filter, map, of, takeUntil, tap } from 'rxjs';
+import { Subject, filter, map, of, takeUntil, tap } from 'rxjs';
 import { StudentService } from '../../student.service';
 import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { ModalService } from '../../../shared/modal.service';
 
 @Component({
   selector: 'app-student-course-view',
   templateUrl: './student-course-view.component.html',
   styleUrl: './student-course-view.component.css',
 })
-export class StudentCourseViewComponent implements OnInit, OnDestroy,AfterViewInit {
+export class StudentCourseViewComponent implements OnInit, OnDestroy {
   @ViewChild('paymentRef', { static: true }) paymentRef!: ElementRef;
   navItems = [
     { link: './about', title: 'About' },
@@ -25,7 +26,7 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy,AfterViewIn
 
   currentUrl = '';
   course_id = '';
-  // courseDetails!: ICourseDetails;
+  isVisible$ = this._modalService.isVisible$;
   courseDetails$ = of<ICourseDetails | null>(null);
   isLoading$ = of(true);
   courseDetails = { price: 500 };
@@ -33,7 +34,8 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy,AfterViewIn
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _studentService: StudentService
+    private _studentService: StudentService,
+    private _modalService: ModalService
   ) {}
   ngOnInit(): void {
     this.course_id = this._activatedRoute.snapshot.paramMap.get('id')!;
@@ -52,43 +54,13 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy,AfterViewIn
       });
   }
 
-  // buy(){
-  //   window.paypal.Buttons().render(this.paymentRef.nativeElement)
-  // }
-
-
-  ngAfterViewInit() {
-    // After the view is fully initialized, render the PayPal button
-    this.loadPayPalButton();
+  openModal() {
+    this._modalService.openModal();
   }
 
-  loadPayPalButton() {
-    paypal.Buttons({
-      createOrder: (data: any, actions: any) => {
-        return actions.order.create({
-          purchase_units: [{
-            amount: {
-              value: this.courseDetails.price.toString(),
-              currency_code: 'INR'
-            }
-          }]
-        });
-      },
-      onApprove: (data: any, actions: any) => {
-        return actions.order.capture().then((details: any) => {
-          alert('Transaction completed by ' + details.payer.name.given_name);
-          // Optionally handle the successful payment here
-        });
-      }
-    }).render(this.paymentRef.nativeElement);
+  closeModal() {
+    this._modalService.closeModal();
   }
-
-  buy() {
-    // Render PayPal button when the "Buy" button is clicked
-    this.loadPayPalButton();
-  }
-
-
 
   getCourseDetails() {
     this.courseDetails$ = this._studentService

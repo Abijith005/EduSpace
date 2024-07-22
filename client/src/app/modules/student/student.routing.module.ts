@@ -6,6 +6,8 @@ import { StudentCourseListComponent } from './components/student-course-list/stu
 import { StudentCourseViewComponent } from './components/student-course-view/student-course-view.component';
 import { StudentAboutCourseComponent } from './components/student-about-course/student-about-course.component';
 import { StudentViewReviewComponent } from './components/student-view-review/student-view-review.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { StudentSubscriptionComponent } from './components/student-subscription/student-subscription.component';
 
 const routes: Routes = [
   {
@@ -17,7 +19,8 @@ const routes: Routes = [
       {path:'',redirectTo:'about',pathMatch:'full'},
       {path:'about',component:StudentAboutCourseComponent},
       {path:'reviews',component:StudentViewReviewComponent}
-    ]}
+    ]},
+    {path:'subscriptions',component:StudentSubscriptionComponent}
   ],
   },
 ];

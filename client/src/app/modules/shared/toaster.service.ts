@@ -28,8 +28,15 @@ export class ToasterService {
       position: 'topCenter',
     });
   }
-  showError(message: string) {
+  showError(message: string) {    
     this._ngToaster.error({
+      duration: 2000,
+      detail: message,
+      position: 'topCenter',
+    });
+  }
+  showWarning(message: string) {
+    this._ngToaster.info({
       duration: 2000,
       detail: message,
       position: 'topCenter',

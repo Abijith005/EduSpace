@@ -17,7 +17,7 @@ export class NavbarComponent {
   navItems = [
     { title: 'Home', link: './' },
     { title: 'Courses', link: './course' },
-    { title: 'Instructors', link: './instructors' },
+    { title: 'Instructors', link: './payment' },
     { title: 'Discussions', link: './discussions' },
     { title: 'Subscriptions', link: './subscriptions' },
   ];
