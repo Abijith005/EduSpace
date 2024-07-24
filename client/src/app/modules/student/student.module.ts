@@ -14,6 +14,8 @@ import { StudentViewReviewComponent } from './components/student-view-review/stu
 import { StudentAboutCourseComponent } from './components/student-about-course/student-about-course.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { StudentSubscriptionComponent } from './components/student-subscription/student-subscription.component';
+import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
+import { CourseComponent } from './components/course/course.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { StudentSubscriptionComponent } from './components/student-subscription/
     StudentAboutCourseComponent,
     PaymentComponent,
     StudentSubscriptionComponent,
+    PaymentSuccessComponent,
+    CourseComponent
   ],
   imports: [
     CommonModule,

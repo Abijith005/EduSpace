@@ -4,24 +4,29 @@
     <h1 class="text-2xl font-semibold exo-text">Subscriptions</h1>
   </div>
   <!-- Course Card Start -->
-  <div class="flex bg-white shadow-md rounded-lg overflow-hidden">
+  <div
+    *ngFor="let course of courses"
+    class="flex bg-white shadow-md rounded-lg overflow-hidden"
+  >
     <div class="w-4/12 md:h-72 relative">
       <img
-        src="/images/banner.png"
+        [src]="course.course.previewImage[0].url"
         alt="Course Image"
         class="w-full h-full object-cover"
       />
       <span
         class="inline-block bg-black text-white text-xs font-bold px-2 py-1 rounded absolute top-2 left-2 jost-text"
-        >Photography</span
+        >{{ course.course.category_id.title | titlecase }}</span
       >
     </div>
     <div class="flex flex-col justify-between p-4 w-3/4">
       <div class="flex flex-col gap-2">
-        <p class="text-sm text-gray-600 jost-text">by Determined-Poitras</p>
+        <p class="text-sm text-gray-600 jost-text">
+          {{ course.course.user_id.name | titlecase }}
+        </p>
         <div class="mt-2 flex justify-between items-center">
           <h2 class="text-lg font-semibold exo-text">
-            Create An LMS Website With LearnPress
+            {{ course.course.title | titlecase }}
           </h2>
 
           <div class="flex justify-between items-center mr-6">
@@ -33,6 +38,7 @@
               </button>
               <button
                 class="ring-1 text-blue-500 text-sm jost-text px-3 py-1 rounded"
+                (click)="navigateWithData(course.course._id)"
               >
                 Open Course
               </button>
@@ -41,7 +47,8 @@
         </div>
         <div class="flex items-center text-gray-600 text-sm mt-2 space-x-2">
           <span>
-            <i class="fas fa-clock text-orange-500 mr-2"></i> 2 Weeks</span
+            <i class="fas fa-clock text-orange-500 mr-2"></i
+            >{{ course.course.createdAt | date }}</span
           >
           <span
             ><i class="fas fa-graduation-cap text-orange-500 mr-2"></i> 156
@@ -64,6 +71,4 @@
       </div>
     </div>
   </div>
-
-  
 </div>

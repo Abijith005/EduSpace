@@ -27,6 +27,7 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
   currentUrl = '';
   course_id = '';
   isVisible$ = this._modalService.isVisible$;
+  isNestedVisible$ = this._modalService.isNestedVisible$;
   courseDetails$ = of<ICourseDetails | null>(null);
   isLoading$ = of(true);
   courseDetails = { price: 500 };
@@ -58,8 +59,15 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
     this._modalService.openModal();
   }
 
-  closeModal() {
+  closeModal(event: string) {
     this._modalService.closeModal();
+    if (event === 'success') {
+      this._modalService.openNestedModal();
+    }
+  }
+  closeNestedModal() {
+    this._modalService.closeNestedModal();
+    this._router.navigate(['']);
   }
 
   getCourseDetails() {

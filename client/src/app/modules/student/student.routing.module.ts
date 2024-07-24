@@ -6,22 +6,28 @@ import { StudentCourseListComponent } from './components/student-course-list/stu
 import { StudentCourseViewComponent } from './components/student-course-view/student-course-view.component';
 import { StudentAboutCourseComponent } from './components/student-about-course/student-about-course.component';
 import { StudentViewReviewComponent } from './components/student-view-review/student-view-review.component';
-import { PaymentComponent } from './components/payment/payment.component';
 import { StudentSubscriptionComponent } from './components/student-subscription/student-subscription.component';
+import { CourseComponent } from './components/course/course.component';
 
 const routes: Routes = [
   {
     path: '',
     component: NavbarComponent,
-    children: [{ path: '', component: StudentHomeComponent },
-    {path:'course',component:StudentCourseListComponent},
-    {path:'course/view/:id',component:StudentCourseViewComponent,children:[
-      {path:'',redirectTo:'about',pathMatch:'full'},
-      {path:'about',component:StudentAboutCourseComponent},
-      {path:'reviews',component:StudentViewReviewComponent}
-    ]},
-    {path:'subscriptions',component:StudentSubscriptionComponent}
-  ],
+    children: [
+      { path: '', component: StudentHomeComponent },
+      { path: 'course', component: StudentCourseListComponent },
+      {
+        path: 'course/view/:id',
+        component: StudentCourseViewComponent,
+        children: [
+          { path: '', redirectTo: 'about', pathMatch: 'full' },
+          { path: 'about', component: StudentAboutCourseComponent },
+          { path: 'reviews', component: StudentViewReviewComponent },
+        ],
+      },
+      { path: 'subscriptions', component: StudentSubscriptionComponent },
+      { path: 'subscriptions/course/:id', component: CourseComponent },
+    ],
   },
 ];
 

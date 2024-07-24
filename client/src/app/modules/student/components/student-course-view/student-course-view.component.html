@@ -116,9 +116,18 @@
     *ngIf="isVisible$ | async"
     class="fixed inset-0 z-50 overflow-y-auto flex items-center w-full justify-center bg-black bg-opacity-60"
   >
-    <app-payment (modalClosed)="closeModal()"
-    [courseDetails]="courseDetails"></app-payment>
+    <app-payment
+      (modalClosed)="closeModal($event)"
+      [courseDetails]="courseDetails"
+    ></app-payment>
   </div>
 
+  <div
+    *ngIf="isNestedVisible$ | async"
+    class="fixed inset-0 z-50 overflow-y-auto flex items-center w-full justify-center bg-black bg-opacity-60"
+  >
+    <app-payment-success
+    (nestedModalClosed)="closeNestedModal()"
+    [price]="courseDetails.price"></app-payment-success>
+  </div>
 </div>
-

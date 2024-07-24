@@ -5,6 +5,7 @@ import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { ICourseDetails } from '../../interfaces/courseDetails';
 import { IFilterValues } from '../../interfaces/filterValues';
 import { IfilterSelectionItems } from '../../interfaces/filterSelectionList';
+import { ISubscriptionData } from '../../interfaces/subscriptionData';
 
 @Injectable({
   providedIn: 'root',
@@ -62,9 +63,15 @@ export class StudentService {
     >(`/v1/course/manageCourse/courseCount/rating`);
   }
 
-
-  getCourseDetails(course_id:string){
-    return this._http.get<IgenreralResponse&{courseDetails:ICourseDetails}>(`/v1/course/manageCourse/courseDetails/${course_id}`)
+  getCourseDetails(course_id: string) {
+    return this._http.get<
+      IgenreralResponse & { courseDetails: ICourseDetails }
+    >(`/v1/course/manageCourse/courseDetails/${course_id}`);
   }
 
+  getAllSubscriptions() {
+    return this._http.get<IgenreralResponse & { courses: ISubscriptionData[] }>(
+      `/v1/course/manageCourse/subscriptions/all`
+    );
+  }
 }

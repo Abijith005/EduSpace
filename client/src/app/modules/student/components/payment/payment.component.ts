@@ -24,7 +24,7 @@ import { ToasterService } from '../../../shared/toaster.service';
 })
 export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('paymentRef', { static: false }) paymentRef!: ElementRef;
-  @Output() modalClosed = new EventEmitter<void>();
+  @Output() modalClosed = new EventEmitter<string>();
   @Input() courseDetails!: ICourseDetails;
   orderRef: string | undefined;
   selectedPaymentMethod: string = '';
@@ -135,7 +135,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       amount: price * 100,
       currency: 'INR',
       name: 'EduSpace',
-      image:'/images/log.png',
+      image: '/images/log.png',
       order_id: order_id,
       modal: {
         escape: false,
@@ -162,19 +162,20 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         .verifyPayment(paymentData)
         .pipe(takeUntil(this._ngUnsubscribe$))
         .subscribe((res) => {
-          this._toaster.toasterFunction(res);
           if (res.success) {
-            this.closeModal();
+            this._toaster.toasterFunction(res);
+            this.closeModal('success');
           }
         });
     };
 
     const rzp = new this._windRef.nativeWindow.Razorpay(options);
+
     rzp.open();
   }
 
-  closeModal() {
-    this.modalClosed.emit();
+  closeModal(status: string) {
+    this.modalClosed.emit(status);
   }
 
   ngOnDestroy(): void {
