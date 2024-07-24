@@ -5,6 +5,7 @@ import sendUploadTaskToQueue from "../rabbitmq/producers/uploadProducer.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 import s3Config from "../config/s3BucketConfig.js";
 import mongoose from "mongoose";
+import subscriptionModel from "../models/subscriptionModel.js";
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -292,8 +293,65 @@ export const getCourseDetails = async (req, res) => {
       "authQueue",
       JSON.stringify([courseDetails.user_id])
     );
-    courseDetails.user_id = {name:userDetails[0].name,_id:userDetails[0]._id};
+    courseDetails.user_id = {
+      name: userDetails[0].name,
+      _id: userDetails[0]._id,
+    };
     res.status(200).json({ success: true, courseDetails: courseDetails });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getAllSubscriptions = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const user_id = jwtDecode(token).id;
+
+    const courses = await subscriptionModel.aggregate([
+      { $match: { subscriber_id: new mongoose.Types.ObjectId(user_id) } },
+      {
+        $lookup: {
+          from: "courses",
+          localField: "course_id",
+          foreignField: "_id",
+          as: "course",
+        },
+      },
+      { $unwind: "$course" },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "course.category_id",
+          foreignField: "_id",
+          as: "course.category_id",
+        },
+      },
+      { $unwind: "$course.category_id" },
+      {
+        $project: {
+          subscriber_id: 0,
+          course_id: 0,
+        },
+      },
+    ]);
+
+    const user_ids = [...new Set(courses.map((item) => item.course.user_id))];
+    const userDetails = await sendRPCRequest(
+      "authQueue",
+      JSON.stringify(user_ids)
+    );
+
+    const data = courses.map((item) => {
+      const user = userDetails.find((e) => e._id == item.course.user_id);
+      item.course.user_id = user;
+      return item;
+    });
+
+    res.status(200).json({ success: true, courses: data });
   } catch (error) {
     console.log("Error \n", error);
     return res

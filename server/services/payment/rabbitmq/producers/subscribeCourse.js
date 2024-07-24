@@ -1,10 +1,9 @@
 import { connectRabbitMQ } from "../../config/rabbitmq.js";
 
-const sendSubscriptionTaskToQueue = async (data) => {
+const sendSubscriptionTaskToQueue = async (queue,data) => {
   try {
     const connection = await connectRabbitMQ();
     const channel = await connection.createChannel();
-    const queue = "course_subscription";
 
     await channel.assertQueue(queue, { durable: true });
     channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)), {

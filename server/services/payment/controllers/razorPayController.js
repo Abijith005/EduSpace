@@ -49,8 +49,8 @@ export const verifyPayment = async (req, res) => {
         sender_id: user_id,
         amount,
       });
-      const data={user_id,course_id,}
-      await sendSubscriptionTaskToQueue()
+      const data = { user_id, course_id };
+      await sendSubscriptionTaskToQueue("course_subscription", data);
 
       res.status(200).json({ success: true, message: "Payment successfull" });
     } else {
