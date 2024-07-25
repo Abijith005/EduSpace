@@ -9,6 +9,7 @@ import courseRoutes from "./routes/courseRoutes.js";
 import { getCategoriesByIds } from "./controllers/categoryController.js";
 import startRpcServer from "./rabbitmq/services/rpcServer.js";
 import startConsumer from "./rabbitmq/consumers/uploadConsumer.js";
+import consumeSubscriptionTasks from "./rabbitmq/consumers/subscriptionConsumer.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -26,12 +27,14 @@ app.use(
     credentials: true,
   })
 );
+startRpcServer("category", getCategoriesByIds);
+startConsumer();
+consumeSubscriptionTasks()
 
 app.use("/api/v1/course/categories", categoryRoutes);
 app.use("/api/v1/course/manageCourse", courseRoutes);
 
-startRpcServer("category", getCategoriesByIds);
-startConsumer();
+
 
 app.listen(port, () => {
   console.log(`courses service running in port ${port}`);

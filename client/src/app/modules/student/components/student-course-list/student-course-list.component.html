@@ -1,13 +1,13 @@
 <div class="container mx-auto py-12">
   <div class="flex gap-1">
     <div
-      class="flex-grow p-4 overflow-y-auto"
+      class="flex-grow pr-4 overflow-y-auto"
       style="max-height: calc(100vh - 4.09rem); scrollbar-width: none"
     >
       <!-- Main content goes here -->
       <div class="grid grid-cols-3 gap-x-3 gap-y-10">
         <div
-        *ngFor="let course of courses "
+          *ngFor="let course of courses"
           class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
         >
           <img
@@ -17,22 +17,23 @@
           />
           <span
             class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-            >{{course.category_id.title}}</span
+            >{{ course.category_id.title }}</span
           >
           <div class="flex-grow p-4 pb-0">
             <p class="text-gray-500 text-sm text-left jost-text">
-              by {{course.user_id.name}}
+              by {{ course.user_id.name }}
             </p>
             <h2
               class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
             >
-              {{course.title}}
+              {{ course.title }}
             </h2>
             <div
               class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"
             >
               <span class="jost-text flex items-center">
-                <i class="fas fa-clock text-orange-500 mr-2"></i> {{course.createdAt|date}}
+                <i class="fas fa-clock text-orange-500 mr-2"></i>
+                {{ course.createdAt | date }}
               </span>
               <span class="jost-text flex items-center">
                 <i class="fas fa-graduation-cap text-orange-500 mr-2"></i> 156
@@ -43,10 +44,17 @@
           </div>
           <div class="flex justify-between items-center p-4">
             <div class="flex justify-start space-x-3">
-              <span class="line-through text-gray-400 jost-text">₹ {{course.price}}</span>
+              <span class="line-through text-gray-400 jost-text"
+                >₹ {{ course.price }}</span
+              >
               <span class="text-green-500 font-bold jost-text">Free</span>
             </div>
-            <button class="exo-text font-bold" [routerLink]="'../view'">View More</button>
+            <button
+              class="exo-text font-bold"
+              [routerLink]="['./view', course._id]"
+            >
+              View More
+            </button>
           </div>
         </div>
       </div>
@@ -62,7 +70,7 @@
 
     <div
       class="min-w-80 sticky p-4 overflow-y-hidden drop-shadow-md bg-white shadow-lg rounded-md"
-      style="max-height: calc(100vh - 8.09rem); "
+      style="max-height: calc(100vh - 8.09rem)"
     >
       <app-filter (onApplyFilter)="onApplyFilter($event)"></app-filter>
     </div>

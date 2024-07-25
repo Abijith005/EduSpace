@@ -1,0 +1,44 @@
+<div
+  class="mx-auto bg-white rounded-lg shadow-md p-10 text-center"
+  style="width: 25rem"
+>
+  <div class="container py-10">
+    <div class="flex justify-center mb-4">
+      <div
+        class="w-16 h-16 bg-green-200 rounded-full flex items-center justify-center"
+      >
+        <svg
+          class="w-8 h-8 text-green-500"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M5 13l4 4L19 7"
+          ></path>
+        </svg>
+      </div>
+    </div>
+    <h2 class="text-2xl font-bold mb-5">Payment Successfull!</h2>
+    <p class="text-lg font-semibold mb-6">₹ {{ amount }}</p>
+  </div>
+  <div class="flex justify-end space-x-2 px-0">
+    <button
+      class="ring-1 ring-pink-500 text-sm px-4 rounded-md jost-text"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
+    <button
+      class="ring-1 ring-lime-400 text-sm px-4 py-1.5 rounded-md jost-text"
+      (click)="onGotoSubscription()"
+    >
+      Go to Suscription
+    </button>
+  </div>
+</div>

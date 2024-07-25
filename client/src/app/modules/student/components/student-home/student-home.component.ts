@@ -16,6 +16,7 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
   constructor(private _studentService: StudentService) {}
 
   ngOnInit(): void {
+    
     this._studentService
       .getAllCategories()
       .pipe(takeUntil(this._ngUnsubscribe$))

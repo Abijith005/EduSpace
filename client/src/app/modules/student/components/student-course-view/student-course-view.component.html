@@ -1,10 +1,10 @@
-<div class="px-4 py-8">
+<div class="px-4 py-8" *ngIf="courseDetails$ | async as courseDetails">
   <div class="sticky top-16 py-4 bg-white z-10">
     <div class="container mx-auto">
       <div class="flex justify-between items-start">
         <div class="max-w-2xl">
           <h1 class="text-3xl font-bold exo-text">
-            Advanced Funnels with Google Analytics
+            {{ courseDetails.title | titlecase }}
           </h1>
           <div class="flex items-center mt-4">
             <img
@@ -12,12 +12,16 @@
               alt="Anna John"
               class="w-10 h-10 rounded-full"
             />
-            <span class="ml-4 font-semibold exo-text">Anna John</span>
+            <span class="ml-4 font-semibold exo-text">{{
+              courseDetails.user_id.name | titlecase
+            }}</span>
           </div>
         </div>
         <div class="flex items-center mb-2">
           <span class="text-yellow-500">⭐⭐⭐☆☆</span>
-          <span class="ml-2 text-gray-600 jost-text">(157 Reviews)</span>
+          <span class="ml-2 text-gray-600 jost-text"
+            >({{ courseDetails.rating }} Reviews)</span
+          >
         </div>
       </div>
 
@@ -27,7 +31,7 @@
             class="text-sm font-semibold exo-text cursor-pointer"
             *ngFor="let item of navItems"
             [routerLink]="item.link"
-            [class]="isActive(item.link)?'text-orange-500':''"
+            [class]="isActive(item.link) ? 'text-orange-500' : ''"
           >
             {{ item.title }}
           </h3>
@@ -39,7 +43,7 @@
   <div class="mt-6 container mx-auto flex justify-between items-center">
     <div class="drop-shadow-md">
       <video
-        src="/images/rm3.mp4"
+        [src]="courseDetails.previewVideo[0].url"
         alt="Course Image"
         class="w-full rounded shadow-lg"
         controls
@@ -47,16 +51,20 @@
     </div>
 
     <div class="border p-8 rounded-md shadow-lg text-center w-96">
-      <div class="text-2xl font-bold exo-text">₹ 99.00 INR</div>
+      <div class="text-2xl font-bold exo-text">
+        ₹ {{ courseDetails.price }}.00 INR
+      </div>
       <p class="text-gray-600 mt-2 text-justify jost-text text-xxs">
         Provide most popular courses that you want to join and let's start the
         course for the most way in here
       </p>
+      <div #paymentRef></div>
       <button
+        (click)="openModal()"
         class="mt-4 ring-1 text-green-500 py-2 w-full exo-text rounded"
         style="color: #40c003"
       >
-        Buy ₹ 99 INR
+        Buy ₹ {{ courseDetails.price }} INR
       </button>
       <ul class="text-left mt-6 space-y-4">
         <li class="flex items-center">
@@ -103,31 +111,23 @@
   <div class="container mx-auto">
     <router-outlet></router-outlet>
   </div>
-</div>
 
-<!-- <form [formGroup]="permissionsForm" (ngSubmit)="onSubmit()">
-    <div formArrayName="menus">
-      <div *ngFor="let menu of menus.controls; let i = index" [formGroupName]="i">
-        <h2>{{ menu.get('name')?.value }}</h2>
-        <div formArrayName="subMenus">
-          <div *ngFor="let subMenu of getSubMenus(i).controls; let j = index" [formGroupName]="j">
-            <h3>{{ subMenu.get('name')?.value }}</h3>
-            <label>
-              <input type="checkbox" formControlName="canSave"> Can Save
-            </label>
-            <label>
-              <input type="checkbox" formControlName="canUpdate"> Can Update
-            </label>
-            <label>
-              <input type="checkbox" formControlName="canView"> Can View
-            </label>
-            <label>
-              <input type="checkbox" formControlName="canDelete"> Can Delete
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button type="submit">Submit</button>
-  </form>
-   -->
+  <div
+    *ngIf="isVisible$ | async"
+    class="fixed inset-0 z-50 overflow-y-auto flex items-center w-full justify-center bg-black bg-opacity-60"
+  >
+    <app-payment
+      (modalClosed)="closeModal($event)"
+      [courseDetails]="courseDetails"
+    ></app-payment>
+  </div>
+
+  <div
+    *ngIf="isNestedVisible$ | async"
+    class="fixed inset-0 z-50 overflow-y-auto flex items-center w-full justify-center bg-black bg-opacity-60"
+  >
+    <app-payment-success
+    (nestedModalClosed)="closeNestedModal()"
+    [price]="courseDetails.price"></app-payment-success>
+  </div>
+</div>

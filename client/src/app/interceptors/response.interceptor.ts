@@ -13,7 +13,6 @@ import { NgToastService } from 'ng-angular-popup';
 import { Store } from '@ngrx/store';
 import { SharedState } from '../store/shared/shared.state';
 import { setLoading } from '../store/shared/shared.actions';
-import { selectSharedState } from '../store/shared/shared.selector';
 
 @Injectable()
 export class ResponseInterceptor implements HttpInterceptor {
