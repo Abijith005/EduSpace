@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import "dotenv/config";
+import openaiRoutes from "./routes/openaiRoutes.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -17,7 +18,7 @@ app.use(
   })
 );
 
-// app.all("/api/v1//hello", );
+app.use("/api/v1/student/openAI", openaiRoutes);
 
 app.listen(port, () => {
   console.log(`student service running in port ${port}`);

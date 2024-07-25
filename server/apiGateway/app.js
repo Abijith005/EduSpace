@@ -33,8 +33,8 @@ app.use(
 );
 
 app.use(
-  "/api/v1/user",
-  authMiddleware(["student", "admin"]),
+  "/api/v1/student",
+  // authMiddleware(["student", "admin"]),
   createProxyMiddleware({
     target: process.env.STUDENT_SERVICE_URL,
     changeOrigin: true,
