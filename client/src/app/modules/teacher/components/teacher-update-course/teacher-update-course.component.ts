@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { ToasterService } from '../../../shared/toaster.service';
 import { TeacherService } from '../../teacher.service';
-import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { IcourseDetails } from '../../../../interfaces/courseDetails';
 
 @Component({
   selector: 'app-teacher-update-course',
@@ -19,7 +19,7 @@ import { ICourseDetails } from '../../../../interfaces/courseDetails';
   styleUrl: './teacher-update-course.component.css',
 })
 export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
-  @Input() courseDataInput!: ICourseDetails;
+  @Input() courseDataInput!: IcourseDetails;
   @Input() categories!: IcategoryData[];
   @Output() modalClosed = new EventEmitter();
   courseDetailsForm!: FormGroup;
@@ -29,7 +29,7 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
   videoFiles: any[] = [];
   notesFiles: any[] = [];
   deletedFiles: any = {};
-  courseData!: ICourseDetails;
+  courseData!: IcourseDetails;
 
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
@@ -132,10 +132,6 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
   onSubmit() {
 
     this.isSubmitted = true;
-
-    console.log(this.courseDetailsForm.value);
-
-    return
 
     if (this.courseDetailsForm.invalid) {
       return;

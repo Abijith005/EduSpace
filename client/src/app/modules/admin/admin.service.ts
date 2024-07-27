@@ -4,8 +4,8 @@ import { IcategoryData } from '../../interfaces/categoryData';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { IcategoryResponse } from '../../interfaces/categoryResponse';
 import {
-  ICategoryRequest,
-  ICertificate,
+  IcategoryRequest,
+  Icertificate,
 } from '../../interfaces/categoryRequest';
 
 @Injectable({
@@ -32,12 +32,12 @@ export class AdminService {
 
   getAllRequests(page: number, limit: number) {
     return this._http.get<
-      IgenreralResponse & { requests: ICategoryRequest[]; totalPages: number }
+      IgenreralResponse & { requests: IcategoryRequest[]; totalPages: number }
     >(`/v1/teacher/profile/requests/all?currentPage=${page}&limit=${limit}`);
   }
 
   updateCertificateStatus(data: {
-    certificates: ICertificate[];
+    certificates: Icertificate[];
     requestId: string;
   }) {
     return this._http.put<IgenreralResponse>(

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StudentService } from '../../student.service';
 import { Subject, takeUntil } from 'rxjs';
-import { ISubscriptionData } from '../../../../interfaces/subscriptionData';
+import { IsubscriptionData } from '../../../../interfaces/subscriptionData';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './student-subscription.component.css',
 })
 export class StudentSubscriptionComponent implements OnInit, OnDestroy {
-  courses!: ISubscriptionData[];
+  courses!: IsubscriptionData[];
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
     private _studentService: StudentService,

@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { TeacherService } from '../../teacher.service';
-import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { IcourseDetails } from '../../../../interfaces/courseDetails';
 import { ModalService } from '../../../shared/modal.service';
 import { IcategoryData } from '../../../../interfaces/categoryData';
-import { IFilterValues } from '../../../../interfaces/filterValues';
+import { IfilterValues } from '../../../../interfaces/filterValues';
 
 @Component({
   selector: 'app-teacher-course-manage',
@@ -15,7 +15,7 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
   totalPages!: number;
   currentPage = 1;
   limit = 6;
-  filter: IFilterValues = {
+  filter: IfilterValues = {
     searchKey: '',
     category_ids: [],
     instructor_ids: [],
@@ -23,11 +23,11 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
     priceRange: { min: -Infinity, max: Infinity },
   };
   search = '';
-  courses!: ICourseDetails[];
+  courses!: IcourseDetails[];
   categoires!: IcategoryData[];
   isVisible$ = this._modalService.isVisible$;
   isUpdateVisible$ = this._modalService.isUpdateVisible$;
-  updateData!: ICourseDetails;
+  updateData!: IcourseDetails;
 
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
@@ -81,7 +81,7 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
     this._modalService.closeModal();
   }
 
-  openUpdateModal(course: ICourseDetails) {
+  openUpdateModal(course: IcourseDetails) {
     this.updateData = course;
     this._modalService.openUpdateComponent();
   }

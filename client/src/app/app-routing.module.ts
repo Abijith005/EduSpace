@@ -4,6 +4,7 @@ import { studentModuleGuard } from './guards/student-module.guard';
 import { authModuleGuard } from './guards/auth-module.guard';
 import { adminModuleGuard } from './guards/admin-module.guard';
 import { teacherModuleGuard } from './guards/teacher-module.guard';
+import { DiscussionsComponent } from './modules/student/components/discussions/discussions.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth' },

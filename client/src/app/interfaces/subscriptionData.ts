@@ -1,6 +1,6 @@
-import { ICourseDetails } from './courseDetails';
+import { IcourseDetails } from './courseDetails';
 
-export interface ISubscriptionData {
+export interface IsubscriptionData {
   _id: string;
-  course: ICourseDetails;
+  course: IcourseDetails;
 }

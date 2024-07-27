@@ -1,0 +1,32 @@
+.chat-container {
+    position: absolute;
+    top: 0;
+    right: -100%;
+    width: 30%;
+    height: 100%;
+    background: white;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-container.visible {
+    right: 0;
+  }
+  
+  .chat-visible  {
+    transition: width 0.3s ease;
+  }
+
+  
+  .selected {
+    transition: all 0.3s ease-out;
+    border: 1px solid rgb(245, 36, 36);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05); 
+  }
+  
+  .text-xxs{
+    font-size: .8rem;
+  }
+
+  

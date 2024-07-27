@@ -25,6 +25,6 @@ import { FileNameExtractorPipe } from './pipes/file-name-extractor.pipe';
     CommonModule,
     NgxExtendedPdfViewerModule
   ],
-  exports:[PaginationComponent,LoadingComponent,PdfViewerComponent,ObjectUrlPipe,RemoveTimestampPipe,RatingStarPipe,FileNameExtractorPipe]
+  exports:[PaginationComponent,LoadingComponent,PdfViewerComponent,ObjectUrlPipe,RemoveTimestampPipe,RatingStarPipe,FileNameExtractorPipe,]
 })
 export class SharedModule { }

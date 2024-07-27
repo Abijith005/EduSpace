@@ -3,8 +3,8 @@ import { ModalService } from '../../../shared/modal.service';
 import { AdminService } from '../../admin.service';
 import { Subject, takeUntil } from 'rxjs';
 import {
-  ICategoryRequest,
-  ICertificate,
+  IcategoryRequest,
+  Icertificate,
 } from '../../../../interfaces/categoryRequest';
 import { ToasterService } from '../../../shared/toaster.service';
 
@@ -17,8 +17,8 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   totalPages!: number;
   currentPage = 1;
   limit = 8;
-  requests!: ICategoryRequest[];
-  certificates!: ICertificate[];
+  requests!: IcategoryRequest[];
+  certificates!: Icertificate[];
   selectedRequestId: string | null = null;
   dropdownOpen = false;
   currentRequestId: string | null = null;
@@ -63,7 +63,7 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
       });
   }
 
-  openModal(request: ICategoryRequest) {
+  openModal(request: IcategoryRequest) {
     this.certificates = request.certificates;
     this.selectedRequestId = request._id;
     this._modalService.openModal();

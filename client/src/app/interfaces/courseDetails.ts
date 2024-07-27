@@ -6,7 +6,7 @@ interface FileDetails {
   key: string;
 }
 
-export interface ICourseDetails {
+export interface IcourseDetails {
   _id: string;
   user_id: IuserInformation;
   category_id: IcategoryData;

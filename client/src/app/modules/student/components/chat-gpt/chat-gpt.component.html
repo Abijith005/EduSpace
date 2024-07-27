@@ -1,0 +1,57 @@
+<div
+  class="flex flex-col justify-between h-full px-4 pt-4 pb-1 bg-[#050708] text-white rounded-md"
+>
+  <div
+    class="flex flex-col-reverse flex-grow gap-3 max-h-[371.5px] overflow-y-auto"
+    style="scrollbar-width: 0.1px"
+  >
+    <div
+      *ngFor="let chat of chats"
+      class="p-2 bg-[#1a1a1a] max-w-full rounded-md break-words"
+      [ngClass]="chat.type === 'send' ? 'sendMessages' : 'receivedMessages'"
+    >
+      {{ chat.message }}
+    </div>
+  </div>
+
+  <div class="py-1 mt-2">
+    <div class="flex items-center space-x-4">
+      <!-- <textarea
+          class="w-full p-2 rounded border-none outline-none bg-[#EFF6FC] ring-0 focus:ring-0 exo-text resize-none"
+          placeholder="Type your message here..."
+          rows="1"
+          id="message-box"
+        ></textarea> -->
+      <textarea
+        [(ngModel)]="messageInput"
+        (input)="adjustHeight($event)"
+        placeholder="Ask Chat GPT ..."
+        class="flex-grow bg-[#333] text-white rounded-md resize-none focus:outline-none focus:ring-0 scrollwi"
+        style="scrollbar-width: none"
+        [style.height.px]="textareaHeight"
+      ></textarea>
+      <button (click)="sendMessage()" id="sendButton" class="pr-2 -left-2">
+        <div *ngIf="isLoading$ | async; else sendButton" >
+        <img src="/images/loadingLottie.gif" class="w-8 " alt="">
+        </div>
+        <ng-template #sendButton>
+          <svg
+            stroke="white"
+            fill="none"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+          >
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </ng-template>
+      </button>
+    </div>
+  </div>
+</div>

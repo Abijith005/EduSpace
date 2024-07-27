@@ -4,8 +4,8 @@
       <img src="images/Log.ico" class="h-10 w-10" alt="" />
       <a class="text-black font-bold text-3xl exo-text">EduSpace</a>
     </div>
-    <div class="hidden md:flex items-center space-x-6">
-      <a *ngFor="let item of navItems" [class]="isActiveLink(item.link)?'bg-gray-100 px-3 py-2 rounded-md text-orange-500':''" class="hover:text-orange-400 transition duration-300 text-decoration"
+    <div class="hidden md:flex items-center space-x-8">
+      <a *ngFor="let item of navItems" [class]="isActiveLink(item.link)?'bg-gray-100 px-2 py-2 rounded-md text-orange-500':''" class="hover:text-orange-400 px-2 transition duration-300 text-decoration"
       [routerLink]="item.link"
         >{{item.title}}</a
       >

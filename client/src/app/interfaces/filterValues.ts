@@ -1,4 +1,4 @@
-export interface IFilterValues {
+export interface IfilterValues {
   searchKey: string;
   category_ids: string[];
   instructor_ids: string[];
