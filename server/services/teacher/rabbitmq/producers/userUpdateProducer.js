@@ -22,7 +22,6 @@ export const sendUserUpdateTask = async (queue, data) => {
     await channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)), {
       persistent: true,
     });
-    console.log('send to queue');
   } catch (error) {
     console.error("Failed to send message to queue", error);
   }

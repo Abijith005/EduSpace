@@ -1,5 +1,5 @@
 import connectRabbitMQ from "../../config/rabbitmq.js";
-import teacherModel from "../../models/teacherModel.js";
+import userModel from "../../models/userModel.js";
 
 export const consumeUserUpdate = async () => {
   try {
@@ -10,16 +10,12 @@ export const consumeUserUpdate = async () => {
 
     channel.consume(queue, async (msg) => {
       if (msg != null) {
-        console.log(JSON.parse(msg.content.toString()));
         const message = JSON.parse(msg.content.toString());
+        console.log(query,update,'from atuthhthth');
         const { query, update } = message;
-        console.log(query,update);
-      const updateddd=  await teacherModel.updateOne(query, update);
-        console.log('updated user',updateddd);
-        channel.ack(msg)
+        await userModel.updateOne(query, update);
+        channel.ack(msg);
       }
     });
   } catch (error) {}
 };
-
-

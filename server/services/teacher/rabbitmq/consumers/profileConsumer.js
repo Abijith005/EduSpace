@@ -1,12 +1,11 @@
-import { connectRabbitMQ } from "../../config/rabbitmq.js";
-import subscriptionModel from "../../models/subscriptionModel.js";
-import sendMemberTaskQueue from "../producers/memberProducer.js";
+import connectRabbitMQ from "../../config/rabbitmq.js";
+import teacherProfileModel from "../../models/teacherProfileModel.js";
 
-const consumeSubscriptionTasks = async () => {
+const consumeProfileTasks = async () => {
   try {
     const connection = await connectRabbitMQ();
     const channel = await connection.createChannel();
-    const queue = "course_subscription";
+    const queue = "teacher_profile";
 
     await channel.assertQueue(queue, { durable: true });
     await channel.consume(
@@ -27,12 +26,15 @@ const consumeSubscriptionTasks = async () => {
 
 const processMessage = async (msg) => {
   try {
-    const { user_id, course_id } = msg;
-    await subscriptionModel.create({ course_id, subscriber_id: user_id });
-    sendMemberTaskQueue({ user_id, course_id });
+    const userId = msg;
+    await teacherProfileModel.findOneAndUpdate(
+      { userId },
+      { userId },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
   } catch (error) {
     console.error("Failed to process message:", error);
   }
 };
 
-export default consumeSubscriptionTasks;
+export default consumeProfileTasks;

@@ -3,7 +3,7 @@
 // import { getUserDetails } from "../consumers/userDetailsConsumer.js";
 import jwtDecode from "../helpers/jwtDecode.js";
 import requestModel from "../models/categoryRequestModeldel.js";
-import { sendUserUpdateTask } from "../rabbitmq/producers/userUpdateProducer.js";
+import teacherProfileModel from "../models/teacherProfileModel.js";
 import sendRPCRequest from "../rabbitmq/service/rpcClient.js";
 
 export const uploadCertificates = async (req, res) => {
@@ -46,10 +46,10 @@ export const getRequests = async (req, res) => {
 
     const userIds = [...new Set(requests.map((item) => item.userId))];
     const categoryIds = [...new Set(requests.map((item) => item.category))];
-
+    const query = { _id: { $in: userIds } };
     const userDetails = await sendRPCRequest(
       "authQueue",
-      JSON.stringify(userIds)
+      JSON.stringify(query)
     );
     const categoryDetails = await sendRPCRequest(
       "category",
@@ -75,8 +75,6 @@ export const getRequests = async (req, res) => {
       requests: requestsWithDetails,
       totalPages,
     });
-
-    console.log("Completed fetching permission requests");
   } catch (error) {
     console.log("Error \n", error);
     return res
@@ -88,10 +86,38 @@ export const getRequests = async (req, res) => {
 export const updateCertificates = async (req, res) => {
   try {
     const { requestId, certificates } = req.body;
-    await requestModel.findByIdAndUpdate(
+    const data = await requestModel.findByIdAndUpdate(
       { _id: requestId },
       { $set: { certificates: certificates } }
     );
+
+    const userId = data.userId;
+
+    const teacherProfile = await teacherProfileModel.findOne({ userId });
+
+    if (!teacherProfile) {
+      throw new Error("User not found");
+    }
+
+    const verifiedCerts = certificates.filter((cert) => cert.verified);
+    const unverifiedCertKeys = certificates
+      .filter((cert) => !cert.verified)
+      .map((cert) => cert.key);
+
+    const newCertificates = teacherProfile.certificates.filter(
+      (cert) => !unverifiedCertKeys.includes(cert.key)
+    );
+    verifiedCerts.forEach((cert) => {
+      if (
+        !newCertificates.some((existingCert) => existingCert.key === cert.key)
+      ) {
+        newCertificates.push(cert);
+      }
+    });
+
+    teacherProfile.certificates = newCertificates;
+    await teacherProfile.save();
+
     res
       .status(200)
       .json({ success: true, message: "Certificates updated successfully" });
@@ -112,10 +138,9 @@ export const updateRequestStatus = async (req, res) => {
     );
 
     if (status === "approved") {
-      const queue = "user_update_queue";
-      const query = { _id: user_id };
+      const query = { userId: user_id };
       const update = { $push: { categories: category } };
-      sendUserUpdateTask(queue, { query, update });
+      await teacherProfileModel.updateOne(query, update);
     }
     res
       .status(200)
@@ -127,3 +152,33 @@ export const updateRequestStatus = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const getTeacherProfile = (user_ids) => {
+  try {
+    return teacherProfileModel.find({ userId: { $in: user_ids } });
+  } catch (error) {
+    console.log("Error \n", error);
+    throw error;
+  }
+};
+
+export const removeApprovedCategories = async (req, res) => {
+  try {
+    const { categoryIds, userId } = req.body;
+    console.log(userId, categoryIds);
+    const a = await teacherProfileModel.updateOne(
+      { userId: userId },
+      { $pullAll: { categories: categoryIds } }
+    );
+    console.log(a);
+    res
+      .status(200)
+      .json({ success: true, message: "Category removed successfully" });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+ 

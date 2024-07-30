@@ -27,10 +27,8 @@ export const getNewAccessToken = async (req, res) => {
 export const decodeUserInfo = async (req, res) => {
   try {
     const {token} = req.params;
-    console.log(token);
     const userInfo = verifyJwt(token);
     const { name, email, profilePic, role } = userInfo;
-    console.log(userInfo,'no user info');
     if (!userInfo) {
       return res.status(401).json({ success: false, message: "invalid token" });
     }

@@ -6,7 +6,7 @@ import "dotenv/config.js";
 import dbConnect from "./config/dbConnect.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
-import { getCategoriesByIds } from "./controllers/categoryController.js";
+import { getCategoriesByIds, getSubscriptionDatas } from "./controllers/categoryController.js";
 import startRpcServer from "./rabbitmq/services/rpcServer.js";
 import startConsumer from "./rabbitmq/consumers/uploadConsumer.js";
 import consumeSubscriptionTasks from "./rabbitmq/consumers/subscriptionConsumer.js";
@@ -28,6 +28,7 @@ app.use(
   })
 );
 startRpcServer("category", getCategoriesByIds);
+startRpcServer("subscriptionDataQueue", getSubscriptionDatas);
 startConsumer();
 consumeSubscriptionTasks()
 

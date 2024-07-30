@@ -3,24 +3,23 @@ import generateOtp from "../helpers/generateOtp.js";
 import hashPassword from "../helpers/hashPassword.js";
 import { userCredentialsValidation } from "../helpers/inputValidations.js";
 import { createAccessToken, createRefreshToken } from "../helpers/jwtSign.js";
-import adminModel from "../models/adminModel.js";
 import otpModel from "../models/otpModel.js";
-import studentModel from "../models/studentModel.js";
-import teacherModel from "../models/teacherModel.js";
 import bcrypt from "bcrypt";
+import userModel from "../models/userModel.js";
+import sendProfileTaskToQueue from "../rabbitmq/producers/teacherProfileProducer.js";
 
 export const userRegister = async (req, res) => {
   try {
     const { name, email, password, otp, role } = req.body;
-    const model = role == "student" ? studentModel : teacherModel;
-    console.log(model, role);
+
     const validate = userCredentialsValidation({ name, email, password, role });
     if (!validate.isValid) {
       return res
         .status(400)
         .json({ success: false, message: validate.message });
     }
-    const user = await model.findOne({ email: email });
+
+    const user = await userModel.findOne({ email: email });
 
     if (user) {
       const message = "Email already exists";
@@ -32,13 +31,21 @@ export const userRegister = async (req, res) => {
 
     const userOtp = await otpModel.findOne({
       email: email,
-      user_type: role.toLowerCase(),
       purpose: "registration",
     });
     const currentDate = new Date();
     if (userOtp?.expiresAt >= currentDate && userOtp.otp == otp) {
       const hashedPassword = await hashPassword(password);
-      await model.create({ name, email, password: hashedPassword });
+
+      const user = await userModel.create({
+        name,
+        email,
+        password: hashedPassword,
+        role,
+      });
+      if (role === "teacher") {
+        await sendProfileTaskToQueue(user._id);
+      }
       return res
         .status(200)
         .json({ success: true, message: `${role} registration successfull` });
@@ -55,13 +62,8 @@ export const userRegister = async (req, res) => {
 
 export const userLogin = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
-    const model =
-      role == "student"
-        ? studentModel
-        : role == "teacher"
-        ? teacherModel
-        : adminModel;
+    const { email, password } = req.body;
+
     const validate = userCredentialsValidation({ email, password });
     if (!validate.isValid) {
       return res
@@ -69,7 +71,7 @@ export const userLogin = async (req, res) => {
         .json({ success: false, message: validate.message });
     }
 
-    const user = await model.findOne({ email: email });
+    const user = await userModel.findOne({ email: email });
     if (user) {
       if (user.socialId) {
         return res
@@ -83,27 +85,27 @@ export const userLogin = async (req, res) => {
           name: user.name,
           email: user.email,
           profilePic: user.profilePic,
-          role: role,
+          role: user.role,
         });
         const accessToken = createAccessToken({
           id: user.id,
           name: user.name,
           email: user.email,
           profilePic: user.profilePic,
-          role: role,
+          role: user.role,
         });
         const userInfo = {
-          name: user.name||'',
+          name: user.name || "",
           email: user.email,
-          profilePic: user.profilePic||'',
-          role: role,
+          profilePic: user.profilePic || "",
+          role: user.role,
         };
         return res.status(200).json({
           success: true,
           message: "Login successfull",
           accessToken,
           refreshToken,
-          userInfo
+          userInfo,
         });
       } else {
         return res
@@ -113,7 +115,7 @@ export const userLogin = async (req, res) => {
     } else {
       return res
         .status(404)
-        .json({ success: false, message: "User not found" });
+        .json({ success: false, message: "User not found ! Please sign up" });
     }
   } catch (error) {
     console.log("Error \n", error);
@@ -125,10 +127,8 @@ export const userLogin = async (req, res) => {
 
 export const userRegistrationOtp = async (req, res) => {
   try {
-    const { email, role } = req.body;
-    const model = role == "student" ? studentModel : teacherModel;
-    const user = await model.findOne({ email: email });
-    console.log(user);
+    const { email } = req.body;
+    const user = await userModel.findOne({ email: email });
     if (user) {
       let message = "Email already registered";
       if (user.socialId) {
@@ -138,30 +138,24 @@ export const userRegistrationOtp = async (req, res) => {
     }
 
     const otp = await generateOtp();
-    const validate = userCredentialsValidation({ email, role });
+    const validate = userCredentialsValidation({ email });
     if (!validate.isValid) {
       return res
         .status(400)
         .json({ success: false, message: validate.message });
     }
 
-    const data = await otpModel.findOne({
-      email,
-      purpose: "registration",
-      user_type: role.toLowerCase(),
-    });
-    if (data) {
-      data.otp = otp;
-      data.expiresAt = new Date(Date.now() + 1 * 60 * 1000);
-      await data.save();
-    } else {
-      await otpModel.create({
+    const data = await otpModel.findOneAndUpdate(
+      {
         email,
-        otp,
         purpose: "registration",
-        user_type: role.toLowerCase(),
-      });
-    }
+      },
+      {
+        otp,
+        expiresAt: new Date(Date.now() + 1 * 60 * 1000),
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
 
     const job = {};
     job.subject = "EduSpace Email Verification";
@@ -187,16 +181,15 @@ export const userRegistrationOtp = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
   try {
-    const { email, role } = req.body;
-    const model = role == "student" ? studentModel : teacherModel;
-    const validate = userCredentialsValidation({ email, role });
+    const { email } = req.body;
+    const validate = userCredentialsValidation({ email });
     if (!validate.isValid) {
       return res
         .status(400)
         .json({ success: false, message: validate.message });
     }
 
-    const user = await model.findOne({ email: email });
+    const user = await userModel.findOne({ email: email });
 
     if (!user || user?.socialId) {
       const message = user?.socialId
@@ -205,24 +198,18 @@ export const forgotPassword = async (req, res) => {
       return res.status(401).json({ success: false, message });
     } else {
       const otp = await generateOtp();
-      const data = await otpModel.findOne({
-        email,
-        purpose: "forgot_password",
-        user_type: role.toLowerCase(),
-      });
 
-      if (data) {
-        data.otp = otp;
-        data.expiresAt = new Date(Date.now() + 1 * 60 * 1000);
-        await data.save();
-      } else {
-        await otpModel.create({
+      const data = await otpModel.findOneAndUpdate(
+        {
           email,
-          otp,
           purpose: "forgot_password",
-          user_type: role.toLowerCase(),
-        });
-      }
+        },
+        {
+          otp,
+          expiresAt: new Date(Date.now() + 1 * 60 * 1000),
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
 
       const job = {};
       job.subject = "EduSpace Email Verification";
@@ -249,7 +236,7 @@ export const forgotPassword = async (req, res) => {
 
 export const forgotPasswordverifyOtp = async (req, res) => {
   try {
-    const { email, otp, role } = req.body;
+    const { email, otp } = req.body;
     const validate = userCredentialsValidation({ email });
     if (!validate.isValid) {
       return res
@@ -260,7 +247,6 @@ export const forgotPasswordverifyOtp = async (req, res) => {
     const otpData = await otpModel.findOne({
       email: email,
       purpose: "forgot_password",
-      user_type: role.toLowerCase(),
     });
     const currentDate = new Date();
     if (otpData.expiresAt >= currentDate && otpData.otp == otp) {
@@ -289,7 +275,7 @@ export const updatePassword = async (req, res) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    await studentModel.updateOne(
+    await userModel.updateOne(
       { email: email },
       { $set: { password: hashedPassword } }
     );
@@ -303,54 +289,3 @@ export const updatePassword = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
-
-export const adminLogin = async () => {
-  try {
-    const { email, password, role } = req.body;
-    const validate = userCredentialsValidation({ email, password, role });
-    if (!validate.isValid) {
-      return res
-        .status(400)
-        .json({ success: false, message: validate.message });
-    }
-
-    const admin = await adminModel.findOne({ email: email });
-
-    if (admin) {
-      const verifyPassword = await bcrypt.compare(password, admin.password);
-      if (verifyPassword) {
-        const refreshToken = createRefreshToken({
-          id: admin.id,
-          email: admin.email,
-          role: "admin",
-        });
-        const accessToken = createAccessToken({
-          id: admin.id,
-          email: admin.email,
-          role: "admin",
-        });
-        return res.status(200).json({
-          success: true,
-          message: "Login successfull",
-          accessToken,
-          refreshToken,
-        });
-      } else {
-        return res
-          .status(401)
-          .json({ success: false, message: "Incorrect password" });
-      }
-    } else {
-      return res
-        .status(404)
-        .json({ success: false, message: "Admin not found" });
-    }
-  } catch (error) {
-    console.log("Error \n", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
-  }
-};
-
-

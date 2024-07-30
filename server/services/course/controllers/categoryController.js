@@ -1,7 +1,7 @@
 import { inputValidation } from "../helpers/inptValidation.js";
 import jwtDecode from "../helpers/jwtDecode.js";
 import categoryModel from "../models/categoryModel.js";
-import cousreModel from "../models/courseModel.js";
+import subscriptionModel from "../models/subscriptionModel.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 
 export const createCategory = async (req, res) => {
@@ -59,6 +59,14 @@ export const getCategoriesByIds = async (categoryIds) => {
   }
 };
 
+export const getSubscriptionDatas = async (userIds) => {
+  try {
+    return await subscriptionModel.find({ subscriber_id: { $in: userIds } }).lean();
+  } catch (error) {
+    console.log("Error \n", error);
+  }
+};
+
 export const updateCategoryStatus = async (req, res) => {
   try {
     const { categoryId, status } = req.body;
@@ -82,7 +90,7 @@ export const getAllowedCategories = async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const user_id = jwtDecode(token).id;
     const [userDetails] = await sendRPCRequest(
-      "authQueue",
+      "teacherQueue",
       JSON.stringify([user_id])
     );
     const { categories } = userDetails;
@@ -97,7 +105,3 @@ export const getAllowedCategories = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
-
-
-
-

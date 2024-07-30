@@ -5,6 +5,10 @@ import cors from "cors";
 import "dotenv/config.js";
 import dbConnect from "./config/dbConnect.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import startRPCServer from "./rabbitmq/service/rpcServer.js";
+import { getTeacherProfile } from "./controllers/profileController.js";
+import consumeProfileTasks from "./rabbitmq/consumers/profileConsumer.js";
+import teacherRoutes from "./routes/teacherRoutes.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -24,7 +28,11 @@ app.use(
 );
 
 app.use("/api/v1/teacher/profile", profileRoutes);
+app.use("/api/v1/teacher/teacherManage", teacherRoutes);
 
-  app.listen(port, () => {
-    console.log(`teacher service running in port ${port}`);
-  });
+consumeProfileTasks();
+startRPCServer("teacherQueue", getTeacherProfile);
+
+app.listen(port, () => {
+  console.log(`teacher service running in port ${port}`);
+});
