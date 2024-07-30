@@ -41,7 +41,7 @@
         Add Category
       </button>
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto pb-10">
       <table class="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
@@ -131,7 +131,7 @@
                   *ngIf="dropdownOpen && category._id === currentCategoryId"
                   class="absolute right-1 mt-2 w-48 bg-gray-100 rounded-md shadow-lg z-50"
                 >
-                  <ul>
+                  <ul class="">
                     <li
                       class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
                       (click)="updateCategoryStatus(category._id,!category.activeStatus)"
@@ -146,7 +146,7 @@
         </tbody>
       </table>
     </div>
-    <div class="mt-16 flex justify-center items-center">
+    <div class=" flex justify-center items-center">
       <app-pagination
         [totalPages]="totalPages"
         [currentPage]="currentPage"

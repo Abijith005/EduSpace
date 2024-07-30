@@ -13,7 +13,6 @@ export class LessonsComponent implements OnInit {
   selectedVideo: { url: string; key: string } | null = null;
   isChatVisible = false;
 
-
   constructor(
     private _sharedDataService: SharedDataService,
     private _store: Store
@@ -33,15 +32,10 @@ export class LessonsComponent implements OnInit {
   }
 
   isSelected(video: any) {
-    console.log(this.selectedVideo?.url === video.url);
-    
     return this.selectedVideo?.url === video.url;
   }
-
 
   toggleChat() {
     this.isChatVisible = !this.isChatVisible;
   }
-
-
 }

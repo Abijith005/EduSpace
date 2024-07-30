@@ -17,16 +17,16 @@
           />
           <span
             class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-            >{{ course.category_id.title }}</span
+            >{{ course.category_id.title|titlecase }}</span
           >
           <div class="flex-grow p-4 pb-0">
             <p class="text-gray-500 text-sm text-left jost-text">
-              by {{ course.user_id.name }}
+              by {{ course.user_id.name|titlecase }}
             </p>
             <h2
               class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
             >
-              {{ course.title }}
+              {{ course.title|titlecase }}
             </h2>
             <div
               class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"

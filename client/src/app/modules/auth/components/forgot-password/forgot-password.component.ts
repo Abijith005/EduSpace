@@ -24,8 +24,7 @@ export class ForgotPasswordComponent {
   text2 = '';
   text3 = '';
   text4 = '';
-  data!:{email:string,role:string}
-  roles=["Student","Teacher",]
+  data!:{email:string}
   private _ngUnsbscribe = new Subject<void>();
   constructor(
     private _fb: FormBuilder,
@@ -46,7 +45,6 @@ export class ForgotPasswordComponent {
         ],
       ],
 
-      role:['',Validators.required],
     });
   }
 
@@ -74,7 +72,7 @@ export class ForgotPasswordComponent {
     this.resendOtp = false;
     this.resendOtpTimer();
     this._authService
-      .forgotPassword(this.data.email,this.data.role.toLowerCase())
+      .forgotPassword(this.data.email)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
@@ -91,7 +89,7 @@ export class ForgotPasswordComponent {
       form.value.text1 + form.value.text2 + form.value.text3 + form.value.text4;
 
     this._authService
-      .verifyOtp(this.data.email,this.data.role.toLowerCase(), otpValue)
+      .verifyOtp(this.data.email, otpValue)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {

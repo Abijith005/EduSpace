@@ -80,7 +80,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   handleGoogleSignUp(data: IuserInformation): void {
     this._authService
-      .signInWithGoogle(data)
+      .signUpWithGoogle(data)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
@@ -90,7 +90,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
           localStorage.setItem('refreshToken', res.refreshToken);
           this._store.dispatch(userLogin({userDatas:res.userInfo}))
           this._toasterService.showSuccess(res.message);
-          this._router.navigate([`./${this.role}`]);
+          this._router.navigate([`./${res.userInfo.role}`]);
         } else {
           this._toasterService.showError(res.message);
         }

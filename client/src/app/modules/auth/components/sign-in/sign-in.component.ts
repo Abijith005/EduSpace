@@ -5,7 +5,6 @@ import { AuthService } from '../../auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import {
-  GoogleLoginProvider,
   SocialAuthService,
 } from '@abacritt/angularx-social-login';
 import { ToasterService } from '../../../shared/toaster.service';
@@ -20,7 +19,6 @@ import { userLogin } from '../../../../store/auth/auth.actions';
   styleUrls: ['./sign-in.component.css'],
 })
 export class SignInComponent implements OnInit, OnDestroy {
-  role: string = '';
   isSubmitted: boolean = false;
   passwordVisibilty: boolean = false;
   loginForm: FormGroup = new FormGroup({});
@@ -54,25 +52,20 @@ export class SignInComponent implements OnInit, OnDestroy {
     this._socialAuthService.authState
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        if (res && this.role) {
+        if (res ) {
           this.socialLogin = true;
           const data = {
             name: res.name!,
             email: res.email,
             profilePic: res.photoUrl,
             socialId: res.id,
-            role: this.role,
           };
           this.handleGoogleSignIn(data);
-        } else if (res && !this.role) {
-          this._toasterService.showError(
-            'Please select the role before signing in with Google'
-          );
-        }
+        } 
       });
   }
 
-  handleGoogleSignIn(data: IuserInformation) {
+  handleGoogleSignIn(data: Omit<IuserInformation, 'role'>) {
     this._authService
       .signInWithGoogle(data)
       .pipe(takeUntil(this._ngUnsbscribe))
@@ -82,7 +75,7 @@ export class SignInComponent implements OnInit, OnDestroy {
           localStorage.setItem('refreshToken', res.refreshToken);
           this._store.dispatch(userLogin({userDatas:res.userInfo}))
           this._toasterService.showSuccess(res.message);
-          this._router.navigate([`./${this.role}`]);
+          this._router.navigate([`./${res.userInfo.role}`]);
         } else {
           this._toasterService.showError(res.message);
         }
@@ -93,9 +86,6 @@ export class SignInComponent implements OnInit, OnDestroy {
     return this.loginForm.controls;
   }
 
-  selectRole(newRole: string) {
-    this.role = newRole;
-  }
 
   showPassword() {
     this.passwordVisibilty = !this.passwordVisibilty;
@@ -106,27 +96,21 @@ export class SignInComponent implements OnInit, OnDestroy {
     if (!this.loginForm.valid) {
       return;
     }
-    if (!this.role) {
-      this._ngToaster.error({
-        position: 'topCenter',
-        duration: 2000,
-        detail: 'Please select the role',
-      });
-      return;
-    }
+
     const data = this.loginForm.getRawValue();
-    data.role = this.role.toLowerCase();
 
     this._authService
       .userLogin(data)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {          
+          console.log(res,'logindetails');
+          
           localStorage.setItem('accessToken', res.accessToken!);
           localStorage.setItem('refreshToken', res.refreshToken!);
           this._store.dispatch(userLogin({userDatas:res.userInfo}))
           this._toasterService.showSuccess(res.message);
-          this._router.navigate([`/${this.role}`]);
+          this._router.navigate([`/${res.userInfo.role}`]);
         } else {
           this._toasterService.showError(res.message);
         }

@@ -13,6 +13,7 @@ import { StudentManagementComponent } from './components/student-management/stud
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermissionManagementComponent } from './components/permission-management/permission-management.component';
 import { ListCetificatesComponent } from './components/list-cetificates/list-cetificates.component';
+import { ApprovedCategoriesComponent } from './components/approved-categories/approved-categories.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { ListCetificatesComponent } from './components/list-cetificates/list-cet
     StudentManagementComponent,
     PermissionManagementComponent,
     ListCetificatesComponent,
+    ApprovedCategoriesComponent,
     // RemoveTimestampPipe
   ],
   imports: [

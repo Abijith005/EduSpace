@@ -45,18 +45,16 @@ export class AuthService {
     );
   }
 
-  forgotPassword(email: string, role: string) {
+  forgotPassword(email: string) {
     return this._http.post<IgenreralResponse>(`/v1/auth/user/forgotPassword`, {
       email,
-      role,
     });
   }
 
-  verifyOtp(email: string, role: string, otp: string) {
+  verifyOtp(email: string, otp: string) {
     return this._http.post<IgenreralResponse>(`/v1/auth/user/verifyOtp`, {
       email,
       otp,
-      role,
     });
   }
 
@@ -69,18 +67,27 @@ export class AuthService {
 
   getUserInfo(token: string | null) {
     if (!token) {
-      console.log(token,'not token');
-      
-      return of({ success: false } as { success: boolean, userInfo?: IuserInformation } & IgenreralResponse);
+      console.log(token, 'not token');
+
+      return of({ success: false } as {
+        success: boolean;
+        userInfo?: IuserInformation;
+      } & IgenreralResponse);
     }
     return this._http.get<{ userInfo: IuserInformation } & IgenreralResponse>(
       `/v1/auth/token/userInfo/${token}`
     );
   }
 
-  signInWithGoogle(data: IuserInformation) {
+  signInWithGoogle(data: Omit<IuserInformation, 'role'>) {
     return this._http.post<
       ItokenData & IgenreralResponse & { userInfo: IuserInformation }
     >(`/v1/auth/socialAuth/login`, data);
+  }
+
+  signUpWithGoogle(data: IuserInformation) {
+    return this._http.post<
+      ItokenData & IgenreralResponse & { userInfo: IuserInformation }
+    >(`/v1/auth/socialAuth/register`, data);
   }
 }

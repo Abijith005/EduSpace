@@ -9,6 +9,7 @@ import {
 import { ChatService } from '../../../shared/chat.service';
 import { Subject, takeUntil } from 'rxjs';
 import { IcommunityMemberData } from '../../../../interfaces/communityData';
+import { SocketService } from '../../../shared/socket.service';
 
 @Component({
   selector: 'app-discussions',
@@ -18,11 +19,15 @@ import { IcommunityMemberData } from '../../../../interfaces/communityData';
 export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('messageBox') messageBox!: ElementRef;
 
+  message: string = '';
   communityData: IcommunityMemberData | null = null;
 
   private _ngUnsubscribe$ = new Subject<void>();
 
-  constructor(private _chatService: ChatService) {}
+  constructor(
+    private _chatService: ChatService,
+    private _socketService: SocketService
+  ) {}
 
   ngOnInit(): void {
     this._chatService
@@ -31,9 +36,8 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res) => {
         this.communityData = res.memberDetails;
       });
+    this._socketService.online(1);
   }
-
-  message: string = '';
 
   ngAfterViewInit() {
     if (this.communityData) {
