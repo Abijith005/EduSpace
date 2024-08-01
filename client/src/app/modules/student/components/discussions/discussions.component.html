@@ -1,4 +1,4 @@
-<div *ngIf="communityData" class="container mx-auto py-8 px-4 h-screen">
+<div *ngIf="communityData" class="container mx-auto py-8 px-4 ">
   <div
     class="px-36 grid grid-cols-12 gap-4"
     style="min-height: 765px; max-height: 765px"
@@ -39,62 +39,10 @@
         class="flex-grow overflow-y-auto space-y-2 p-3 rounded-lg shadow-lg ring-1"
       >
         <h2 class="exo-text font-semibold mb-4">Communities</h2>
-        <div *ngFor="let community of communityData!.communities" class="flex items-center p-4 border-b rounded cursor-pointer">
-          <img
-            src="/images/banner1.png"
-            alt="Avatar"
-            class="w-10 h-10 rounded-full ring-1 mr-4"
-          />
-          <div class="flex-grow">
-            <div class="font-bold exo-text">{{community.title|titlecase}}</div>
-            <div class="text-xs text-gray-500 jost-text">Hahahah!!</div>
-          </div>
-          <span
-            class="font-semibold bg-orange-500 p-1 rounded-full text-white exo-text text-xxs"
-            >5</span
-          >
-        </div>
-        <!-- <div class="flex items-center p-4 border-b rounded cursor-pointer">
-          <img
-            src="/images/banner1.png"
-            alt="Avatar"
-            class="w-10 h-10 rounded-full ring-1 mr-4"
-          />
-          <div class="flex-grow">
-            <div class="font-bold">community-2</div>
-            <div class="text-xs text-gray-500">Hahahah!!</div>
-          </div>
-          <span class="ml-auto text-xs text-red-500">4</span>
-        </div>
-        <div class="flex items-center p-4 border-b rounded cursor-pointer">
-          <img
-            src="/images/banner1.png"
-            alt="Avatar"
-            class="w-10 h-10 rounded-full ring-1 mr-4"
-          />
-          <div class="flex-grow">
-            <div class="font-bold">community-3</div>
-            <div class="text-xs text-gray-500">Hahahah!!</div>
-          </div>
-          <span
-            class="font-semibold bg-orange-500 p-1 rounded-full text-white exo-text text-xxs"
-            >4</span
-          >
-        </div>
-        <div class="flex items-center p-4 border-b rounded cursor-pointer">
-          <img
-            src="/images/banner1.png"
-            alt="Avatar"
-            class="w-10 h-10 rounded-full ring-1 mr-4"
-          />
-          <div class="flex-grow">
-            <div class="font-bold">community-4</div>
-            <div class="text-xs text-gray-500">Hahahah!!</div>
-          </div>
-          <span class="ml-auto text-xs text-red-500">4</span>
-        </div>
         <div
-          class="flex items-center p-4 bg-gray-200 border-b rounded cursor-pointer"
+          (click)="selectCommunity(community)"
+          *ngFor="let community of communityData!.communities"
+          class="flex items-center p-4 border-b rounded cursor-pointer"
         >
           <img
             src="/images/banner1.png"
@@ -102,146 +50,101 @@
             class="w-10 h-10 rounded-full ring-1 mr-4"
           />
           <div class="flex-grow">
-            <div class="font-bold">community-5</div>
-            <div class="text-xs text-gray-500">Hahahah!!</div>
+            <div class="font-bold exo-text">
+              {{ community.title | titlecase }}
+            </div>
+            <div class="text-xs text-gray-500 jost-text">Hahahah!!</div>
           </div>
-          <span class="ml-auto text-xs text-red-500">4</span>
+          <span
+            class="font-semibold bg-orange-500 p-1 rounded-full text-white exo-text text-xxs"
+            >5</span
+          >
         </div>
-        <div class="flex items-center p-4 border-b rounded cursor-pointer">
+      </div>
+    </div>
+
+    <div
+      *ngIf="selectedCommunity"
+      class="col-span-7 flex flex-col py-4 shadow-lg rounded-lg ring-1 overflow-y-auto"
+      style="min-height: 765px; max-height: 765px"
+    >
+      <div class="px-6">
+        <div class="flex items-center p-4 border-b">
           <img
             src="/images/banner1.png"
             alt="Avatar"
             class="w-10 h-10 rounded-full ring-1 mr-4"
           />
-          <div class="flex-grow">
-            <div class="font-bold">community-6</div>
-            <div class="text-xs text-gray-500">Hahahah!!</div>
-          </div>
-          <span class="ml-auto text-xs text-red-500">4</span>
-        </div> -->
-      </div>
-    </div>
 
-    <div
-      class="col-span-7 flex flex-col py-4 shadow-lg rounded-lg ring-1 overflow-y-auto"
-      style="min-height: 765px; max-height: 765px"
-    >
-    <div class="px-6">
-      <div class="flex items-center p-4 border-b">
-        <img
-          src="/images/banner1.png"
-          alt="Avatar"
-          class="w-10 h-10 rounded-full ring-1 mr-4"
-        />
-        
-          <h2 class="font-bold exo-text">Community-5</h2>
-      </div>
+          <h2 class="font-bold exo-text">
+            {{ selectedCommunity!.title | titlecase }}
+          </h2>
+        </div>
       </div>
       <div
-        class="flex-1 px-6 py-4 overflow-y-auto"
+        class="flex-1 flex flex-col-reverse px-6 py-4 overflow-y-auto"
         style="scrollbar-width: thin"
+        #chatContainer
+        (scroll)="onScroll()"
       >
         <div class="space-y-4">
-          <!-- Received Messages -->
-          <div class="flex items-start">
-            <div class="bg-gray-200 p-2 rounded-lg max-w-xs jost-text">
-              Hey There!
-            </div>
-          </div>
-          <div class="flex items-start">
-            <div class="bg-gray-200 p-2 rounded-lg max-w-xs jost-text">
-              How are you?
-            </div>
-          </div>
-          <div class="text-xs text-gray-500 jost-text">Today, 8:30pm</div>
-
-          <!-- Sent Messages -->
-          <div class="flex items-end justify-end">
+          <div
+            *ngFor="let item of messageList.get(selectedCommunity?._id!)"
+            class="flex items-start"
+            [ngClass]="
+              item.senderId === userId
+                ? 'items-end justify-end '
+                : ' items-start'
+            "
+          >
             <div
-              class="bg-purple-500 text-white p-2 rounded-lg max-w-xs jost-text"
+              [ngClass]="
+                item.senderId === userId
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-gray-200 '
+              "
+              class="py-2 px-4 flex flex-col gap-3 rounded-lg max-w-md jost-text break-words"
             >
-              Hello!
+              <div
+                *ngIf="item.senderId != userId"
+                class="flex jost-text items-start time-text text-pink-500"
+              >
+                {{ item.senderName | titlecase }}
+              </div>
+              <div class="message-text pr-3">
+                {{ item.message }}
+              </div>
+              <div class="flex jost-text items-end justify-end time-text">
+                {{ item.createdAt | date }}
+              </div>
             </div>
           </div>
-          <div class="text-xs text-gray-500 text-right jost-text">
-            Today, 8:33pm
-          </div>
-          <div class="flex items-end justify-end">
-            <div
-              class="bg-purple-500 text-white p-2 rounded-lg max-w-xs jost-text"
-            >
-              Hello!
-            </div>
-          </div>
-          <div class="text-xs text-gray-500 text-right jost-text">
-            Today, 8:33pm
-          </div>
-          <div class="flex items-end justify-end">
-            <div
-              class="bg-purple-500 text-white p-2 rounded-lg max-w-xs jost-text"
-            >
-              Hello!
-            </div>
-          </div>
-          <div class="text-xs text-gray-500 text-right jost-text">
-            Today, 8:33pm
-          </div>
-
-          <div class="flex items-end justify-end">
-            <div
-              class="bg-purple-500 text-white p-2 rounded-lg max-w-xs jost-text"
-            >
-              I am fine and how are you?
-            </div>
-          </div>
-          <div class="text-xs text-gray-500 text-right jost-text">
-            Today, 8:34pm
-          </div>
-
-          <!-- Received Messages -->
-          <div class="flex items-start">
-            <div class="bg-gray-200 p-2 rounded-lg max-w-xs">
-              I am doing well, Can we meet tomorrow?
-            </div>
-          </div>
-          <div class="text-xs text-gray-500">Today, 8:36pm</div>
-
-          <!-- Sent Messages -->
-          <div class="flex items-end justify-end">
-            <div class="bg-purple-500 text-white p-2 rounded-lg max-w-xs">
-              Yes Sure!
-            </div>
-          </div>
-          <div class="text-xs text-gray-500 text-right">Today, 8:58pm</div>
-
-          <div class="flex items-start">
-            <div class="bg-gray-200 p-2 rounded-lg max-w-xs">
-              I am doing well, Can we meet tomorrow?
-            </div>
-          </div>
-          <div class="text-xs text-gray-500">Today, 8:36pm</div>
         </div>
       </div>
       <div class="px-6">
-      <div
-        class="px-4 py-1.5 bg-[#EFF6FC] flex justify-between rounded-2xl items-center"
-      >
-        <div class="w-11/12">
-          <textarea
-            class="w-full p-2 rounded border-none outline-none bg-[#EFF6FC] ring-0 focus:ring-0 exo-text resize-none"
-            placeholder="Type your message here..."
-            rows="1"
-            [(ngModel)]="message"
-            (input)="adjustTextareaHeight($event)"
-            #messageBox
-          ></textarea>
+        <div
+          class="px-4 py-1.5 bg-[#EFF6FC] flex justify-between rounded-2xl items-center"
+        >
+          <div class="w-11/12">
+            <textarea
+              class="w-full p-2 rounded border-none outline-none bg-[#EFF6FC] ring-0 focus:ring-0 exo-text resize-none"
+              placeholder="Type your message here..."
+              rows="1"
+              [(ngModel)]="message"
+              (input)="adjustTextareaHeight($event)"
+              #messageBox
+              (keydown)="handleKeyUp($event)"
+            ></textarea>
+          </div>
+          <div>
+            <button
+              (click)="sendMessage()"
+              class="ml-2 p-2 text-black rounded-lg"
+            >
+              <i class="fas fa-paper-plane text-2xl items-center"></i>
+            </button>
+          </div>
         </div>
-        <div>
-          <button class="ml-2 p-2 text-black rounded-lg">
-            <i class="fas fa-paper-plane text-2xl items-center"></i>
-          </button>
-        </div>
-      </div>
       </div>
     </div>
   </div>

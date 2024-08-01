@@ -29,16 +29,21 @@
           class="rounded-md pl-10 pr-4 py-1 drop-shadow-md text-gray-700 placeholder-gray-400 focus:ring-0 jost-text"
           type="text"
           placeholder="Search"
+          [(ngModel)]="search"
+          (keyup)="applySearch()"
         />
       </div>
       <div class="flex items-center jost-text">
         <p class="text-md font-semibold">Filter</p>
         <select
           class="ml-2 rounded-md border shadow-md border-gray-300 px-2 py-1 focus:ring-0"
+          [(ngModel)]="filter"
+          (change)="applyFilter()"
         >
-          <option value="all-time">All</option>
-          <option value="last-month">Verified</option>
-          <option value="last-year">Rejected</option>
+          <option value="">All</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
         </select>
       </div>
     </div>
@@ -95,18 +100,24 @@
             <td class="px-6 py-4 whitespace-nowrap">
               {{ request.createdAt | date }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
+            <td
+              class="px-6 py-4 whitespace-nowrap flex items-center justify-center"
+            >
               {{ request.status | titlecase }}
-            
+
               <ng-container *ngIf="request.status === 'pending'">
                 <i class="fas fa-hourglass-half text-orange-500 ml-2"></i>
               </ng-container>
-            
+
               <ng-container *ngIf="request.status === 'rejected'">
                 <i class="fas fa-times-circle text-red-700 ml-2"></i>
               </ng-container>
-            
-              <ng-container *ngIf="request.status !== 'pending' && request.status !== 'rejected'">
+
+              <ng-container
+                *ngIf="
+                  request.status !== 'pending' && request.status !== 'rejected'
+                "
+              >
                 <i class="fas fa-check-circle text-green-500 ml-2"></i>
               </ng-container>
             </td>
@@ -115,7 +126,7 @@
               (click)="openModal(request)"
             >
               <span
-                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
+                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-blue-600 text-blue-800"
               >
                 View
               </span>
@@ -131,7 +142,7 @@
                     'cursor-pointer': request.status == 'pending',
                     'cursor-not-allowed opacity-50': request.status != 'pending'
                   }"
-                [disabled]="request.status!='pending'"
+                  [disabled]="request.status != 'pending'"
                 >
                   <i class="fas fa-ellipsis-v"></i>
                 </button>
@@ -142,13 +153,27 @@
                   <ul>
                     <li
                       class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
-                      (click)="updateRequestStatus(request._id, 'approved',request.categoryDetails._id,request.userDetails._id!)"
-                      >
+                      (click)="
+                        updateRequestStatus(
+                          request._id,
+                          'approved',
+                          request.categoryDetails._id,
+                          request.userDetails._id!
+                        )
+                      "
+                    >
                       Approve
                     </li>
                     <li
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
-                    (click)="updateRequestStatus(request._id, 'rejected',request.categoryDetails._id,request.userDetails._id!)"
+                      class="block px-4 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
+                      (click)="
+                        updateRequestStatus(
+                          request._id,
+                          'rejected',
+                          request.categoryDetails._id,
+                          request.userDetails._id!
+                        )
+                      "
                     >
                       Reject
                     </li>

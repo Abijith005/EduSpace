@@ -22,6 +22,9 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   selectedRequestId: string | null = null;
   dropdownOpen = false;
   currentRequestId: string | null = null;
+  filter = '';
+  search = '';
+  timer: any;
   private _ngUnsbscribe = new Subject<void>();
 
   constructor(
@@ -31,14 +34,14 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.getAllcategories();
+    this.getAllRequests();
   }
 
   isVisible$ = this._modalService.isVisible$;
 
-  getAllcategories() {
+  getAllRequests() {
     this._adminService
-      .getAllRequests(this.currentPage, this.limit)
+      .getAllRequests(this.search, this.filter, this.currentPage, this.limit)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         this.requests = res.requests;
@@ -58,9 +61,21 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res.success) {
           this.dropdownOpen = false;
+          const request = this.requests.find((e) => e._id == requestId);
+          request!.status = status;
         }
         this._toasterService.toasterFunction(res);
       });
+  }
+
+  applySearch() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.getAllRequests();
+    }, 300);
+  }
+  applyFilter() {
+    this.getAllRequests();
   }
 
   openModal(request: IcategoryRequest) {
@@ -74,7 +89,7 @@ export class PermissionManagementComponent implements OnInit, OnDestroy {
   }
   onPageChanged(page: number) {
     this.currentPage = page;
-    this.getAllcategories();
+    this.getAllRequests();
   }
 
   toggleDropdown(requestId: string) {

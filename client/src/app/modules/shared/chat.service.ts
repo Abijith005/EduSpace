@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { IcommunityMemberData } from '../../interfaces/communityData';
+import { Imessage } from '../../interfaces/messageData';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,17 @@ import { IcommunityMemberData } from '../../interfaces/communityData';
 export class ChatService {
   constructor(private _http: HttpClient) {}
 
-  getAllCommunities(){
-    return this._http.get<IgenreralResponse&{memberDetails:IcommunityMemberData}>(`/v1/chat/communities/all`)
+  getAllCommunities() {
+    return this._http.get<
+      IgenreralResponse & { memberDetails: IcommunityMemberData }
+    >(`/v1/chat/communities/all`);
+  }
+
+  getCommunityMessages(communityId: string, page: number, limit: number) {
+    return this._http.get<
+      IgenreralResponse & { messages: Omit<Imessage, 'communityId'>[] }
+    >(
+      `/v1/chat/communities/messages?communityId=${communityId}&page=${page}&limit=${limit}`
+    );
   }
 }

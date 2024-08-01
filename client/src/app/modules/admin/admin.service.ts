@@ -32,10 +32,10 @@ export class AdminService {
     );
   }
 
-  getAllRequests(page: number, limit: number) {
+  getAllRequests(search: string, filter: string, page: number, limit: number) {
     return this._http.get<
       IgenreralResponse & { requests: IcategoryRequest[]; totalPages: number }
-    >(`/v1/teacher/profile/requests/all?currentPage=${page}&limit=${limit}`);
+    >(`/v1/teacher/profile/requests/all?search=${search}&filter=${filter}&page=${page}&limit=${limit}`)
   }
 
   updateCertificateStatus(data: {

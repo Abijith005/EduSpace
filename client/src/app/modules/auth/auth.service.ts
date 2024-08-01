@@ -67,8 +67,6 @@ export class AuthService {
 
   getUserInfo(token: string | null) {
     if (!token) {
-      console.log(token, 'not token');
-
       return of({ success: false } as {
         success: boolean;
         userInfo?: IuserInformation;

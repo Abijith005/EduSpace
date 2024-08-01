@@ -10,7 +10,7 @@ import { IfilterValues } from '../../../../interfaces/filterValues';
   styleUrl: './student-course-list.component.css',
 })
 export class StudentCourseListComponent implements OnInit {
-  totalPages: number = 10;
+  totalPages: number = 0;
   currentPage = 1;
   searchKey = '';
   filter: IfilterValues = {
@@ -42,7 +42,7 @@ export class StudentCourseListComponent implements OnInit {
 
   onApplyFilter(filterDatas: IfilterValues) {
     this.filter = filterDatas;
-    
+
     this.searchKey = filterDatas.searchKey;
 
     this.getAllCourses();

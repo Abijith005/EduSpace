@@ -28,6 +28,7 @@ export class AppInitializerService {
         map((response) => {
           if (response.success && response.userInfo) {
             this.store.dispatch(
+              
               checkAuthStatusSuccess({ userDatas: response.userInfo })
             );
           } else {
