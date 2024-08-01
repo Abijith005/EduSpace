@@ -93,9 +93,10 @@ export const getAllCourses = async (req, res) => {
     const datas = await cousreModel
       .find(query)
       .skip(skip)
-      .limit(page * limit)
+      .limit( limit)
       .populate("category_id", { _id: 1, title: 1 })
       .lean();
+      console.log(datas.length);
     const user_ids = [...new Set(datas.map((item) => item.user_id.toString()))];
     const authQuery = { _id: { $in: user_ids } };
     const userDetails = await sendRPCRequest(

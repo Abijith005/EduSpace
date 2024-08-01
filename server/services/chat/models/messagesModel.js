@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
   {
-    sender_id: {
+    senderId: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "Sender Id is requried"],
     },
 
-    receiver_id: {
+    communityId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Communities",
       required: [true, "Receiver Id is required"],
@@ -20,6 +20,6 @@ const messageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const messageModel = mongoose.model("Messages", messageSchema);
+const messageModel = mongoose.model("messages", messageSchema);
 
 export default messageModel;

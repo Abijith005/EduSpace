@@ -34,13 +34,27 @@ export const uploadCertificates = async (req, res) => {
 
 export const getRequests = async (req, res) => {
   try {
-    const { currentPage, limit } = req.query;
+    const { search, filter, page, limit } = req.query;
     const totalData = await requestModel.countDocuments();
     const totalPages = Math.ceil(totalData / limit);
-    const skip = (currentPage - 1) * limit;
+    const skip = (page - 1) * limit;
+    let findQuery = {};
+    if (search) {
+      const searchKeywords = search.split(" ");
+      findQuery = {
+        $or: searchKeywords.map((keyword) => ({
+          name: { $regex: keyword, $options: "i" },
+        })),
+      };
+    }
+
+    if (filter) {
+      findQuery.status = filter;
+    }
+
     const requests = await requestModel
-      .find()
-      .limit(limit * currentPage)
+      .find(findQuery)
+      .limit(limit)
       .skip(skip)
       .lean();
 
@@ -165,12 +179,10 @@ export const getTeacherProfile = (user_ids) => {
 export const removeApprovedCategories = async (req, res) => {
   try {
     const { categoryIds, userId } = req.body;
-    console.log(userId, categoryIds);
-    const a = await teacherProfileModel.updateOne(
+    await teacherProfileModel.updateOne(
       { userId: userId },
       { $pullAll: { categories: categoryIds } }
     );
-    console.log(a);
     res
       .status(200)
       .json({ success: true, message: "Category removed successfully" });
@@ -181,4 +193,3 @@ export const removeApprovedCategories = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
- 

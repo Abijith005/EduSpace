@@ -37,8 +37,9 @@ export const getCategories = async (req, res) => {
       categories = await categoryModel
         .find()
         .skip(skip)
-        .limit(page * limit)
+        .limit(limit)
         .lean();
+      console.log(categories.length);
     } else {
       categories = await categoryModel.find().lean();
     }
@@ -61,7 +62,9 @@ export const getCategoriesByIds = async (categoryIds) => {
 
 export const getSubscriptionDatas = async (userIds) => {
   try {
-    return await subscriptionModel.find({ subscriber_id: { $in: userIds } }).lean();
+    return await subscriptionModel
+      .find({ subscriber_id: { $in: userIds } })
+      .lean();
   } catch (error) {
     console.log("Error \n", error);
   }

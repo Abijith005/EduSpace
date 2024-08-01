@@ -20,6 +20,6 @@ const communitySchema = new mongoose.Schema(
   }
 );
 
-const communityModel = mongoose.model("Communities", communitySchema);
+const communityModel = mongoose.model("communities", communitySchema);
 
 export default communityModel;

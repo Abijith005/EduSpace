@@ -8,13 +8,13 @@ const memberSchema = new mongoose.Schema(
     },
     communityIds: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref:'Communities',
+      ref:'communities',
       required: [true, "community Id is required"],
     },
   },
   { timestamps: true }
 );
 
-const membersModel = mongoose.model("Members", memberSchema);
+const membersModel = mongoose.model("members", memberSchema);
 
 export default membersModel;

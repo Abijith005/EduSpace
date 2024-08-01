@@ -17,7 +17,7 @@ export const userSocialSignup = async (req, res) => {
         .json({ success: false, message: validate.message });
     }
     let user = await userModel.findOne({ email: email });
-    if ((user && !user.socialId) || (user&&user?.role != role)) {
+    if ((user && !user.socialId) || (user && user?.role != role)) {
       return res
         .status(409)
         .json({ success: false, message: "Email already registered" });
@@ -34,14 +34,14 @@ export const userSocialSignup = async (req, res) => {
       message = "User registration successfull";
     }
     const refreshToken = createRefreshToken({
-      id: user.id,
+      id: user._id,
       name: user.name,
       email: user.email,
       profilePic: user.profilePic,
       role: user.role,
     });
     const accessToken = createAccessToken({
-      id: user.id,
+      id: user._id,
       name: user.name,
       email: user.email,
       profilePic: user.profilePic,
@@ -53,6 +53,7 @@ export const userSocialSignup = async (req, res) => {
       accessToken,
       refreshToken,
       userInfo: {
+        _id: user._id,
         name: user.name,
         email: user.email,
         profilePic: user.profilePic,
@@ -97,14 +98,14 @@ export const userSocialSignIn = async (req, res) => {
     }
 
     const refreshToken = createRefreshToken({
-      id: user.id,
+      id: user._id,
       name: user.name,
       email: user.email,
       profilePic: user.profilePic,
       role: user.role,
     });
     const accessToken = createAccessToken({
-      id: user.id,
+      id: user._id,
       name: user.name,
       email: user.email,
       profilePic: user.profilePic,
@@ -117,6 +118,7 @@ export const userSocialSignIn = async (req, res) => {
       accessToken,
       refreshToken,
       userInfo: {
+        _id: user._id,
         name: user.name,
         email: user.email,
         profilePic: user.profilePic,

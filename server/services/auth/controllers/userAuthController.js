@@ -81,20 +81,21 @@ export const userLogin = async (req, res) => {
       const verifyPassword = await bcrypt.compare(password, user.password);
       if (verifyPassword) {
         const refreshToken = createRefreshToken({
-          id: user.id,
+          id: user._id,
           name: user.name,
           email: user.email,
           profilePic: user.profilePic,
           role: user.role,
         });
         const accessToken = createAccessToken({
-          id: user.id,
+          id: user._id,
           name: user.name,
           email: user.email,
           profilePic: user.profilePic,
           role: user.role,
         });
         const userInfo = {
+          _id:user._id,
           name: user.name || "",
           email: user.email,
           profilePic: user.profilePic || "",

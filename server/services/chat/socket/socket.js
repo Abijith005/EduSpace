@@ -1,19 +1,46 @@
+import {
+  // addToOnlineMemberList,
+  getUserCommunities,
+  storeMessages,
+  // removeFromOnlineMemberList,
+} from "./comunityManager.js";
+
 const socket = (io) => {
-  const onlineMembers = new Map();
   io.on("connection", (socket) => {
-
-    console.log("A user connected ", socket.id,onlineMembers);
-
-    socket.on("online", (user_id) => {
-      onlineMembers.set(user_id, socket.id);
-      console.log('online user',socket.id,'       444',onlineMembers);
+    socket.on("online", async (userId) => {
+      try {
+        const userCommunities = await getUserCommunities(userId);
+        userCommunities.forEach((community) => {
+          const communityId = community.toString();
+          socket.join(communityId);
+          console.log(`Socket ${socket.id} joined community ${communityId}`);
+        });
+      } catch (error) {
+        console.error("Error joining room:", error);
+      }
     });
 
-    socket.on("disconnect", (socket) => {
-      console.log("disconnedted userr", socket.id);
+    socket.on("sendMessage",async (data) => {
+      try {
+        const { message, userId, userName, communityId } = data;
+        const createdAt = new Date();
+        await storeMessages(message, communityId, userId);
+        io.to(communityId).emit("receiveMessage", {
+          message,
+          communityId,
+          senderId: userId,
+          senderName: userName,
+          createdAt,
+        });
+      } catch (error) {
+        console.error("Error saving message:", error);
+        socket.emit("errorMessage", "Failed to send message");
+      }
     });
 
-
+    socket.on("offline", (userId) => {
+      // removeFromOnlineMemberList(userId);
+    });
   });
 };
 
