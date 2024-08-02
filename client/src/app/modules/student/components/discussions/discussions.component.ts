@@ -13,6 +13,7 @@ import { SocketService } from '../../../shared/socket.service';
 import { Store } from '@ngrx/store';
 import { AuthState } from '../../../../store/auth/auth.state';
 import { selectUserAuthState } from '../../../../store/auth/auth.selector';
+import { Imessage } from '../../../../interfaces/messageData';
 
 interface IcommunityData {
   _id: string;
@@ -30,12 +31,12 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chatContainer', { static: false }) chatContainer!: ElementRef;
 
   message: string = '';
-  communityData: IcommunityMemberData | null = null;
+  communityData: IcommunityMemberData[] | null = null;
   userId!: string;
   userName!: string;
   selectedCommunity: IcommunityData | null = null;
   page = 1;
-  limit = 8;
+  limit = 20;
   messageList = new Map<
     string,
     { senderId: string; senderName: string; message: string; createdAt: Date }[]
@@ -53,7 +54,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
       .getAllCommunities()
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
-        this.communityData = res.memberDetails;
+        this.communityData = res.communities;
       });
 
     this._store
@@ -71,6 +72,32 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
         if (data) {
           const { message, communityId, senderId, senderName, createdAt } =
             data;
+
+          const messageCommunity = this.communityData?.find(
+            (e) => e._id == communityId
+          );
+          if (messageCommunity) {
+            if (messageCommunity.messages) {
+              messageCommunity.messages.message = message;
+            } else {
+              messageCommunity.messages = {
+                message,
+                createdAt,
+              } as Imessage;
+            }
+            if (communityId != this.selectedCommunity?._id) {
+              messageCommunity!.unreadCount++ || 1;
+            }
+            const communityIndex = this.communityData?.indexOf(
+              messageCommunity!
+            );
+            const [removedCommunity] = this.communityData!.splice(
+              communityIndex!,
+              1
+            );
+            this.communityData?.unshift(removedCommunity);
+          }
+
           if (!this.messageList.has(communityId)) {
             this.messageList.set(communityId, []);
           }
@@ -92,21 +119,37 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
-  selectCommunity(community: IcommunityData) {
+  selectCommunity(community: IcommunityMemberData) {
     if (this.selectedCommunity == community) {
       return;
     }
+    community.unreadCount = 0;
+
     this.page = 1;
     this.selectedCommunity = community;
-    this.getCommunityMessages(community._id);
-  }
-
-  getCommunityMessages(communityId: string) {
     this._chatService
-      .getCommunityMessages(communityId, this.page, this.limit)
+      .getCommunityMessages(community._id, this.page, this.limit)
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
-        this.messageList.set(communityId, res.messages);
+        if (res.messages) {
+          console.log(res.messages, 'messsssssssssssssssssssss');
+
+          this.messageList.set(community._id, res.messages);
+          const unreadMessageIds: string[] = [];
+          res.messages.forEach((message) => {
+            if (!message.readBy.includes(this.userId)) {
+              unreadMessageIds.push(message._id);
+            }
+          });
+          if (unreadMessageIds.length > 0) {
+            this._chatService
+              .updateMessageRead(unreadMessageIds, this.userId)
+              .pipe(takeUntil(this._ngUnsubscribe$))
+              .subscribe((res) => {
+                console.log(res);
+              });
+          }
+        }
       });
   }
 
@@ -141,8 +184,6 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
     const clientHeight = chatContainer.clientHeight;
 
     if (scrollHeight - Math.abs(scrollTop) <= clientHeight) {
-      const previousScrollHeight = scrollHeight;
-
       ++this.page;
       this._chatService
         .getCommunityMessages(
@@ -158,9 +199,6 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
             ...res.messages,
             ...existingMessages,
           ]);
-          const newScrollHeight = chatContainer.scrollHeight;
-          chatContainer.scrollTop =
-            scrollTop + (newScrollHeight - previousScrollHeight);
         });
     }
   }

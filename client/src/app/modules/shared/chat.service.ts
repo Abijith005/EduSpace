@@ -12,7 +12,7 @@ export class ChatService {
 
   getAllCommunities() {
     return this._http.get<
-      IgenreralResponse & { memberDetails: IcommunityMemberData }
+      IgenreralResponse & { communities: IcommunityMemberData[] }
     >(`/v1/chat/communities/all`);
   }
 
@@ -20,7 +20,19 @@ export class ChatService {
     return this._http.get<
       IgenreralResponse & { messages: Omit<Imessage, 'communityId'>[] }
     >(
-      `/v1/chat/communities/messages?communityId=${communityId}&page=${page}&limit=${limit}`
+      `/v1/chat/messages/all?communityId=${communityId}&page=${page}&limit=${limit}`
+    );
+  }
+
+  updateMessageRead(messageId: string[], userId: string) {
+    console.log('sendingapi');
+
+    return this._http.patch<IgenreralResponse>(
+      '/v1/chat/messages/messageRead',
+      {
+        messageId,
+        userId,
+      }
     );
   }
 }

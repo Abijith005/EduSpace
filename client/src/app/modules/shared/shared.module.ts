@@ -8,8 +8,7 @@ import { RemoveTimestampPipe } from './pipes/remove-timestamp.pipe';
 import { ObjectUrlPipe } from './pipes/object-url.pipe';
 import { RatingStarPipe } from './pipes/rating-star.pipe';
 import { FileNameExtractorPipe } from './pipes/file-name-extractor.pipe';
-
-
+import { MessageTimePipe } from './message-time.pipe';
 
 @NgModule({
   declarations: [
@@ -20,11 +19,18 @@ import { FileNameExtractorPipe } from './pipes/file-name-extractor.pipe';
     ObjectUrlPipe,
     RatingStarPipe,
     FileNameExtractorPipe,
+    MessageTimePipe,
   ],
-  imports: [
-    CommonModule,
-    NgxExtendedPdfViewerModule
+  imports: [CommonModule, NgxExtendedPdfViewerModule],
+  exports: [
+    PaginationComponent,
+    LoadingComponent,
+    PdfViewerComponent,
+    ObjectUrlPipe,
+    RemoveTimestampPipe,
+    RatingStarPipe,
+    FileNameExtractorPipe,
+    MessageTimePipe,
   ],
-  exports:[PaginationComponent,LoadingComponent,PdfViewerComponent,ObjectUrlPipe,RemoveTimestampPipe,RatingStarPipe,FileNameExtractorPipe,]
 })
-export class SharedModule { }
+export class SharedModule {}

@@ -28,6 +28,7 @@
     "apexcharts": "^3.49.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "date-fns": "^3.6.0",
     "flowbite": "^2.3.0",
     "ng-angular-popup": "^0.5.2",
     "ng-apexcharts": "^1.11.0",

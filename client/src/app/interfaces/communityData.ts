@@ -1,6 +1,11 @@
+import { Imessage } from './messageData';
+
 export interface IcommunityMemberData {
   _id: string;
-  communities: communityData[];
+  title: string;
+  course_id: string;
+  unreadCount: number;
+  messages: Imessage;
 }
 
 interface communityData {
