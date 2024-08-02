@@ -21,6 +21,7 @@ import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DiscussionsComponent } from './components/discussions/discussions.component';
+import { SmapleComponent } from './components/smaple/smaple.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { DiscussionsComponent } from './components/discussions/discussions.compo
     ChatGptComponent,
     LessonsComponent,
     NotesComponent,
-    DiscussionsComponent
+    DiscussionsComponent,
+    SmapleComponent
   ],
   imports: [
     CommonModule,

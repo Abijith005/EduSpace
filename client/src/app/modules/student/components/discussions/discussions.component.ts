@@ -37,9 +37,16 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedCommunity: IcommunityData | null = null;
   page = 1;
   limit = 20;
+  firstUnreadMessageId: string | null = null;
   messageList = new Map<
     string,
-    { senderId: string; senderName: string; message: string; createdAt: Date }[]
+    {
+      _id?: string;
+      senderId: string;
+      senderName: string;
+      message: string;
+      createdAt: Date;
+    }[]
   >();
 
   private _ngUnsubscribe$ = new Subject<void>();
@@ -132,9 +139,14 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         if (res.messages) {
-          console.log(res.messages, 'messsssssssssssssssssssss');
+          this.firstUnreadMessageId = res.messages.find(
+            (message) => !message.readBy.includes(this.userId)
+          )?._id!;
 
           this.messageList.set(community._id, res.messages);
+
+          setTimeout(() => this.scrollToFirstUnread(), 0);
+
           const unreadMessageIds: string[] = [];
           res.messages.forEach((message) => {
             if (!message.readBy.includes(this.userId)) {
@@ -200,6 +212,35 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
             ...existingMessages,
           ]);
         });
+    }
+  }
+
+  scrollToFirstUnread() {
+    console.log('this worked');
+
+    if (this.firstUnreadMessageId) {
+      console.log('this worked1');
+      const container = this.chatContainer.nativeElement;
+      const messages = Array.from(
+        container.querySelectorAll('.message')
+      ) as HTMLElement[];
+
+      const firstUnread = messages.find((el: HTMLElement) => {
+        return (
+          el.getAttribute('data-message-id') ===
+          this.firstUnreadMessageId?.toString()
+        );
+      });
+      console.log(firstUnread);
+
+      if (firstUnread) {
+        const offsetTop = firstUnread.offsetTop;
+        const containerHeight = container.clientHeight;
+        const scrollTop =
+          offsetTop - containerHeight + firstUnread.clientHeight;
+
+        container.scrollTo({ top: scrollTop });
+      }
     }
   }
 

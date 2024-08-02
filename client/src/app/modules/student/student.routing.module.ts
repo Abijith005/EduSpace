@@ -11,6 +11,7 @@ import { CourseComponent } from './components/course/course.component';
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';
 import { DiscussionsComponent } from './components/discussions/discussions.component';
+import { SmapleComponent } from './components/smaple/smaple.component';
 
 const routes: Routes = [
   {
@@ -39,8 +40,9 @@ const routes: Routes = [
         ],
       },
       { path: 'discussions', component: DiscussionsComponent },
+      // { path: 'discussions', component: SmapleComponent },
     ],
-  },
+  },   
 ];
 
 @NgModule({

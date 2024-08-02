@@ -1,0 +1,18 @@
+<div
+  class="flex-1 flex flex-col-reverse px-6 py-4 overflow-y-auto"
+  style="scrollbar-width: thin"
+  #chatContainer
+>
+  <div class="space-y-4">
+    <div
+      *ngFor="let item of messageList"
+      class="flex items-start message" 
+    >
+      <div class="py-2 px-4 flex flex-col gap-3 rounded-lg max-w-md bg-gray-200 jost-text break-words">
+        <div class="message-text pr-3">
+          {{ item }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

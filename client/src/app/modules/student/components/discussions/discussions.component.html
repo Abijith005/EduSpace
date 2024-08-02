@@ -98,12 +98,13 @@
         <div class="space-y-4">
           <div
             *ngFor="let item of messageList.get(selectedCommunity?._id!)"
-            class="flex items-start"
+            class="flex items-start message"
             [ngClass]="
               item.senderId === userId
                 ? 'items-end justify-end '
                 : ' items-start'
             "
+            [attr.data-message-id]="item._id"
           >
             <div
               [ngClass]="

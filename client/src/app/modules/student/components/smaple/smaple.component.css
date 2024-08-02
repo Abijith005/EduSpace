@@ -1,0 +1,13 @@
+/* Ensure the chat container has a fixed height and scrolling */
+.flex-1 {
+    height: 400px; /* Adjust as needed */
+    overflow-y: auto;
+  }
+  
+  .message {
+    height: 50px; /* Adjust as needed for each message */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
