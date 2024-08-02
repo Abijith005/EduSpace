@@ -7,6 +7,7 @@ import consumeCommunityTask from "./rabbitmq/consumers/communityConsumer.js";
 import dbConnect from "./config/dbConnect.js";
 import consumeMemberTask from "./rabbitmq/consumers/memberConsumer.js";
 import communityRoutes from "./routes/communityRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
 import socket from "./socket/socket.js";
@@ -38,10 +39,9 @@ consumeCommunityTask();
 consumeMemberTask();
 
 app.use("/api/v1/chat/communities", communityRoutes);
+app.use("/api/v1/chat/messages", messageRoutes);
 
-socket(io)
-
-
+socket(io);
 
 httpServer.listen(port, () => {
   console.log(`Chat service running in port ${port}`);

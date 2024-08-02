@@ -42,7 +42,12 @@ export const getUserCommunities = async (userId) => {
 
 export const storeMessages = async (message, communityId, userId) => {
   try {
-    await messageModel.create({ senderId:userId, communityId, message });
+    await messageModel.create({
+      senderId: userId,
+      communityId,
+      message,
+      readBy: [userId],
+    });
   } catch (error) {
     throw error;
   }

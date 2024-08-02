@@ -1,11 +1,8 @@
-import express from 'express'
-import { getAllCommunities, getAllMessages } from '../controllers/memberControllers.js'
+import express from "express";
+import { getAllCommunities } from "../controllers/memberControllers.js";
 
-const router=express.Router()
+const router = express.Router();
 
+router.get(`/all`, getAllCommunities);
 
-router.get(`/all`,getAllCommunities)
-
-router.get('/messages',getAllMessages)
-
-export default router
+export default router;
