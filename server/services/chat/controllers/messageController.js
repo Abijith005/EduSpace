@@ -1,4 +1,5 @@
 import jwtDecode from "../helpers/jwtDecode.js";
+import membersModel from "../models/membersModel.js";
 import messageModel from "../models/messagesModel.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 
@@ -12,15 +13,28 @@ export const getAllMessages = async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const userId = jwtDecode(token).id;
 
+    const memberDetails = await membersModel.findOne({
+      userId,
+    });
+    const community = memberDetails.communities.find(
+      (e) => e.communityId == communityId
+    );
+    const { joinedAt } = community;
+
     const unreadCount = await messageModel
-      .find({ communityId: communityId, readBy: { $nin: [userId] } })
+      .find({
+        communityId: communityId,
+        createdAt: { $gte: joinedAt },
+        readBy: { $nin: [userId] },
+      })
       .countDocuments();
     const data = await messageModel
-      .find({ communityId: communityId })
+      .find({ communityId: communityId, createdAt: { $gte: joinedAt } })
       .sort({ createdAt: -1 })
       .limit(limit + unreadCount)
       .skip(skip)
       .lean();
+
     const senderIds = [...new Set(data.map((item) => item.senderId))];
     const query = { _id: senderIds };
     const users = await sendRPCRequest("authQueue", JSON.stringify(query));

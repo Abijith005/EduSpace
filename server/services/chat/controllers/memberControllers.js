@@ -1,76 +1,119 @@
 import mongoose from "mongoose";
 import jwtDecode from "../helpers/jwtDecode.js";
-import membersModel from "../models/membersModel.js";
 import messageModel from "../models/messagesModel.js";
+import membersModel from "../models/membersModel.js";
 
 export const getAllCommunities = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const userId = jwtDecode(token).id;
-    const memberDetails = await membersModel
-      .findOne({ user_id: userId })
-      .populate("communityIds")
-      .lean();
-    const communityIds = [
-      ...new Set(memberDetails.communityIds.map((community) => community._id)),
-    ];
 
-    const data = await messageModel.aggregate([
-      { $match: { communityId: { $in: communityIds } } },
-      { $sort: { createdAt: 1 } },
-      { $group: { _id: "$communityId", messages: { $push: "$$ROOT" } } },
-      {
-        $addFields: {
-          unreadCount: {
-            $size: {
-              $filter: {
-                input: "$messages",
-                as: "message",
-                cond: {
-                  $not: {
-                    $in: [
-                      new mongoose.Types.ObjectId(userId),
-                      "$$message.readBy",
+    const memberDetails = await membersModel
+      .findOne({ userId })
+      .populate({
+        path: "communities.communityId",
+        model: "communities",
+      })
+      .lean();
+
+    let result = [];
+
+    if (memberDetails) {
+      const communityIdsAndDates = memberDetails.communities.map(
+        (community) => ({
+          communityId: community.communityId._id,
+          joinedAt: community.joinedAt,
+        })
+      );
+
+      const data = await messageModel.aggregate([
+        {
+          $match: {
+            communityId: {
+              $in: communityIdsAndDates.map((c) => c.communityId),
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "members",
+            let: { communityId: "$communityId" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$userId", new mongoose.Types.ObjectId(userId)],
+                  },
+                },
+              },
+              { $unwind: "$communities" },
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$communities.communityId", "$$communityId"] },
+                      { $lte: ["$communities.joinedAt", "$createdAt"] },
                     ],
                   },
                 },
               },
-            },
+              {
+                $project: {
+                  joinedAt: "$communities.joinedAt",
+                },
+              },
+            ],
+            as: "membership",
           },
         },
-      },
-      {
-        $addFields: {
-          lastMessage: { $arrayElemAt: ["$messages", -1] },
+        { $unwind: "$membership" },
+        { $sort: { createdAt: 1 } },
+        {
+          $group: {
+            _id: "$communityId",
+            messages: { $push: "$$ROOT" },
+            unreadCount: {
+              $sum: {
+                $cond: [
+                  {
+                    $not: {
+                      $in: [new mongoose.Types.ObjectId(userId), "$readBy"],
+                    },
+                  },
+                  1,
+                  0,
+                ],
+              },
+            },
+            lastMessage: { $last: "$$ROOT" },
+          },
         },
-      },
-      { $addFields: { community: "$_id" } },
-      {
-        $project: {
-          _id: 1,
-          unreadCount: 1,
-          lastMessage: 1,
+        {
+          $project: {
+            _id: 1,
+            unreadCount: 1,
+            lastMessage: 1,
+          },
         },
-      },
-    ]);
+      ]);
 
-    const communityDatas = memberDetails.communityIds.map((item) => {
-      const userMessages = data.find((e) => e._id == item._id.toString());
-      item.messages = userMessages?.lastMessage || null;
-      item.unreadCount = userMessages?.unreadCount || 0;
-      return item;
-    });
+      const communityDatas = memberDetails.communities.map((item) => {
+        const userMessages = data.find(
+          (e) => e._id == item.communityId._id.toString()
+        );
+        item.messages = userMessages?.lastMessage || null;
+        item.unreadCount = userMessages?.unreadCount || 0;
+        return item;
+      });
 
-    const sortedData = communityDatas.sort((a, b) => {
-      if (!a.messages && !b.messages) return 0;
-      if (!a.messages) return 1; 
-      if (!b.messages) return -1; 
-      return new Date(b.messages.createdAt) - new Date(a.messages.createdAt);
-    });
-    
-    console.log(sortedData, "this is sorted data");
-
-    res.status(200).json({ success: true, communities: sortedData });
+      result = communityDatas.sort((a, b) => {
+        if (!a.messages && !b.messages) return 0;
+        if (!a.messages) return 1;
+        if (!b.messages) return -1;
+        return new Date(b.messages.createdAt) - new Date(a.messages.createdAt);
+      });
+    }
+    res.status(200).json({ success: true, communities: result });
   } catch (error) {
     console.log("Error \n", error);
     return res

@@ -2,15 +2,23 @@ import mongoose from "mongoose";
 
 const memberSchema = new mongoose.Schema(
   {
-    user_id: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "User Id is required"],
     },
-    communityIds: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref:'communities',
-      required: [true, "community Id is required"],
-    },
+    communities: [
+      {
+        communityId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "communities",
+          required: [true, "Community Id is required"],
+        },
+        joinedAt: {
+          type: Date,
+          default: Date.now, 
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

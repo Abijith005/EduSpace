@@ -30,11 +30,17 @@ const processMessage = async (data) => {
     const community = await communityModel.findOne({ course_id: course_id });
 
     const result = await membersModel.findOneAndUpdate(
-      { user_id },
-      { $addToSet: { communityIds: community._id } },
+      { userId: user_id, "communities.communityId": { $ne: community._id } },
+      {
+        $addToSet: {
+          communities: {
+            communityId: community._id.toString(),
+            joinedAt: new Date(),
+          },
+        },
+      },
       { new: true, upsert: true }
     );
-    console.log(result);
   } catch (error) {
     console.error("Error in consumer:", error);
   }
