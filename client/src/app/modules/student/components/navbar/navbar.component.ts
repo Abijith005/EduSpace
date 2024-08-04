@@ -57,7 +57,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       });
 
     this.userInfo$
-      .pipe(take(1)) // Take only the first emission
+      .pipe(take(1))
       .subscribe((userInfo) => {
         this._socketService.online(userInfo.userId);
       });
@@ -73,12 +73,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.userInfo$
-      .pipe(takeUntil(this._ngUnsubscribe))
-      .subscribe((userInfo) => {
-        this._socketService.offline(userInfo.userId);
-      });
-
     localStorage.clear();
     this._store.dispatch(userLogOut());
     this._router.navigate(['']);

@@ -1,0 +1,9 @@
+
+<div>
+  <h2>Video Chat</h2>
+  <input type="text" [(ngModel)]="roomId" placeholder="Enter Meeting ID" />
+  <button (click)="startCall()">Start Call</button>
+  <button (click)="joinCall()">Join Call</button>
+  <video id="localVideo" autoplay muted></video>
+  <video id="remoteVideo" autoplay></video>
+</div>

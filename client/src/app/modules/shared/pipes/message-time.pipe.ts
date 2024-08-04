@@ -13,7 +13,6 @@ export class MessageTimePipe implements PipeTransform {
   transform(date: Date | string): unknown {
     if (!date) return '';
     const inputDate = new Date(date);
-    const currentDate = new Date();
     if (isToday(inputDate)) {
       return format(inputDate, 'h:mm a');
     }

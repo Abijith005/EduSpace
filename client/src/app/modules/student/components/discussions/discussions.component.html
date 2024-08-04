@@ -51,7 +51,7 @@
           />
           <div class="flex-grow">
             <div class="font-bold exo-text">
-              {{ item.title | titlecase }}
+              {{ item.communityId.title | titlecase }}
             </div>
             <div class="text-xs text-gray-500 jost-text truncate max-w-60">
               {{
@@ -84,7 +84,7 @@
           />
 
           <h2 class="font-bold exo-text">
-            {{ selectedCommunity!.title | titlecase }}
+            {{ selectedCommunity!.communityId.title | titlecase }}
           </h2>
         </div>
       </div>
@@ -97,7 +97,9 @@
       >
         <div class="space-y-4">
           <div
-            *ngFor="let item of messageList.get(selectedCommunity?._id!)"
+            *ngFor="
+              let item of messageList.get(selectedCommunity?.communityId?._id!)
+            "
             class="flex items-start message"
             [ngClass]="
               item.senderId === userId

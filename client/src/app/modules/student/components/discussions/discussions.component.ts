@@ -8,12 +8,16 @@ import {
 } from '@angular/core';
 import { ChatService } from '../../../shared/chat.service';
 import { Subject, takeUntil } from 'rxjs';
-import { IcommunityMemberData } from '../../../../interfaces/communityData';
+// import { IcommunityMemberData } from '../../../../interfaces/communityData';
 import { SocketService } from '../../../shared/socket.service';
 import { Store } from '@ngrx/store';
 import { AuthState } from '../../../../store/auth/auth.state';
 import { selectUserAuthState } from '../../../../store/auth/auth.selector';
 import { Imessage } from '../../../../interfaces/messageData';
+import {
+  ICommunityData,
+  ICommunityMemberData,
+} from '../../../../interfaces/communityData';
 
 interface IcommunityData {
   _id: string;
@@ -31,10 +35,10 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chatContainer', { static: false }) chatContainer!: ElementRef;
 
   message: string = '';
-  communityData: IcommunityMemberData[] | null = null;
+  communityData: ICommunityMemberData[] | null = null;
   userId!: string;
   userName!: string;
-  selectedCommunity: IcommunityData | null = null;
+  selectedCommunity: ICommunityMemberData | null = null;
   page = 1;
   limit = 20;
   firstUnreadMessageId: string | null = null;
@@ -72,6 +76,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.userName = res.userData.name;
       });
 
+    this._socketService.online(this.userId);
     this._socketService
       .getMessages()
       .pipe(takeUntil(this._ngUnsubscribe$))
@@ -81,8 +86,9 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
             data;
 
           const messageCommunity = this.communityData?.find(
-            (e) => e._id == communityId
+            (e) => e.communityId._id == communityId
           );
+
           if (messageCommunity) {
             if (messageCommunity.messages) {
               messageCommunity.messages.message = message;
@@ -92,7 +98,8 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
                 createdAt,
               } as Imessage;
             }
-            if (communityId != this.selectedCommunity?._id) {
+
+            if (communityId != this.selectedCommunity?.communityId._id) {
               messageCommunity!.unreadCount++ || 1;
             }
             const communityIndex = this.communityData?.indexOf(
@@ -108,6 +115,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
           if (!this.messageList.has(communityId)) {
             this.messageList.set(communityId, []);
           }
+
           const community = this.messageList.get(communityId)!;
           community.push({ senderId, senderName, message, createdAt });
         }
@@ -126,7 +134,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
-  selectCommunity(community: IcommunityMemberData) {
+  selectCommunity(community: ICommunityMemberData) {
     if (this.selectedCommunity == community) {
       return;
     }
@@ -135,7 +143,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.page = 1;
     this.selectedCommunity = community;
     this._chatService
-      .getCommunityMessages(community._id, this.page, this.limit)
+      .getCommunityMessages(community.communityId._id, this.page, this.limit)
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         if (res.messages) {
@@ -143,7 +151,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
             (message) => !message.readBy.includes(this.userId)
           )?._id!;
 
-          this.messageList.set(community._id, res.messages);
+          this.messageList.set(community.communityId._id, res.messages);
 
           setTimeout(() => this.scrollToFirstUnread(), 0);
 
@@ -157,9 +165,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
             this._chatService
               .updateMessageRead(unreadMessageIds, this.userId)
               .pipe(takeUntil(this._ngUnsubscribe$))
-              .subscribe((res) => {
-                console.log(res);
-              });
+              .subscribe((res) => {});
           }
         }
       });
@@ -182,7 +188,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
       msg,
       this.userId,
       this.userName,
-      this.selectedCommunity?._id!
+      this.selectedCommunity?.communityId._id!
     );
     this.messageBox.nativeElement.style.height = 'auto';
     this.message = '';
@@ -199,15 +205,16 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
       ++this.page;
       this._chatService
         .getCommunityMessages(
-          this.selectedCommunity?._id!,
+          this.selectedCommunity?.communityId._id!,
           this.page,
           this.limit
         )
         .pipe(takeUntil(this._ngUnsubscribe$))
         .subscribe((res) => {
           const existingMessages =
-            this.messageList.get(this.selectedCommunity?._id!) || [];
-          this.messageList.set(this.selectedCommunity?._id!, [
+            this.messageList.get(this.selectedCommunity?.communityId._id!) ||
+            [];
+          this.messageList.set(this.selectedCommunity?.communityId._id!, [
             ...res.messages,
             ...existingMessages,
           ]);
@@ -216,10 +223,7 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   scrollToFirstUnread() {
-    console.log('this worked');
-
     if (this.firstUnreadMessageId) {
-      console.log('this worked1');
       const container = this.chatContainer.nativeElement;
       const messages = Array.from(
         container.querySelectorAll('.message')
@@ -231,7 +235,6 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.firstUnreadMessageId?.toString()
         );
       });
-      console.log(firstUnread);
 
       if (firstUnread) {
         const offsetTop = firstUnread.offsetTop;

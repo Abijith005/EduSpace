@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmapleComponent } from './smaple.component';
+import { VideoChatComponent } from './video-chat.component';
 
-describe('SmapleComponent', () => {
-  let component: SmapleComponent;
-  let fixture: ComponentFixture<SmapleComponent>;
+describe('VideoChatComponent', () => {
+  let component: VideoChatComponent;
+  let fixture: ComponentFixture<VideoChatComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SmapleComponent]
+      declarations: [VideoChatComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SmapleComponent);
+    fixture = TestBed.createComponent(VideoChatComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

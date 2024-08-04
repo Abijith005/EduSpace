@@ -14,7 +14,7 @@ export class SocketService implements OnDestroy {
     senderId: string;
     senderName: string;
     communityId: string;
-    createdAt:Date
+    createdAt: Date;
   } | null>(null);
   private _socket: Socket;
 
@@ -49,8 +49,12 @@ export class SocketService implements OnDestroy {
       .pipe(filter((msg) => msg != null)) as Observable<Imessage>;
   }
 
-  offline(user_id: string) {
-    this._socket.emit('offline', user_id);
+  offline() {
+    this._socket.emit('offline');
+  }
+
+  logout() {
+    this._socket.emit('logout');
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,9 @@
+video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  margin-top: 10px;
+}

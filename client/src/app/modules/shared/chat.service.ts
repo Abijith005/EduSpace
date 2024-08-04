@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
-import { IcommunityMemberData } from '../../interfaces/communityData';
 import { Imessage } from '../../interfaces/messageData';
+import { ICommunityMemberData } from '../../interfaces/communityData';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class ChatService {
 
   getAllCommunities() {
     return this._http.get<
-      IgenreralResponse & { communities: IcommunityMemberData[] }
+      IgenreralResponse & { communities: ICommunityMemberData[] }
     >(`/v1/chat/communities/all`);
   }
 
@@ -25,8 +25,6 @@ export class ChatService {
   }
 
   updateMessageRead(messageId: string[], userId: string) {
-    console.log('sendingapi');
-
     return this._http.patch<IgenreralResponse>(
       '/v1/chat/messages/messageRead',
       {

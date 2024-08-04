@@ -21,7 +21,7 @@ import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DiscussionsComponent } from './components/discussions/discussions.component';
-import { SmapleComponent } from './components/smaple/smaple.component';
+import { VideoChatComponent } from './components/video-chat/video-chat.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import { SmapleComponent } from './components/smaple/smaple.component';
     LessonsComponent,
     NotesComponent,
     DiscussionsComponent,
-    SmapleComponent
+    VideoChatComponent,
   ],
   imports: [
     CommonModule,

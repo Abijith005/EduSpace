@@ -8,7 +8,8 @@ import { RemoveTimestampPipe } from './pipes/remove-timestamp.pipe';
 import { ObjectUrlPipe } from './pipes/object-url.pipe';
 import { RatingStarPipe } from './pipes/rating-star.pipe';
 import { FileNameExtractorPipe } from './pipes/file-name-extractor.pipe';
-import { MessageTimePipe } from './message-time.pipe';
+import { MessageTimePipe } from './pipes/message-time.pipe';
+import { MessageDatePipe } from './pipes/message-date.pipe';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { MessageTimePipe } from './message-time.pipe';
     RatingStarPipe,
     FileNameExtractorPipe,
     MessageTimePipe,
+    MessageDatePipe,
   ],
   imports: [CommonModule, NgxExtendedPdfViewerModule],
   exports: [
