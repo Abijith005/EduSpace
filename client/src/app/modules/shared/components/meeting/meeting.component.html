@@ -1,0 +1,184 @@
+<div
+  *ngIf="!isMeetingOpen; else meetingBlock"
+  class="container mx-auto flex flex-col justify-center items-start"
+  style="height: calc(100vh - 4.09rem)"
+>
+  <div
+    *ngIf="!isVisible; else modalBlock"
+    class="flex justify-between items-center w-full"
+  >
+    <div class="w-4/12">
+      <div class="text-center">
+        <h1
+          class="text-2xl md:text-3xl text-justify font-semibold mb-4 exo-text"
+        >
+          Interactive Learning and Seamless Collaboration for All
+        </h1>
+        <p class="text mb-8 exo-text text-justify">
+          Empower your education journey from anywhere—join live sessions,
+          collaborate in real-time, and access courses with your instructors on
+          EduSpace.
+        </p>
+        <div class="flex justify-center space-x-4 mb-8">
+          <button
+            *ngIf="userRole == 'teacher'"
+            (click)="createNewMeeting()"
+            class="bg-orange-500 text-white font-bold py-2 px-6 rounded-md shadow hover:bg-orange-600"
+          >
+            New meeting
+          </button>
+          <div class="inline-flex">
+            <input
+              type="text"
+              [(ngModel)]="roomId"
+              placeholder="Enter a code or link"
+              class="pl-4 pr-4 py-2 border focus:ring-0 rounded-l-md border-r-0 focus:outline-none"
+            />
+            <button
+              (click)="joinRoom()"
+              class="bg-orange-500 text-white font-bold py-2 px-6 rounded-r-md hover:bg-orange-600"
+            >
+              Join
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-8/12">
+      <div class="flex justify-center">
+        <div class="flex flex-col space-y-5 justify-between items-center">
+          <div class="flex items-center justify-center">
+            <img
+              src="/images/meeting.png"
+              class="w-96 h-96 bg-blue-50 rounded-full object-contain"
+              alt=""
+            />
+          </div>
+          <div class="text-center">
+            <p class="jost-text text-center">
+              Bringing minds together to shape the future
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #modalBlock>
+    <div class="flex justify-center w-full items-center">
+      <div class="shadow-md p-5 rounded-md bg-gray-100 max-w-96">
+        <div class="flex justify-between space-x-12 mb-2">
+          <h2 class="text-2xl mb-5 exo-text">Here is your joining info</h2>
+          <button
+            (click)="closeModal()"
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <div class="text-sm mb-5 jost-text">
+          Send this to people you want to meet with. Be sure to save it so you
+          can use it later, too.
+        </div>
+        <div
+          class="mb-5 bg-gray-200 inline-flex opacity-75 rounded-md justify-between text-sm p-3 w-full"
+        >
+          <p>{{ meetId }}</p>
+          <button (click)="copyMeetingId()">
+            <i class="far fa-copy font-extralight"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- <ng-template #meetingBlock>
+  <div>
+    <div>
+      <video
+        #localVideo
+        autoplay
+        [muted]="true"
+        style="transform: scaleX(-1)"
+      ></video>
+      <video #remoteVideo autoplay></video>
+    </div>
+  </div>
+</ng-template> -->
+
+<ng-template #meetingBlock>
+  <div
+    class="relative container mx-auto flex flex-col items-center justify-start"
+    style="height: calc(100vh - 4.09rem)"
+  >
+    <!-- Main video section -->
+    <div
+      class="flex flex-col items-center justify-center w-full h-3/5 p-0 mt-16"
+    >
+      <video
+        #localVideo
+        [autoplay]="true"
+        [muted]="true"
+        class="h-full w-full max-w-4xl object-cover rounded-md shadow-md"
+      ></video>
+    </div>
+
+    <div class="flex justify-center w-full mt-4">
+      <div class="flex flex-wrap justify-center gap-4">
+        
+        <div
+          *ngFor="let participant of participants"
+          class="remote-video-container"
+        >
+          <video
+            [attr.id]="'video-' + participant.id"
+            [autoplay]="true"
+            class="w-full h-48 object-cover rounded-md shadow-md"
+          ></video>
+        </div>
+       
+      </div>
+    </div>
+
+    <!-- Control buttons -->
+    <div class="absolute bottom-5 flex space-x-4 mt-4">
+      <button
+        (click)="toggleCamera()"
+        class="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600"
+      >
+        <i class="fas fa-video flex items-center justify-center w-7 h-7"></i>
+      </button>
+      <button
+        (click)="toggleMic()"
+        class="bg-green-500 text-white p-2 rounded-full hover:bg-green-600"
+      >
+        <i
+          class="fas fa-microphone flex items-center justify-center w-7 h-7"
+        ></i>
+      </button>
+      <button
+        (click)="exitCall()"
+        class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+      >
+        <i class="fas fa-phone flex items-center justify-center w-7 h-7"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>

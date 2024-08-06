@@ -11,8 +11,7 @@ import { CourseComponent } from './components/course/course.component';
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';
 import { DiscussionsComponent } from './components/discussions/discussions.component';
-import { VideoChatComponent } from './components/video-chat/video-chat.component';
-
+import { MeetingComponent } from '../shared/components/meeting/meeting.component';
 const routes: Routes = [
   {
     path: '',
@@ -40,7 +39,7 @@ const routes: Routes = [
         ],
       },
       { path: 'discussions', component: DiscussionsComponent },
-      { path: 'meeting', component: VideoChatComponent },
+      { path: 'meeting', component: MeetingComponent },
     ],
   },
 ];

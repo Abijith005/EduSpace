@@ -25,6 +25,10 @@ export class SocketService implements OnDestroy {
     });
   }
 
+  getSocket(): Socket {
+    return this._socket;
+  }
+
   online(user_id: string) {
     this._socket.emit('online', user_id);
   }
