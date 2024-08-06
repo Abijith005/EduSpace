@@ -44,37 +44,28 @@ const socket = (io) => {
         socket.disconnect(true);
       } catch (error) {
         console.error("Error during logout:", error);
-      }
+      } 
     });
 
-    
-    
-    socket.on("join-room", (roomId) => {
+    // Join a room
+    socket.on("join-room", (roomId, userId) => {
+      console.log(`User ${userId} joined room ${roomId}`);
       socket.join(roomId);
-      console.log(`User ${socket.id} joined room ${roomId}`);
+      socket.to(roomId).emit("user-connected", userId);
+
+      socket.on("disconnect", () => {
+        console.log(`User ${userId} disconnected from room ${roomId}`);
+        socket.to(roomId).emit("user-disconnected", userId);
+      });
+
+      socket.on("leave-room", (roomId, userId) => {
+        socket.to(roomId).broadcast.emit("user-disconnected", userId);
+      });
+
+      socket.on("end-meeting", (roomId) => {
+        socket.to(roomId).broadcast.emit("meeting-ended");
+      });
     });
-
-    // Handle offer
-    socket.on("offer", (roomId, offer) => {
-      console.log('offer created');
-      socket.to(roomId).emit("offer", offer); // Send offer to other users in the room
-    });
-
-    // Handle answer
-    socket.on("answer", (roomId, answer) => {
-      socket.to(roomId).emit("answer", answer); // Send answer to other users in the room
-    });
-
-    // Handle ICE candidates
-    socket.on("ice-candidate", (roomId, candidate) => {
-      socket.to(roomId).emit("ice-candidate", candidate); // Send candidate to other users in the room
-    });
-
-    socket.on("disconnect", () => {
-      console.log("User disconnected:", socket.id);
-    });
-
-
   });
 };
 

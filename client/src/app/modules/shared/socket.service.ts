@@ -20,6 +20,8 @@ export class SocketService implements OnDestroy {
 
   constructor() {
     this._socket = io(this.serverUrl);
+    console.log('socket connected');
+    
     this._socket.on('receiveMessage', (data) => {
       this.messages$.next(data);
     });

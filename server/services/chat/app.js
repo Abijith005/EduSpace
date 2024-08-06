@@ -11,30 +11,40 @@ import messageRoutes from "./routes/messageRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
 import socket from "./socket/socket.js";
+import { ExpressPeerServer } from "peer";
 
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:4200"],
+    origin: ["http://localhost:4200", "http://192.168.20.14:4200"],
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
 const port = process.env.PORT || 5070;
-dbConnect();
+
+const peerServer = ExpressPeerServer(httpServer, {
+  debug: true,
+  path: "/",
+});
+
+app.use("/peerjs", peerServer);
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(
   cors({
-    origin: ["http://localhost:4200"],
+    origin: ["http://localhost:4200", "http://192.168.20.14:4200"],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
   })
 );
+
+dbConnect();
 
 consumeCommunityTask();
 consumeMemberTask();

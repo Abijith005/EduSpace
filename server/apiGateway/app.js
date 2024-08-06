@@ -18,7 +18,7 @@ const chatUrl = process.env.CHAT_SERVICE_URL;
 
 app.use(
   cors({
-    origin: [clientUrl, teacherUrl, adminUrl],
+    origin: [clientUrl, teacherUrl, adminUrl,'http://192.168.20.14:4200'],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
   })
