@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from '../../../../store/auth/auth.state';
 import { selectUserInfo } from '../../../../store/auth/auth.selector';
 import { Subject, takeUntil } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 declare const Peer: any;
 
 @Component({
@@ -30,7 +31,8 @@ export class MeetingComponent implements OnInit {
   constructor(
     private socketService: SocketService,
     private _toasterService: ToasterService,
-    private _store: Store<{ user: AuthState }>
+    private _store: Store<{ user: AuthState }>,
+    private _http: HttpClient
   ) {}
 
   isVisible = false;
@@ -57,11 +59,18 @@ export class MeetingComponent implements OnInit {
 
   initializePeer() {
     this.peer = new Peer(undefined, {
-      host: 'localhost',
-      port: 5070,
-      path: '/peerjs',
-      secure: false, // Set to true if using HTTPS
+      host: 'rtc.kkweb.online', // Your server host
+      port: 5070, // Make sure this is correct
+      path: '/peerjs', // Correct path, ensure there's no duplication
+      secure: true, // Use true for HTTPS
     });
+
+    // this.peer = new Peer(undefined, {
+    //   host: 'https://rtc.kkweb.online',
+    //   port: 5070,
+    //   path: '/peerjs',
+    //   secure: true, // Set to true if using HTTPS
+    // });
 
     this.peer.on('open', (id: string) => {
       this.userPeerId = id;
