@@ -1,0 +1,162 @@
+<div *ngIf="communityData" class="container mx-auto py-8 px-4">
+  <div
+    class="px-36 grid grid-cols-12 gap-4"
+    style="min-height: 765px; max-height: 765px"
+  >
+    <!-- Sidebar -->
+    <div class="col-span-5 px-4 flex flex-col">
+      <div class="mb-8 shadow-lg rounded-lg px-3 py-2 ring-1">
+        <div class="relative">
+          <svg
+            class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16z"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-4.35-4.35"
+            ></path>
+          </svg>
+          <input
+            type="text"
+            class="w-full pl-10 p-2 rounded border-none outline-none ring-0 focus:ring-0 exo-text"
+            placeholder="Search"
+          />
+        </div>
+      </div>
+
+      <div
+        class="flex-grow overflow-y-auto space-y-2 p-3 rounded-lg shadow-lg ring-1"
+      >
+        <h2 class="exo-text font-semibold mb-4">Communities</h2>
+        <div
+          *ngFor="let item of communityData"
+          class="flex items-center p-4 border-b rounded cursor-pointer"
+          (click)="selectCommunity(item)"
+        >
+          <img
+            src="/images/banner1.png"
+            alt="Avatar"
+            class="w-10 h-10 rounded-full ring-1 mr-4"
+          />
+          <div class="flex-grow">
+            <div class="font-bold exo-text">
+              {{ item.communityId.title | titlecase }}
+            </div>
+            <div class="text-xs text-gray-500 jost-text truncate max-w-60">
+              {{
+                item.messages && item.messages.message
+                  ? item.messages.message
+                  : ""
+              }}
+            </div>
+          </div>
+          <span
+            *ngIf="item.unreadCount"
+            class="flex font-semibold bg-orange-500 p-1 h-5 w-5 justify-center items-center rounded-full text-white exo-text text-xxs"
+            >{{ item.unreadCount }}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="selectedCommunity"
+      class="col-span-7 flex flex-col py-4 shadow-lg rounded-lg ring-1 overflow-y-auto"
+      style="min-height: 765px; max-height: 765px"
+    >
+      <div class="px-6">
+        <div class="flex items-center p-4 border-b">
+          <img
+            src="/images/banner1.png"
+            alt="Avatar"
+            class="w-10 h-10 rounded-full ring-1 mr-4"
+          />
+
+          <h2 class="font-bold exo-text">
+            {{ selectedCommunity!.communityId.title | titlecase }}
+          </h2>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 flex flex-col-reverse px-6 py-4 overflow-y-auto"
+        style="scrollbar-width: thin"
+        #chatContainer
+        (scroll)="onScroll()"
+      >
+        <div class="space-y-4">
+          <div
+            *ngFor="
+              let item of messageList.get(selectedCommunity?.communityId?._id!)
+            "
+            class="flex items-start message"
+            [ngClass]="
+              item.senderId === userId
+                ? 'items-end justify-end '
+                : ' items-start'
+            "
+            [attr.data-message-id]="item._id"
+          >
+            <div
+              [ngClass]="
+                item.senderId === userId
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-gray-200 '
+              "
+              class="py-2 px-4 flex flex-col gap-3 rounded-lg max-w-md jost-text break-words"
+            >
+              <div
+                *ngIf="item.senderId != userId"
+                class="flex jost-text items-start time-text text-pink-500"
+              >
+                {{ item.senderName | titlecase }}
+              </div>
+              <div class="message-text pr-3">
+                {{ item.message }}
+              </div>
+              <div class="flex jost-text items-end justify-end time-text">
+                {{ item.createdAt | messageTime }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-6">
+        <div
+          class="px-4 py-1.5 bg-[#EFF6FC] flex justify-between rounded-2xl items-center"
+        >
+          <div class="w-11/12">
+            <textarea
+              class="w-full p-2 rounded border-none outline-none bg-[#EFF6FC] ring-0 focus:ring-0 exo-text resize-none"
+              placeholder="Type your message here..."
+              rows="1"
+              [(ngModel)]="message"
+              (input)="adjustTextareaHeight($event)"
+              #messageBox
+              (keydown)="handleKeyUp($event)"
+            ></textarea>
+          </div>
+          <div>
+            <button
+              (click)="sendMessage()"
+              class="ml-2 p-2 text-black rounded-lg"
+            >
+              <i class="fas fa-paper-plane text-2xl items-center"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

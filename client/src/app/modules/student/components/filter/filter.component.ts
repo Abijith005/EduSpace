@@ -9,7 +9,7 @@ import {
   Output,
 } from '@angular/core';
 import { StudentService } from '../../student.service';
-import { Subject, min, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IfilterSelectionItems } from '../../../../interfaces/filterSelectionList';
 
 interface filterValues {

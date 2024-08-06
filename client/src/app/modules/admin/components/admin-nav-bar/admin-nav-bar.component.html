@@ -1,39 +1,28 @@
 <div class="flex h-screen">
-    <div class="bg-white w-64 shadow-md p-6 rounded-lg">
-      <div class="flex items-center mb-6">
-        <img src="images/Log.ico" alt="EduSpace Logo" class="w-10 h-10 mr-2">
-        <h1 class="text-xl font-bold exo-text">EduSpace</h1>
-      </div>
-      <p class="text-gray-500 mb-6 jost-text">Admin Panel</p>
-      <div class="flex flex-col gap-2.5 py-2 ">
-      <a [ngClass]="{'active-link':selectedItem==0}" (click)="selectItem(0)" [routerLink]="'./'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
-        <i class="fas fa-home mr-2"></i> Dashboard
+  <div class="bg-white w-64 shadow-md p-6 rounded-lg">
+    <div class="flex items-center mb-6">
+      <img src="images/Log.ico" alt="EduSpace Logo" class="w-10 h-10 mr-2" />
+      <h1 class="text-xl font-bold exo-text">EduSpace</h1>
+    </div>
+    <p class="text-gray-500 mb-6 jost-text">Admin Panel</p>
+    <div class="flex flex-col gap-2.5 py-2">
+      <a
+        *ngFor="let item of navItems"
+        [ngClass]="{ 'active-link': isActiveLink(item.link) }"
+        [routerLink]="item.link"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
+        <i class="mr-2" [class]="item.icon"></i> {{ item.title }}
       </a>
-      <a [ngClass]="{'active-link':selectedItem==1}" (click)="selectItem(1)" [routerLink]="'instructor_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
-        <i class="fas fa-user-graduate mr-2"></i> Instructors
-      </a>
-      <a [ngClass]="{'active-link':selectedItem==2}" (click)="selectItem(2)" [routerLink]="'student_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
-        <i class="fas fa-graduation-cap mr-2"></i> Students
-      </a>
-      <a [ngClass]="{'active-link':selectedItem==3}" (click)="selectItem(3)" [routerLink]="'category_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
-        <i class="fas fa-list-alt mr-2"></i> Categories
-      </a>
-      <a [ngClass]="{'active-link':selectedItem==4}" (click)="selectItem(4)" [routerLink]="'permission_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
-        <i class="fas fa-key mr-2"></i> Permissions
-      </a>
-      <a [ngClass]="{'active-link':selectedItem==5}" (click)="selectItem(5)" [routerLink]="'payment_manage'" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
-        <i class="fas fa-credit-card mr-2"></i> Payments
-      </a>
-      <a [ngClass]="{'active-link':selectedItem==6}" (click)="selectItem(6)" [routerLink]="''" class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer">
+      <a
+        (click)="logOut()"
+        class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+      >
         <i class="fas fa-sign-out-alt mr-2"></i> Logout
       </a>
     </div>
-    </div>
-    <div class="flex-1 overflow-y-auto  p-6 pt-0 " style=" background: #F3F2F7">
-      <router-outlet></router-outlet>
-    </div>
   </div>
-
-
-
-  
+  <div class="flex-1 overflow-y-auto p-6 pt-0" style="background: #f3f2f7">
+    <router-outlet></router-outlet>
+  </div>
+</div>

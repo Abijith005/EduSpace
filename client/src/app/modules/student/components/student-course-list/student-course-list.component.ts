@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../student.service';
-import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { IcourseDetails } from '../../../../interfaces/courseDetails';
 import { Subject, takeUntil } from 'rxjs';
-import { IFilterValues } from '../../../../interfaces/filterValues';
+import { IfilterValues } from '../../../../interfaces/filterValues';
 
 @Component({
   selector: 'app-student-course-list',
@@ -10,10 +10,10 @@ import { IFilterValues } from '../../../../interfaces/filterValues';
   styleUrl: './student-course-list.component.css',
 })
 export class StudentCourseListComponent implements OnInit {
-  totalPages: number = 10;
+  totalPages: number = 0;
   currentPage = 1;
   searchKey = '';
-  filter: IFilterValues = {
+  filter: IfilterValues = {
     searchKey: '',
     category_ids: [],
     instructor_ids: [],
@@ -21,7 +21,7 @@ export class StudentCourseListComponent implements OnInit {
     priceRange: { min: null, max: null },
   };
   limit = 6;
-  courses!: ICourseDetails[];
+  courses!: IcourseDetails[];
 
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(private _studentService: StudentService) {}
@@ -40,9 +40,9 @@ export class StudentCourseListComponent implements OnInit {
       });
   }
 
-  onApplyFilter(filterDatas: IFilterValues) {
+  onApplyFilter(filterDatas: IfilterValues) {
     this.filter = filterDatas;
-    
+
     this.searchKey = filterDatas.searchKey;
 
     this.getAllCourses();

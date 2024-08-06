@@ -10,7 +10,7 @@ import {
   ViewChild,
   ChangeDetectorRef,
 } from '@angular/core';
-import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { IcourseDetails } from '../../../../interfaces/courseDetails';
 import { PaymentService } from '../../payment.service';
 import { WindowRefService } from '../../window-ref.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -24,8 +24,8 @@ import { ToasterService } from '../../../shared/toaster.service';
 })
 export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('paymentRef', { static: false }) paymentRef!: ElementRef;
-  @Output() modalClosed = new EventEmitter<string>();
-  @Input() courseDetails!: ICourseDetails;
+  @Output() modalClosed = new EventEmitter<void>();
+  @Input() courseDetails!: IcourseDetails;
   orderRef: string | undefined;
   selectedPaymentMethod: string = '';
 
@@ -164,7 +164,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe((res) => {
           if (res.success) {
             this._toaster.toasterFunction(res);
-            this.closeModal('success');
+            this.closeModal();
           }
         });
     };
@@ -174,8 +174,8 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     rzp.open();
   }
 
-  closeModal(status: string) {
-    this.modalClosed.emit(status);
+  closeModal() {
+    this.modalClosed.emit();
   }
 
   ngOnDestroy(): void {

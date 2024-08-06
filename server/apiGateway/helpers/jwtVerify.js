@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
     const userInfo = jwt.verify(token, secret);
     return userInfo;
   } catch (error) {
-    console.log(error,'from verification==============================');
+    console.log(error);
    return false
   }
 };

@@ -1,11 +1,7 @@
 <div class="flex h-screen">
   <div class="bg-white w-64 shadow-md p-6 rounded-lg fixed h-full">
     <div class="flex items-center mb-6">
-      <img
-        src="images/Log.ico"
-        alt="EduSpace Logo"
-        class="w-10 h-10 mr-2"
-      />
+      <img src="images/Log.ico" alt="EduSpace Logo" class="w-10 h-10 mr-2" />
       <h1 class="text-xl font-bold exo-text">EduSpace</h1>
     </div>
     <p class="text-gray-500 mb-6 jost-text">Teacher Panel</p>
@@ -64,7 +60,10 @@
   <div class="flex flex-1" style="background: #f3f2f7">
     <div class="flex items-center justify-between px-6 fixed w-full z-10">
       <div class="w-64 px-6"></div>
-      <div class="flex flex-1 justify-between pt-7 pb-0" style="background: #f3f2f7">
+      <div
+        class="flex flex-1 justify-between pt-7 pb-0"
+        style="background: #f3f2f7"
+      >
         <h1 class="text-2xl font-bold mb-4 exo-text">Dashboard</h1>
         <div class="flex items-center space-x-7 px-4">
           <div
@@ -88,12 +87,15 @@
             </div>
           </div>
 
-          <span class="mr-4">Samantha</span>
-          <img
-            src="https://via.placeholder.com/40"
-            alt="User Avatar"
-            class="rounded-full w-10 h-10"
-          />
+          <ng-container *ngIf="userInfo$ | async as userInfo">
+            <span class="mr-4">{{ userInfo.name | titlecase }}</span>
+            <img
+              (click)="logout()"
+              [src]="userInfo.profilePic || 'images/user.png'"
+              class="h-7 w-7 rounded-full"
+              alt="User Profile Picture"
+            />
+          </ng-container>
         </div>
       </div>
     </div>

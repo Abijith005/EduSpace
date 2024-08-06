@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { IcategoryData } from '../../interfaces/categoryData';
-import { ICourseDetails } from '../../interfaces/courseDetails';
-import { IFilterValues } from '../../interfaces/filterValues';
+import { IcourseDetails } from '../../interfaces/courseDetails';
+import { IfilterValues } from '../../interfaces/filterValues';
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +41,7 @@ export class TeacherService {
     page: number,
     limit: number,
     search: string,
-    filter: IFilterValues
+    filter: IfilterValues
   ) {
     const queryParams = new URLSearchParams({
       page: page.toString(),
@@ -51,7 +51,7 @@ export class TeacherService {
       id: 'true',
     }).toString();
     return this._http.get<
-      IgenreralResponse & { courses: ICourseDetails[]; totalPages: number }
+      IgenreralResponse & { courses: IcourseDetails[]; totalPages: number }
     >(`/v1/course/manageCourse/all?${queryParams}`);
   }
 

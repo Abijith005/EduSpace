@@ -14,6 +14,7 @@ const adminUrl = process.env.ADMIN_SERVICE_URL;
 const teacherUrl = process.env.TEACHER_SERVICE_URL;
 const courseUrl = process.env.COURSE_SERVICE_URL;
 const paymentUrl = process.env.PAYMENT_SERVICE_URL;
+const chatUrl = process.env.CHAT_SERVICE_URL;
 
 app.use(
   cors({
@@ -73,6 +74,15 @@ app.use(
   authMiddleware(["student"]),
   createProxyMiddleware({
     target: paymentUrl,
+    origin: true,
+  })
+);
+
+app.use(
+  "/api/v1/chat",
+  authMiddleware(["teacher", "admin", "student"]),
+  createProxyMiddleware({
+    target: chatUrl,
     origin: true,
   })
 );

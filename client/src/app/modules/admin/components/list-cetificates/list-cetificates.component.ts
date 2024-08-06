@@ -5,7 +5,7 @@ import {
   OnDestroy,
   Output,
 } from '@angular/core';
-import { ICertificate } from '../../../../interfaces/categoryRequest';
+import { Icertificate } from '../../../../interfaces/categoryRequest';
 import { ModalService } from '../../../shared/modal.service';
 import { AdminService } from '../../admin.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -17,7 +17,7 @@ import { ToasterService } from '../../../shared/toaster.service';
   styleUrl: './list-cetificates.component.css',
 })
 export class ListCetificatesComponent implements OnDestroy {
-  @Input() certificates!: ICertificate[];
+  @Input() certificates!: Icertificate[];
   @Input() requestId!: string;
   @Output() modalClosed = new EventEmitter();
   selectedCertificate: string = '';

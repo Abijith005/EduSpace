@@ -93,13 +93,15 @@ export const getAllCourses = async (req, res) => {
     const datas = await cousreModel
       .find(query)
       .skip(skip)
-      .limit(page * limit)
+      .limit( limit)
       .populate("category_id", { _id: 1, title: 1 })
       .lean();
+      console.log(datas.length);
     const user_ids = [...new Set(datas.map((item) => item.user_id.toString()))];
+    const authQuery = { _id: { $in: user_ids } };
     const userDetails = await sendRPCRequest(
       "authQueue",
-      JSON.stringify(user_ids)
+      JSON.stringify(authQuery)
     );
 
     const courses = datas.map((item) => {
@@ -128,11 +130,12 @@ export const updateCourse = async (req, res) => {
 
     if (Object.keys(req.files).length > 0) {
       await sendUploadTaskToQueue(req.files, req.body);
-      // return res.status(200).send({
-      //   success: true,
-      //   message: "Files uploaded successfully and processing in background",
-      // });
+      return res.status(200).send({
+        success: true,
+        message: "Course updates succesfully",
+      });
     }
+
     const { title, price, about, category_id } = req.body;
 
     let updateOperations = { $set: { title, price, about, category_id } };
@@ -153,13 +156,15 @@ export const updateCourse = async (req, res) => {
         }
       }
 
-      const command = new DeleteObjectsCommand({
-        Bucket: process.env.S3_BUCKET,
-        Delete: {
-          Objects,
-        },
-      });
-      await s3Config.send(command);
+      if (Objects.length > 0) {
+        const command = new DeleteObjectsCommand({
+          Bucket: process.env.S3_BUCKET,
+          Delete: {
+            Objects,
+          },
+        });
+        await s3Config.send(command);
+      }
     }
 
     await cousreModel.findByIdAndUpdate({ _id: course_id }, updateOperations);
@@ -237,9 +242,10 @@ export const getAllCourseStats = async (req, res) => {
       },
     ]);
     const teacherIds = teacherData.map((item) => item._id);
+    const query = { _id: { $in: teacherIds } };
     const userDetails = await sendRPCRequest(
       "authQueue",
-      JSON.stringify(teacherIds)
+      JSON.stringify(query)
     );
 
     const instructorData = teacherData.map((item) => {
@@ -289,9 +295,11 @@ export const getCourseDetails = async (req, res) => {
   try {
     const { course_id } = req.params;
     const courseDetails = await cousreModel.findById({ _id: course_id }).lean();
+    const user_ids = [courseDetails.user_id];
+    const query = { _id: { $in: user_ids } };
     const userDetails = await sendRPCRequest(
       "authQueue",
-      JSON.stringify([courseDetails.user_id])
+      JSON.stringify(query)
     );
     courseDetails.user_id = {
       name: userDetails[0].name,
@@ -340,9 +348,10 @@ export const getAllSubscriptions = async (req, res) => {
     ]);
 
     const user_ids = [...new Set(courses.map((item) => item.course.user_id))];
+    const query = { _id: { $in: user_ids } };
     const userDetails = await sendRPCRequest(
       "authQueue",
-      JSON.stringify(user_ids)
+      JSON.stringify(query)
     );
 
     const data = courses.map((item) => {

@@ -29,20 +29,24 @@
           class="rounded-md pl-10 pr-4 py-1 drop-shadow-md text-gray-700 placeholder-gray-400 focus:ring-0 jost-text"
           type="text"
           placeholder="Search"
+          [(ngModel)]="search"
+          (keyup)="applySearch()"
         />
       </div>
       <div class="flex items-center jost-text">
         <p class="text-md font-semibold">Filter</p>
         <select
+          [(ngModel)]="filter"
+          (change)="applyFilter()"
           class="ml-2 rounded-md border shadow-md border-gray-300 px-2 py-1 focus:ring-0"
         >
-          <option value="all-time">All</option>
-          <option value="last-month">Verified</option>
-          <option value="last-year">Rejected</option>
+          <option [ngValue]="null">All</option>
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Blocked</option>
         </select>
       </div>
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto pb-10">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr class="">
@@ -79,137 +83,59 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200 poppins-text">
-          <tr class="text-center">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
+          <tr *ngFor="let student of studentDetails" class="text-center">
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ student.name | titlecase }}
+            </td>
 
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ student.email | titlecase }}
+            </td>
 
-            <td class="px-6 py-4 text-center whitespace-nowrap">5</td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              {{ student.courseSubscribed }}
+            </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <span
+                *ngIf="student.activeStatus; else notActive"
                 class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
               >
                 Active
               </span>
+              <ng-template #notActive>
+                <span
+                  class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md text-red-500 ring-1 ring-red-600"
+                >
+                  Blocked
+                </span>
+              </ng-template>
             </td>
             <td
               class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium cursor-pointer"
             >
-              <i class="fas fa-ellipsis-v"></i>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
-
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
-
-            <td class="px-6 py-4 text-center whitespace-nowrap">5</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
-              >
-                Active
-              </span>
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium"
-            >
-              <i class="fas fa-ellipsis-v"></i>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
-
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
-
-            <td class="px-6 py-4 text-center whitespace-nowrap">5</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
-              >
-                Active
-              </span>
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium"
-            >
-              <i class="fas fa-ellipsis-v"></i>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
-
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
-
-            <td class="px-6 py-4 text-center whitespace-nowrap">5</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
-              >
-                Active
-              </span>
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium"
-            >
-              <i class="fas fa-ellipsis-v"></i>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
-
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
-
-            <td class="px-6 py-4 text-center whitespace-nowrap">5</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
-              >
-                Active
-              </span>
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium"
-            >
-              <i class="fas fa-ellipsis-v"></i>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
-
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
-
-            <td class="px-6 py-4 text-center whitespace-nowrap">5</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md text-red-500 ring-1 ring-red-600"
-              >
-                Blocked
-              </span>
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium"
-            >
-              <i class="fas fa-ellipsis-v"></i>
-            </td>
-          </tr>
-          <tr class="text-center">
-            <td class="px-6 py-4 whitespace-nowrap">Jane Cooper</td>
-
-            <td class="px-6 py-4 whitespace-nowrap">janemicrosoft.com</td>
-
-            <td class="px-6 py-4 text-center whitespace-nowrap">5</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
-              >
-                Active
-              </span>
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium"
-            >
-              <i class="fas fa-ellipsis-v"></i>
+              <div class="relative">
+                <button
+                  class="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  (click)="toggleDropdown(student._id)"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div
+                  *ngIf="dropdownOpen && student._id === currentStudentId"
+                  class="absolute right-1 mt-2 w-48 bg-gray-100 rounded-md shadow-lg z-50"
+                >
+                  <ul class="">
+                    <li
+                      class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer"
+                      (click)="
+                        updatestudent(student._id, !student.activeStatus)
+                      "
+                    >
+                      {{ student.activeStatus == true ? "Block" : "Unblock" }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>

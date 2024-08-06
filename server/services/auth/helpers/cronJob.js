@@ -7,7 +7,6 @@ const cronJob = () => {
     async () => {
       try {
         deleteOtp();
-        console.log('deleted otpssss');
       } catch (error) {
         console.log(error);
         throw error;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import adminModel from "../models/adminModel.js";
 import hashPassword from "../helpers/hashPassword.js";
+import userModel from "../models/userModel.js";
 
 
 const mongoUrl = process.env.MONGODB_URI;
@@ -10,16 +10,17 @@ const dbConnect = async () => {
   try {
     await mongoose.connect(`${mongoUrl}/${database}`);
 
-    console.log("DB connected successfully");
 
     const email=process.env.ADMIN_EMAIL
-    const existingAdmin = await adminModel.findOne({ email });
+    const existingAdmin = await userModel.findOne({ email });
 
     if (!existingAdmin) {
       const password=process.env.ADMIN_PASSWORD
        const hashedPassword = await hashPassword(password);
-      const defaultAdmin = new adminModel({
+      const defaultAdmin = new userModel({
+        name:'Admin',
         email: email,
+        role:'admin',
         password: hashedPassword,
       });
 

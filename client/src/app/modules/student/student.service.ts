@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IcategoryResponse } from '../../interfaces/categoryResponse';
 import { IgenreralResponse } from '../../interfaces/generalResponse';
-import { ICourseDetails } from '../../interfaces/courseDetails';
-import { IFilterValues } from '../../interfaces/filterValues';
+import { IcourseDetails } from '../../interfaces/courseDetails';
+import { IfilterValues } from '../../interfaces/filterValues';
 import { IfilterSelectionItems } from '../../interfaces/filterSelectionList';
-import { ISubscriptionData } from '../../interfaces/subscriptionData';
+import { IsubscriptionData } from '../../interfaces/subscriptionData';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class StudentService {
     page: number,
     limit: number,
     search: string,
-    filter: IFilterValues
+    filter: IfilterValues
   ) {
     const queryParams = new URLSearchParams({
       page: page.toString(),
@@ -32,7 +32,7 @@ export class StudentService {
       filter: JSON.stringify(filter),
     }).toString();
     return this._http.get<
-      IgenreralResponse & { courses: ICourseDetails[]; totalPages: number }
+      IgenreralResponse & { courses: IcourseDetails[]; totalPages: number }
     >(`/v1/course/manageCourse/all?${queryParams}`);
   }
 
@@ -65,12 +65,12 @@ export class StudentService {
 
   getCourseDetails(course_id: string) {
     return this._http.get<
-      IgenreralResponse & { courseDetails: ICourseDetails }
+      IgenreralResponse & { courseDetails: IcourseDetails }
     >(`/v1/course/manageCourse/courseDetails/${course_id}`);
   }
 
   getAllSubscriptions() {
-    return this._http.get<IgenreralResponse & { courses: ISubscriptionData[] }>(
+    return this._http.get<IgenreralResponse & { courses: IsubscriptionData[] }>(
       `/v1/course/manageCourse/subscriptions/all`
     );
   }

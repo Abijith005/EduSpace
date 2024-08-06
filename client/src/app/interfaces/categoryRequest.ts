@@ -2,7 +2,7 @@ import { IcategoryData } from "./categoryData";
 import { IcategoryResponse } from "./categoryResponse";
 import { IuserInformation } from "./userInformation";
 
-export interface ICertificate {
+export interface Icertificate {
     _id: string;
     key: string;
     url: string;
@@ -10,10 +10,10 @@ export interface ICertificate {
   }
 
   
-  export interface ICategoryRequest {
+  export interface IcategoryRequest {
     _id: string;
     categoryDetails: IcategoryResponse;
-    certificates: ICertificate[];
+    certificates: Icertificate[];
     status: string;
     userDetails:IuserInformation,
     createdAt: string;

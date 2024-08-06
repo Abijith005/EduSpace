@@ -28,11 +28,13 @@
     "apexcharts": "^3.49.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "date-fns": "^3.6.0",
     "flowbite": "^2.3.0",
     "ng-angular-popup": "^0.5.2",
     "ng-apexcharts": "^1.11.0",
     "ngx-extended-pdf-viewer": "^21.0.0-alpha.6",
     "rxjs": "~7.8.0",
+    "socket.io-client": "^4.7.5",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

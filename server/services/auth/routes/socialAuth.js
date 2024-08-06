@@ -1,9 +1,12 @@
 import express from "express";
-import { userSocialLogin } from "../controllers/socialAuthController.js";
+import {  userSocialSignIn, userSocialSignup } from "../controllers/socialAuthController.js";
 
 const router = express.Router();
 
-router.post('/login',userSocialLogin)
+router.post('/register',userSocialSignup)
+
+router.post('/login',userSocialSignIn)
+
 
 
 export default router;

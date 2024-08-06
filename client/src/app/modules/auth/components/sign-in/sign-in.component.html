@@ -6,7 +6,7 @@
         <form
           [formGroup]="loginForm"
           (ngSubmit)="onSubmit()"
-          class="flex flex-col gap-2"
+          class="flex flex-col gap-4"
         >
           <label
             [style.color]="
@@ -60,48 +60,23 @@
               (click)="showPassword()"
             ></i>
           </div>
-          <div class="flex items-center justify-around mt-4">
-            <button
-              type="button"
-              class="bb sm:h-8 h-6 sm:w-16 w-12"
-              [ngClass]="{ box: role === 'student' }"
-              (click)="selectRole('student')"
-            >
-              <h3 class="font-bold text-center text-xxs">STUDENT</h3>
-            </button>
-            <button
-              type="button"
-              class="bb sm:h-8 h-6 sm:w-16 w-12 text-xxs"
-              (click)="selectRole('teacher')"
-              [ngClass]="{ box: role === 'teacher' }"
-            >
-              <h3 class="font-bold text-center text-xxs ">TEACHER</h3>
-            </button>
-            <button
-              type="button"
-              class="bb sm:h-8 h-6 sm:w-16 w-12"
-              [ngClass]="{ box: role === 'admin' }"
-              (click)="selectRole('admin')"
-            >
-              <h3 class="font-bold text-center sm:text-sm text-xxs">ADMIN</h3>
-            </button>
-          </div>
+
           <button
-            class="bg-[#002D74] text-white rounded-xl py-2 hover:scale-105 duration-300 mt-4"
+            class="bg-[#002D74] text-white rounded-xl py-2 hover:scale-105 duration-300 mt-10"
           >
             Login
           </button>
         </form>
 
         <div
-          class="mt-3 text-gray-400 grid grid-cols-3 items-center justify-center"
+          class="mt-6 text-gray-400 grid grid-cols-3 items-center justify-center"
         >
           <hr class="border-gray-400" />
           <p class="text-center text-sm">OR</p>
           <hr class="border-gray-400" />
         </div>
 
-        <div class="mt-2 flex justify-center">
+        <div class="mt-6 flex justify-center">
           <asl-google-signin-button data-click_listener="signInWithGoogle()" type='standard' shape="rectangular" text="signin_with" size='medium' class=" py-1"></asl-google-signin-button>
         </div>
 
@@ -120,7 +95,7 @@
           </button>
         </div>
       </div>
-      <div class="sm:w-1/2 sm:block hidden">
+      <div  class="sm:w-1/2 sm:block hidden">
         <img
           class="rounded-2xl h-full object-cover "
           src="images/EduSpaceLogin.jpeg"

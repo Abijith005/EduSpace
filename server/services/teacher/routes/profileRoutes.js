@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getRequests,
+  removeApprovedCategories,
   updateCertificates,
   updateRequestStatus,
   uploadCertificates,
@@ -47,4 +48,6 @@ router.get("/requests/all", getRequests);
 router.put("/requests/updateCertificates", updateCertificates);
 
 router.put("/requests/updateRequestStatus", updateRequestStatus);
+
+router.patch("/removeApprovedCategory", removeApprovedCategories);
 export default router;

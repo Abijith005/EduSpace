@@ -4,9 +4,11 @@ import { studentModuleGuard } from './guards/student-module.guard';
 import { authModuleGuard } from './guards/auth-module.guard';
 import { adminModuleGuard } from './guards/admin-module.guard';
 import { teacherModuleGuard } from './guards/teacher-module.guard';
+import { MeetingComponent } from './modules/shared/components/meeting/meeting.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth' },
+  // { path: 'hi', component: MeetingComponent },
 
   {
     path: 'auth',

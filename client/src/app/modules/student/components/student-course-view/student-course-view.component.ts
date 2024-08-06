@@ -9,7 +9,7 @@ import {
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subject, filter, map, of, takeUntil, tap } from 'rxjs';
 import { StudentService } from '../../student.service';
-import { ICourseDetails } from '../../../../interfaces/courseDetails';
+import { IcourseDetails } from '../../../../interfaces/courseDetails';
 import { ModalService } from '../../../shared/modal.service';
 
 @Component({
@@ -28,9 +28,8 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
   course_id = '';
   isVisible$ = this._modalService.isVisible$;
   isNestedVisible$ = this._modalService.isNestedVisible$;
-  courseDetails$ = of<ICourseDetails | null>(null);
+  courseDetails$ = of<IcourseDetails | null>(null);
   isLoading$ = of(true);
-  courseDetails = { price: 500 };
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
     private _router: Router,
@@ -59,11 +58,9 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
     this._modalService.openModal();
   }
 
-  closeModal(event: string) {
+  closeModal() {
     this._modalService.closeModal();
-    if (event === 'success') {
-      this._modalService.openNestedModal();
-    }
+    this._modalService.openNestedModal();
   }
   closeNestedModal() {
     this._modalService.closeNestedModal();

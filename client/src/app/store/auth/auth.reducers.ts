@@ -10,6 +10,7 @@ import { AuthState } from './auth.state';
 
 export const initialState: AuthState = {
   userData: {
+    _id:'',
     name: '',
     email: '',
     profilePic: '',

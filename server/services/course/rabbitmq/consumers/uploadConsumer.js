@@ -3,6 +3,8 @@ import s3Config from "../../config/s3BucketConfig.js";
 import { connectRabbitMQ } from "../../config/rabbitmq.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import courseModel from "../../models/courseModel.js";
+import sendCommuntiyTaskQueue from "../producers/communityProducer.js";
+import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 
 const bucket = process.env.S3_BUCKET;
 const region = process.env.S3_REGION;
@@ -40,7 +42,7 @@ const uploadFileToS3 = async (filePath, filename, category, title) => {
 
 const processMessage = async (msg, channel) => {
   try {
-    const categories = ['videos', 'notes', 'previewVideo', 'previewImage'];
+    const categories = ["videos", "notes", "previewVideo", "previewImage"];
 
     const { files, data } = JSON.parse(msg.content.toString());
 
@@ -84,13 +86,47 @@ const processMessage = async (msg, channel) => {
         }
       }
 
-
       await courseModel.findByIdAndUpdate(
         { _id: data.course_id },
         updateOperations
       );
+
+      const { title, price, about, category_id } = data;
+
+      let update = { $set: { title, price, about, category_id } };
+
+      const deletedFields = ["videos", "notes", "previewVideo", "previewImage"];
+
+      if (data.deletedFiles) {
+        const deletedFiles = JSON.parse(data.deletedFiles);
+        let Objects = [];
+        update.$pull = {};
+        for (const fields of deletedFields) {
+          if (deletedFiles[fields]) {
+            Objects.push(...deletedFiles[fields].map((key) => ({ Key: key })));
+
+            update.$pull[fields] = {
+              key: { $in: deletedFiles[fields] },
+            };
+          }
+        }
+
+        const command = new DeleteObjectsCommand({
+          Bucket: process.env.S3_BUCKET,
+          Delete: {
+            Objects,
+          },
+        });
+       const a= await s3Config.send(command);
+      }
+
+      await courseModel.findByIdAndUpdate({ _id: data.course_id }, update);
+      
     } else {
-      await courseModel.create({ ...data, ...uploadResults });
+      const course = await courseModel.create({ ...data, ...uploadResults });
+      const { title } = data;
+      const course_id = course._id;
+      sendCommuntiyTaskQueue({ course_id, title });
     }
 
     channel.ack(msg);

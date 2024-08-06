@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ICourseDetails } from '../../interfaces/courseDetails';
+import { IcourseDetails } from '../../interfaces/courseDetails';
 
 @Injectable({
   providedIn: 'root',
@@ -7,9 +7,9 @@ import { ICourseDetails } from '../../interfaces/courseDetails';
 export class SharedDataService {
   constructor() {}
 
-  private courseData!: ICourseDetails;
+  private courseData!: IcourseDetails;
 
-  setCourseData(data: ICourseDetails) {
+  setCourseData(data: IcourseDetails) {
     this.courseData = data;
   }
 

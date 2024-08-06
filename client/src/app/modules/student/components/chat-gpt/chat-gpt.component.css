@@ -1,0 +1,9 @@
+.sendMessages {
+    max-width: 75%;
+    align-self: flex-end;
+  }
+
+.receivedMessages {
+    max-width: 85%;
+    align-self: flex-start;
+  }

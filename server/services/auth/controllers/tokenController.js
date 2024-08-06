@@ -27,16 +27,14 @@ export const getNewAccessToken = async (req, res) => {
 export const decodeUserInfo = async (req, res) => {
   try {
     const {token} = req.params;
-    console.log(token);
     const userInfo = verifyJwt(token);
-    const { name, email, profilePic, role } = userInfo;
-    console.log(userInfo,'no user info');
+    const {id ,name, email, profilePic, role } = userInfo;
     if (!userInfo) {
       return res.status(401).json({ success: false, message: "invalid token" });
     }
     res
       .status(200)
-      .json({ success: true, userInfo: { name, email, profilePic, role } });
+      .json({ success: true, userInfo: {_id:id,name, email, profilePic, role } });
   } catch (error) {
     console.log("Error \n", error);
     res.status(500).json({ success: false, message: "Invalid token" });

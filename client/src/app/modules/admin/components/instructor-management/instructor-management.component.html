@@ -1,246 +1,185 @@
-  <div class="min-h-fit p-8">
-    <h1 class="text-2xl font-bold mb-4 exo-text">Instructors</h1>
-    <div class="bg-white rounded-lg drop-shadow-md p-6 mt-10">
-        <div class="flex items-center justify-end space-x-4 pb-6">
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-              <svg class="h-5 w-5 text-gray-400 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 18a8 8 0 100-16 8 8 0 000 16z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35"></path>
-              </svg>
-            </span>
-            <input
-              class="rounded-md pl-10 pr-4 py-1 drop-shadow-md text-gray-700 placeholder-gray-400  focus:ring-0 jost-text"
-              type="text"
-              placeholder="Search"
-            />
-          </div>
-          <div class="flex items-center jost-text">
-            <p class="text-md font-semibold">Filter</p>
-            <select class="ml-2 rounded-md border shadow-md border-gray-300 px-2 py-1 focus:ring-0">
-              <option value="all-time">All</option>
-              <option value="last-month">Verified</option>
-              <option value="last-year">Rejected</option>
-            </select>
-          </div>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr class="">
-                  <th scope="col" class="px-6 py-3 text-center text-xs  font-medium text-gray-500 uppercase tracking-wider">
-                    Instructor Name
-                  </th>
-                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Categories
-                  </th>
-                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
-                  </th>
-                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Verification
-                  </th>
-                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Course Uploaded
-                  </th>
-                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Options
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200 poppins-text">
-                <tr class="text-center">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Jane Cooper
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Photography
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    janemicrosoft.com
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                    verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap">
-                    5
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap ">
-                    <span class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium cursor-pointer">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Jane Cooper
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Photography
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    janemicrosoft.com
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                    verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap">
-                    5
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap ">
-                    <span class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Jane Cooper
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Photography
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    janemicrosoft.com
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                    verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap">
-                    5
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap ">
-                    <span class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Jane Cooper
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Photography
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    janemicrosoft.com
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                    verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap">
-                    5
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap ">
-                    <span class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Jane Cooper
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Photography
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    janemicrosoft.com
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                    verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap">
-                    5
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap ">
-                    <span class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Jane Cooper
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Photography
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    janemicrosoft.com
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                    verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap">
-                    5
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap ">
-                    <span class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md  text-red-500 ring-1 ring-red-600">
-                      Blocked
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Jane Cooper
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    Photography
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    janemicrosoft.com
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap flex items-center justify-center">
-                    verified <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                  </td>
-                  <td class="px-6 py-4 text-center whitespace-nowrap">
-                    5
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap ">
-                    <span class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </td>
-                </tr>
-                
-              </tbody>
-          </table>
-        </div>
-        <div class="mt-16 flex justify-center items-center">
-  
-          <app-pagination
-    [totalPages]="totalPages"
-    [currentPage]="currentPage"
-    (pageChanged)="onPageChanged($event)"
-  ></app-pagination>
-  
-        </div>
+<div class="min-h-fit p-8 pb-0">
+  <h1 class="text-2xl font-bold mb-4 exo-text">Instructors</h1>
+  <div class="bg-white rounded-lg drop-shadow-md p-6 mt-10">
+    <div class="flex items-center justify-end space-x-4 pb-6">
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg
+            class="h-5 w-5 text-gray-400 z-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16z"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-4.35-4.35"
+            ></path>
+          </svg>
+        </span>
+        <input
+          class="rounded-md pl-10 pr-4 py-1 drop-shadow-md text-gray-700 placeholder-gray-400 focus:ring-0 jost-text"
+          type="text"
+          placeholder="Search"
+          [(ngModel)]="search"
+          (keyup)="applySearch()"
+        />
       </div>
-  
-  </div> 
-  
+      <div class="flex items-center jost-text">
+        <p class="text-md font-semibold">Filter</p>
+        <select
+          class="ml-2 rounded-md border shadow-md border-gray-300 px-2 py-1 focus:ring-0"
+          [(ngModel)]="filter"
+          (change)="applyFilter()"
+        >
+          <option [ngValue]="null">All</option>
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Blocked</option>
+        </select>
+      </div>
+    </div>
+    <div class="overflow-x-auto" style="padding-bottom: 4.5rem">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr class="">
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Instructor Name
+            </th>
+
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Email
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Category Approved
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Course Uploaded
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Options
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200 poppins-text">
+          <tr *ngFor="let instructor of instructorDetails" class="text-center">
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ instructor.name | titlecase }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ instructor.email }}</td>
+            <td
+              class="px-6 py-4 whitespace-nowrap flex items-center justify-center"
+            >
+              {{ instructor.categories.length }}
+            </td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              {{ instructor.totalCourses }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span
+                *ngIf="instructor.activeStatus; else notActive"
+                class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md ring-1 ring-gray-600 text-green-800"
+              >
+                Active
+              </span>
+              <ng-template #notActive>
+                <span
+                  class="px-4 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-md text-red-500 ring-1 ring-red-600"
+                >
+                  Blocked
+                </span>
+              </ng-template>
+            </td>
+            <td
+              class="px-6 py-4 whitespace-nowrap text-clip text-sm font-medium cursor-pointer"
+            >
+              <div class="relative">
+                <button
+                  class="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  (click)="toggleDropdown(instructor._id)"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div
+                  *ngIf="dropdownOpen && instructor._id === currentInstructorId"
+                  class="absolute right-1 mt-2 w-48 bg-gray-100 rounded-md shadow-lg z-50"
+                >
+                  <ul class="">
+                    <li
+                      class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer"
+                      (click)="
+                        updateInstructor(
+                          instructor._id,
+                          !instructor.activeStatus
+                        )
+                      "
+                    >
+                      {{
+                        instructor.activeStatus == true ? "Block" : "Unblock"
+                      }}
+                    </li>
+                    <li
+                      *ngIf="instructor.categories.length > 0"
+                      (click)="openModal(instructor.categories, instructor._id)"
+                      class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer"
+                    >
+                      view categories
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-center items-center">
+      <app-pagination
+        [totalPages]="totalPages"
+        [currentPage]="currentPage"
+        (pageChanged)="onPageChanged($event)"
+      ></app-pagination>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="isVisible$ | async"
+  class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60"
+>
+  <app-approved-categories
+    [categories]="selecteddCategories!"
+    [userId]="updateUserId!"
+    (modalClosed)="closeModal()"
+    (updateData)="updateData($event)"
+  >
+  </app-approved-categories>
+</div>

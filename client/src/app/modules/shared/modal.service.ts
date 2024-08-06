@@ -10,7 +10,7 @@ export class ModalService {
   private isUpdateVisible = new BehaviorSubject<boolean>(false);
   isNestedVisible$ = this.isNestedVisible.asObservable();
   isVisible$ = this.isVisible.asObservable();
-  isUpdateVisible$=this.isUpdateVisible.asObservable()
+  isUpdateVisible$ = this.isUpdateVisible.asObservable();
   constructor() {}
 
   openModal() {
@@ -32,13 +32,12 @@ export class ModalService {
     document.body.classList.remove('open-modal');
   }
 
-  openUpdateComponent(){
-    this.isUpdateVisible.next(true)
+  openUpdateComponent() {
+    this.isUpdateVisible.next(true);
   }
 
-  closeUpdateComponent(){
-    this.isUpdateVisible.next(false)
+  closeUpdateComponent() {
+    this.isUpdateVisible.next(false);
     document.body.classList.remove('open-modal');
-
   }
 }
