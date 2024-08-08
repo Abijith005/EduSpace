@@ -11,7 +11,6 @@ export const consumeUserUpdate = async () => {
     channel.consume(queue, async (msg) => {
       if (msg != null) {
         const message = JSON.parse(msg.content.toString());
-        console.log(query,update,'from atuthhthth');
         const { query, update } = message;
         await userModel.updateOne(query, update);
         channel.ack(msg);
