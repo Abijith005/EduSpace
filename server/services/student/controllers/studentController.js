@@ -1,3 +1,6 @@
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import jwtDecode from "../helpers/jwtDecode.js";
+import { sendUserUpdateTask } from "../rabbitmq/producers/userUpdateProducer.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 
 export const getAllStudents = async (req, res) => {
@@ -53,6 +56,28 @@ export const updateStudentStatus = async (req, res) => {
     res
       .status(200)
       .json({ success: true, message: "Student updated successfully" });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const updateStudentProfile = (req, res) => {
+  try {
+    console.log("reached");
+    const { name, password, deletedFile } = req.body;
+    console.log(req.file);
+    const token = req.headers.authorization.split(" ")[1];
+    const userId = jwtDecode(token).id;
+    const update = {};
+    const query = {};
+    // sendUserUpdateTask("user_update_queue", { query, update });
+
+    const deleteCommand = new DeleteObjectCommand({
+      Key: deletedFile.key,
+    });
   } catch (error) {
     console.log("Error \n", error);
     return res
