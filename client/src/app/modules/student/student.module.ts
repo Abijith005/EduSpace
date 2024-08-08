@@ -22,6 +22,7 @@ import { NotesComponent } from './components/notes/notes.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DiscussionsComponent } from './components/discussions/discussions.component';
 import { MeetingComponent } from '../shared/components/meeting/meeting.component';
+import { StudentProfileComponent } from './components/student-profile/student-profile.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { MeetingComponent } from '../shared/components/meeting/meeting.component
     NotesComponent,
     DiscussionsComponent,
     MeetingComponent,
+    StudentProfileComponent,
   ],
   imports: [
     CommonModule,

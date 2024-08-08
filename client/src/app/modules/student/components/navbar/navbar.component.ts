@@ -21,9 +21,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   navItems = [
     { title: 'Home', link: './' },
     { title: 'Courses', link: './course' },
-    { title: 'Instructors', link: './payment' },
     { title: 'Discussions', link: './discussions' },
     { title: 'Subscriptions', link: './subscriptions' },
+    { title: 'Meetings', link: './meeting' },
   ];
 
   constructor(
@@ -56,11 +56,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.currentUrl = event.urlAfterRedirects;
       });
 
-    this.userInfo$
-      .pipe(take(1))
-      .subscribe((userInfo) => {
-        this._socketService.online(userInfo.userId);
-      });
+    this.userInfo$.pipe(take(1)).subscribe((userInfo) => {
+      this._socketService.online(userInfo.userId);
+    });
   }
 
   isActiveLink(link: string) {

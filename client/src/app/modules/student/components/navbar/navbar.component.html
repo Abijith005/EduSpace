@@ -13,8 +13,9 @@
     <div class="flex justify-around items-center space-x-2">
       <ng-container *ngIf="userInfo$ | async as userInfo">
         <a class="text-black">{{ userInfo.name | titlecase }}</a>
+        <!-- (click)="logout()" -->
         <img
-        (click)="logout()"
+        [routerLink]="'./profile'"
           [src]="userInfo.profilePic || 'images/user.png'"
           class="h-7 w-7 rounded-full"
           alt="User Profile Picture"

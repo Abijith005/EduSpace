@@ -142,7 +142,6 @@
 
     <div class="flex justify-center w-full mt-4">
       <div class="flex flex-wrap justify-center gap-4">
-        
         <div
           *ngFor="let participant of participants"
           class="remote-video-container"
@@ -153,7 +152,6 @@
             class="w-full h-48 object-cover rounded-md shadow-md"
           ></video>
         </div>
-       
       </div>
     </div>
 
@@ -163,14 +161,26 @@
         (click)="toggleCamera()"
         class="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600"
       >
-        <i class="fas fa-video flex items-center justify-center w-7 h-7"></i>
+        <i
+          class=" fas flex items-center justify-center w-7 h-7"
+          [ngClass]="{
+            'fa-video': cameraEnabled,
+            'fa-video-slash': !cameraEnabled
+          }"
+          [title]="cameraEnabled ? 'Camera On' : 'Camera Off'"
+        ></i>
       </button>
       <button
         (click)="toggleMic()"
         class="bg-green-500 text-white p-2 rounded-full hover:bg-green-600"
       >
         <i
-          class="fas fa-microphone flex items-center justify-center w-7 h-7"
+          class="fas flex items-center justify-center w-7 h-7"
+          [ngClass]="{
+            'fa-microphone': microPhoneEnabled,
+            'fa-microphone-slash': !microPhoneEnabled
+          }"
+          [title]="microPhoneEnabled ? 'Microphone On' : 'Microphone Off'"
         ></i>
       </button>
       <button

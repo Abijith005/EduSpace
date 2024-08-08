@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { AuthState } from '../../../../store/auth/auth.state';
 import { selectUserInfo } from '../../../../store/auth/auth.selector';
 import { Subject, takeUntil } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 declare const Peer: any;
 
 @Component({
@@ -31,8 +30,7 @@ export class MeetingComponent implements OnInit {
   constructor(
     private socketService: SocketService,
     private _toasterService: ToasterService,
-    private _store: Store<{ user: AuthState }>,
-    private _http: HttpClient
+    private _store: Store<{ user: AuthState }>
   ) {}
 
   isVisible = false;
@@ -58,28 +56,33 @@ export class MeetingComponent implements OnInit {
   }
 
   initializePeer() {
-    this.peer = new Peer(undefined, {
-      host: 'rtc.kkweb.online', // Your server host
-      port: 5070, // Make sure this is correct
-      path: '/peerjs', // Correct path, ensure there's no duplication
-      secure: true, // Use true for HTTPS
-    });
-
     // this.peer = new Peer(undefined, {
-    //   host: 'https://rtc.kkweb.online',
+    //   host: 'localhost',
     //   port: 5070,
     //   path: '/peerjs',
-    //   secure: true, // Set to true if using HTTPS
+    //   secure: false, // Set to true if using HTTPS
     // });
+
+    this.peer = new Peer(null, {
+      host: 'rtc.kkweb.online',
+      port: 443,
+      path: '/peerjs',
+      secure: true,
+      debug: 1,
+    });
 
     this.peer.on('open', (id: string) => {
       this.userPeerId = id;
     });
 
     this.peer.on('call', (call: any) => {
+      console.log('new call coming');
+
       this.getUserMedia({ video: true, audio: true })
         .then((stream) => {
           call.answer(stream);
+          console.log('answered call');
+
           call.on('stream', (remoteStream: MediaStream) => {
             this.addRemoteStream(call.peer, remoteStream);
           });
@@ -97,6 +100,13 @@ export class MeetingComponent implements OnInit {
       return;
     }
 
+    if (this.peer&&this.peer.destroyed) {
+      console.log('joining room peer not present',this.peer);
+      
+      this.initializePeer();
+      console.log('joining room peer not present,created new one',this.peer);
+    }
+
     try {
       this.isMeetingOpen = true;
       const stream = await this.getUserMedia({ video: true, audio: true });
@@ -106,7 +116,9 @@ export class MeetingComponent implements OnInit {
       this.socket.emit('join-room', this.roomId, this.userPeerId);
 
       this.socket.on('user-connected', (userId: string) => {
-        this.connectToNewUser(userId, stream);
+        if (userId != this.userPeerId) {
+          this.connectToNewUser(userId, stream);
+        }
       });
 
       this.socket.on('user-disconnected', (userId: string) => {
@@ -147,9 +159,14 @@ export class MeetingComponent implements OnInit {
   }
 
   removeParticipant(userId: string) {
-    this.participants = this.participants.filter(
-      (participant) => participant.id !== userId
+    const index = this.participants.findIndex(
+      (participant) => participant.id === userId
     );
+
+    if (index !== -1) {
+      this.participants.splice(index, 1);
+    }
+
     const videoElement = document.getElementById(`video-${userId}`);
     if (videoElement) {
       videoElement.remove();
@@ -215,38 +232,53 @@ export class MeetingComponent implements OnInit {
 
   toggleCamera() {
     this.cameraEnabled = !this.cameraEnabled;
-    this.localVideo.nativeElement.srcObject
-      .getVideoTracks()
-      .forEach((track: MediaStreamTrack) => {
-        track.enabled = this.cameraEnabled;
-      });
+    const videoTracks =
+      this.localVideo.nativeElement.srcObject.getVideoTracks() as MediaStreamTrack[];
+
+    videoTracks.forEach((track: MediaStreamTrack) => {
+      track.enabled = this.cameraEnabled;
+    });
   }
 
   toggleMic() {
     this.microPhoneEnabled = !this.microPhoneEnabled;
-    this.localVideo.nativeElement.srcObject
-      .getAudioTracks()
-      .forEach((track: MediaStreamTrack) => {
-        track.enabled = this.microPhoneEnabled;
-      });
+    const audioTracks =
+      this.localVideo.nativeElement.srcObject.getAudioTracks() as MediaStreamTrack[];
+
+    audioTracks.forEach((track: MediaStreamTrack) => {
+      track.enabled = this.microPhoneEnabled;
+    });
   }
 
   exitCall() {
     // Stop all media tracks
+    console.log('exited from calll111111111!!!!!!!!!!!!!!!!!!!!!!!!!');
+
     const stream = this.localVideo.nativeElement.srcObject as MediaStream;
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
 
     // Close all peer connections
-    this.peer.destroy();
+    if (this.peer) {
+      console.log('peer destroying', this.peer);
+      this.peer.disconnect();
+      this.peer.destroy();
 
-    // Emit an event to the server to notify others
-    this.socket.emit('leave-room', this.roomId, this.userPeerId);
+      console.log('peer destroyed', this.peer);
+    }
+
+    // Remove socket event listeners
+    this.socket.off('user-connected');
+    this.socket.off('user-disconnected');
+    this.socket.off('meeting-ended');
 
     // Reset the state
     this.participants = [];
     this.isMeetingOpen = false;
+
+    // Emit an event to the server to notify others
+    this.socket.emit('leave-room', this.roomId, this.userPeerId);
 
     // Navigate away or update UI
     this._toasterService.showSuccess('You have left the call.');

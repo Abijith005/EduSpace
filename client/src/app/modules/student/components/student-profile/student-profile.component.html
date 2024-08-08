@@ -1,0 +1,100 @@
+<div
+  class="flex flex-col items-center justify-center mt-12"
+  style="height: calc(100vh - 4.09rem)"
+>
+  <div
+    class="bg-gray-50 p-8 rounded-lg shadow-lg w-full max-w-4xl border-solid"
+  >
+    <div class="flex items-center mb-12 justify-between">
+      <div class="flex items-center">
+        <input
+          type="file"
+          accept="image/*"
+          #fileInput
+          (change)="onFileSelected($event)"
+          hidden
+        />
+        <img
+          class="w-16 h-16 rounded-full mr-4"
+          [src]="
+            updatedProfilePic ? (updatedProfilePic | objectUrl) : profilePic
+          "
+          alt="Avatar"
+          (click)="fileInput.click()"
+        />
+        <div>
+          <h2 class="font-semibold exo-text">{{ userName }}</h2>
+          <p class="text-gray-600 text-sm exo-text">{{ email }}</p>
+        </div>
+      </div>
+      <button
+        class="px-4 py-1 text-xs leading-5 font-light rounded-md ring-1 ring-blue-600 hover:bg-blue-700 hover:text-white text-blue-800 exo-text"
+        (click)="changeUserProfile()"
+      >
+        Update
+      </button>
+    </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-16">
+        <div>
+          <label class="block text-gray-700 text-sm jost-text">Name</label>
+          <input
+            type="text"
+            [value]="userName"
+            (keyup)="onNameChange($event)"
+            name="userName"
+            placeholder="Your Name"
+            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
+          />
+        </div>
+      </div>
+
+    <div class="flex items-center mb-8 justify-between">
+      <div>
+        <h2 class="font-semibold exo-text">Change Password</h2>
+      </div>
+      <button
+        type="submit"
+        (click)="changePassword()"
+        class="px-4 py-1 text-xs leading-5 font-light rounded-md ring-1 ring-blue-600 hover:bg-blue-700 hover:text-white text-blue-800 exo-text"
+      >
+        Update
+      </button>
+    </div>
+    <form>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-8">
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm jost-text"
+            >Old Password</label
+          >
+          <input
+            type="text"
+            placeholder="Old Password"
+            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
+          />
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-8">
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm jost-text"
+            >New Password</label
+          >
+          <input
+            type="text"
+            placeholder="New Password"
+            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 poppins-text text-sm jost-text"
+            >Confirm Password</label
+          >
+          <input
+            type="text"
+            placeholder="Confirm Password"
+            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

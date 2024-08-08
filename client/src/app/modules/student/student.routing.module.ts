@@ -12,6 +12,7 @@ import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';
 import { DiscussionsComponent } from './components/discussions/discussions.component';
 import { MeetingComponent } from '../shared/components/meeting/meeting.component';
+import { StudentProfileComponent } from './components/student-profile/student-profile.component';
 const routes: Routes = [
   {
     path: '',
@@ -40,6 +41,7 @@ const routes: Routes = [
       },
       { path: 'discussions', component: DiscussionsComponent },
       { path: 'meeting', component: MeetingComponent },
+      { path: 'profile', component: StudentProfileComponent },
     ],
   },
 ];

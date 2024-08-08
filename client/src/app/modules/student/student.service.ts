@@ -74,4 +74,11 @@ export class StudentService {
       `/v1/course/manageCourse/subscriptions/all`
     );
   }
+
+  updateUserInfo(data: FormData) {
+    return this._http.put<IgenreralResponse>(
+      '/v1/student/studentManage/profile',
+      data
+    );
+  }
 }
