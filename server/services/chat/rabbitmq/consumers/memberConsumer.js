@@ -28,8 +28,7 @@ const processMessage = async (data) => {
   try {
     const { user_id, course_id } = data;
     const community = await communityModel.findOne({ course_id: course_id });
-
-    const result = await membersModel.findOneAndUpdate(
+    await membersModel.findOneAndUpdate(
       { userId: user_id, "communities.communityId": { $ne: community._id } },
       {
         $addToSet: {

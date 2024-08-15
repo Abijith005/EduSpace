@@ -95,7 +95,7 @@ export const userLogin = async (req, res) => {
           role: user.role,
         });
         const userInfo = {
-          _id:user._id,
+          _id: user._id,
           name: user.name || "",
           email: user.email,
           profilePic: user.profilePic || "",
@@ -267,7 +267,15 @@ export const forgotPasswordverifyOtp = async (req, res) => {
 
 export const updatePassword = async (req, res) => {
   try {
-    const { password, email } = req.body;
+    const { oldPassword, password, email } = req.body;
+    console.log(oldPassword, password, email);
+    const user = await userModel.findOne({ email: email });
+    if (user?.socialId) {
+      return res.status(403).json({
+        success: false,
+        message: `Social login users can't change password.`,
+      });
+    }
     const validate = userCredentialsValidation({ password, email });
     if (!validate.isValid) {
       return res
@@ -275,11 +283,27 @@ export const updatePassword = async (req, res) => {
         .json({ success: false, message: validate.message });
     }
 
+    const verifyPassword = await bcrypt.compare(oldPassword, user.password);
+
+    if (!verifyPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect old password",
+      });
+    }
+
+    const matchPassword = await bcrypt.compare(password, user.password);
+
+    if (matchPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password can't be the same as the old one.",
+      });
+    }
+
     const hashedPassword = await hashPassword(password);
-    await userModel.updateOne(
-      { email: email },
-      { $set: { password: hashedPassword } }
-    );
+    user.password = hashedPassword
+    await user.save();
     res
       .status(200)
       .json({ success: true, message: "Password updated successfully" });

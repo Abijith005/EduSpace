@@ -21,8 +21,14 @@ const userSchema = new mongoose.Schema(
       required: [true, "Role is required"],
     },
     profilePic: {
-      type: String,
-      required: false,
+      key: {
+        type: String,
+        required: false,
+      },
+      url: {
+        type: String,
+        required: false,
+      },
     },
     socialId: {
       type: String,
