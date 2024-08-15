@@ -5,6 +5,26 @@ import { IcourseDetails } from '../../../../interfaces/courseDetails';
 import { ModalService } from '../../../shared/modal.service';
 import { IcategoryData } from '../../../../interfaces/categoryData';
 import { IfilterValues } from '../../../../interfaces/filterValues';
+interface IcourseData {
+  _id: string;
+  title: string;
+  about: string;
+  category_id: {
+    _id: string;
+    title: string;
+  };
+  contents: string[];
+  courseLanguage: string;
+  courseLevel: string;
+  price: number;
+  processingStatus: ProcessingStatus;
+}
+
+enum ProcessingStatus {
+  Uploading = 'uploading',
+  Updating = 'updating',
+  Completed = 'completed',
+}
 
 @Component({
   selector: 'app-teacher-course-manage',
@@ -89,6 +109,17 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
   closeUpdateModal() {
     this._modalService.closeUpdateComponent();
   }
+
+  updateCourseData(data: IcourseData) {
+    const courseIndex = this.courses.findIndex((e) => e._id === data._id);
+    if (courseIndex !== -1) {
+      this.courses[courseIndex] = {
+        ...this.courses[courseIndex],
+        ...data
+      };
+    }
+  }
+  
 
   onPageChanged(page: number) {
     this.currentPage = page;

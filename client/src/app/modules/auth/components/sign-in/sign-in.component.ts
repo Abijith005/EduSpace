@@ -4,9 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
-import {
-  SocialAuthService,
-} from '@abacritt/angularx-social-login';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { ToasterService } from '../../../shared/toaster.service';
 import { IuserInformation } from '../../../../interfaces/userInformation';
 import { Store } from '@ngrx/store';
@@ -34,7 +32,7 @@ export class SignInComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _toasterService: ToasterService,
     private _socialAuthService: SocialAuthService,
-    private _store:Store<AuthState>
+    private _store: Store<AuthState>
   ) {}
 
   ngOnInit(): void {
@@ -52,16 +50,16 @@ export class SignInComponent implements OnInit, OnDestroy {
     this._socialAuthService.authState
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        if (res ) {
+        if (res) {
           this.socialLogin = true;
           const data = {
             name: res.name!,
             email: res.email,
-            profilePic: res.photoUrl,
+            profilePic: { key: '', url: res.photoUrl },
             socialId: res.id,
           };
           this.handleGoogleSignIn(data);
-        } 
+        }
       });
   }
 
@@ -71,12 +69,11 @@ export class SignInComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
-          
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
-          console.log(res.userInfo,'from login');
-          
-          this._store.dispatch(userLogin({userDatas:res.userInfo}))
+          console.log(res.userInfo, 'from login');
+
+          this._store.dispatch(userLogin({ userDatas: res.userInfo }));
           this._toasterService.showSuccess(res.message);
           this._router.navigate([`./${res.userInfo.role}`]);
         } else {
@@ -88,7 +85,6 @@ export class SignInComponent implements OnInit, OnDestroy {
   get formControls() {
     return this.loginForm.controls;
   }
-
 
   showPassword() {
     this.passwordVisibilty = !this.passwordVisibilty;
@@ -106,14 +102,14 @@ export class SignInComponent implements OnInit, OnDestroy {
       .userLogin(data)
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
-        if (res.success) {          
-          console.log(res,'logindetails');
-          
+        if (res.success) {
+          console.log(res, 'logindetails');
+
           localStorage.setItem('accessToken', res.accessToken!);
           localStorage.setItem('refreshToken', res.refreshToken!);
-          console.log(res.userInfo,'fsdffdfd');
-          
-          this._store.dispatch(userLogin({userDatas:res.userInfo}))
+          console.log(res.userInfo, 'fsdffdfd');
+
+          this._store.dispatch(userLogin({ userDatas: res.userInfo }));
           this._toasterService.showSuccess(res.message);
           this._router.navigate([`/${res.userInfo.role}`]);
         } else {

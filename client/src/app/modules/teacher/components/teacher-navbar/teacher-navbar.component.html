@@ -91,7 +91,7 @@
             <span class="mr-4">{{ userInfo.name | titlecase }}</span>
             <img
               (click)="logout()"
-              [src]="userInfo.profilePic || 'images/user.png'"
+              [src]="userInfo.profilePic.url || 'images/user.png'"
               class="h-7 w-7 rounded-full"
               alt="User Profile Picture"
             />

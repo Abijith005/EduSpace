@@ -8,7 +8,6 @@ export class ToasterService {
   constructor(private _ngToaster: NgToastService) {}
   toasterFunction(data: { success: boolean; message: string }) {
     if (data.success) {
-      console.log('toaster works');
       this._ngToaster.success({
         duration: 2000,
         detail: data.message,

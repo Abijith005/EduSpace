@@ -57,11 +57,22 @@
       *ngFor="let course of courses"
       class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
     >
-      <img
-        [src]="course.previewImage[0].url"
-        alt="Course Image 3"
-        class="rounded-t-lg w-full h-72 object-cover"
-      />
+      <ng-container
+        *ngIf="course.processingStatus === 'completed'; else showLoading"
+        ><img
+          [src]="course.previewImage[0].url"
+          alt="Course Image 3"
+          class="rounded-t-lg w-full h-72 object-cover"
+        />
+      </ng-container>
+      <ng-template #showLoading>
+        <img
+          src="/images/loading.gif"
+          alt="Course Image 3"
+          class="rounded-t-lg w-full h-72 object-cover"
+        />
+      </ng-template>
+
       <span
         class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
         >{{ course.category_id.title | titlecase }}</span
@@ -96,7 +107,11 @@
           >
           <span class="text-green-500 font-bold jost-text">Free</span>
         </div>
-        <button (click)="openUpdateModal(course)" class="exo-text font-bold">
+        <button
+          *ngIf="course.processingStatus === 'completed'"
+          (click)="openUpdateModal(course)"
+          class="exo-text font-bold"
+        >
           View More
         </button>
       </div>
@@ -130,5 +145,6 @@
     [categories]="categoires"
     [courseDataInput]="updateData"
     (modalClosed)="closeUpdateModal()"
+    (courseDataUpdated)="updateCourseData($event)"
   ></app-teacher-update-course>
 </div>

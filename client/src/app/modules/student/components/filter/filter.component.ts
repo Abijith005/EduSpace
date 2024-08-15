@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
   NgZone,
   OnDestroy,
   OnInit,
@@ -11,6 +12,7 @@ import {
 import { StudentService } from '../../student.service';
 import { Subject, takeUntil } from 'rxjs';
 import { IfilterSelectionItems } from '../../../../interfaces/filterSelectionList';
+import { IcategoryData } from '../../../../interfaces/categoryData';
 
 interface filterValues {
   searchKey: string;
@@ -26,6 +28,7 @@ interface filterValues {
 })
 export class FilterComponent implements OnInit, OnDestroy {
   @Output() onApplyFilter = new EventEmitter<filterValues>();
+  @Input() selectedCategoryId: string | null = null;
 
   searchKey = '';
   searchInstructor = '';
@@ -62,10 +65,16 @@ export class FilterComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         const categoryData = res.data.categoryData;
-        this.courseCategories = categoryData.map((item) => ({
-          ...item,
-          selected: false,
-        }));
+        this.courseCategories = categoryData.map((item) => {
+          let selected = false;
+          if (item._id == this.selectedCategoryId) {
+            selected = true;
+          }
+          return {
+            ...item,
+            selected,
+          };
+        });
 
         const ratingsData = res.data.ratingData;
 
@@ -162,7 +171,7 @@ export class FilterComponent implements OnInit, OnDestroy {
         }
         return acc;
       },
-      { min: Infinity, max: -Infinity } 
+      { min: Infinity, max: -Infinity }
     );
 
     const finalRatingRange = {

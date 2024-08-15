@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { StudentService } from '../../student.service';
 import { IcategoryResponse } from '../../../../interfaces/categoryResponse';
+import { IcategoryData } from '../../../../interfaces/categoryData';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-student-home',
@@ -13,10 +15,13 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
 
   categories!: IcategoryResponse[];
 
-  constructor(private _studentService: StudentService) {}
+  constructor(
+    private _studentService: StudentService,
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    
     this._studentService
       .getAllCategories()
       .pipe(takeUntil(this._ngUnsubscribe$))
@@ -30,6 +35,13 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
       top: 0,
       left: 0,
       behavior: 'smooth',
+    });
+  }
+
+  navigateToCourse(category: IcategoryData) {    
+    this._router.navigate(['./course'], {
+      relativeTo: this._activatedRoute,
+      state: { category },
     });
   }
 

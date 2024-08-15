@@ -7,12 +7,13 @@ import { StudentCourseViewComponent } from './components/student-course-view/stu
 import { StudentAboutCourseComponent } from './components/student-about-course/student-about-course.component';
 import { StudentViewReviewComponent } from './components/student-view-review/student-view-review.component';
 import { StudentSubscriptionComponent } from './components/student-subscription/student-subscription.component';
-import { CourseComponent } from './components/course/course.component';
+import { CourseComponent } from './components/discussions/course/course.component';
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';
 import { DiscussionsComponent } from './components/discussions/discussions.component';
 import { MeetingComponent } from '../shared/components/meeting/meeting.component';
 import { StudentProfileComponent } from './components/student-profile/student-profile.component';
+import { RatingComponent } from './components/rating/rating.component';
 const routes: Routes = [
   {
     path: '',
@@ -42,6 +43,7 @@ const routes: Routes = [
       { path: 'discussions', component: DiscussionsComponent },
       { path: 'meeting', component: MeetingComponent },
       { path: 'profile', component: StudentProfileComponent },
+      { path: 'rating', component: RatingComponent },
     ],
   },
 ];

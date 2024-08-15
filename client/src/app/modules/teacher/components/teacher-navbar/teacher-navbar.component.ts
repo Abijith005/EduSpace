@@ -14,7 +14,7 @@ import { userLogOut } from '../../../../store/auth/auth.actions';
 })
 export class TeacherNavbarComponent implements OnInit {
   selectedItem = 0;
-  userInfo$!: Observable<{ name: string; profilePic: string }>;
+  userInfo$!: Observable<{ name: string; profilePic: {key:string,url:string} }>;
 
   constructor(
     private _store: Store<{ auth: AuthState }>,

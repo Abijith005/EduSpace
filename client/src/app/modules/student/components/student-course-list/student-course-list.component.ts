@@ -3,6 +3,8 @@ import { StudentService } from '../../student.service';
 import { IcourseDetails } from '../../../../interfaces/courseDetails';
 import { Subject, takeUntil } from 'rxjs';
 import { IfilterValues } from '../../../../interfaces/filterValues';
+import { Router } from '@angular/router';
+import { IcategoryData } from '../../../../interfaces/categoryData';
 
 @Component({
   selector: 'app-student-course-list',
@@ -22,11 +24,16 @@ export class StudentCourseListComponent implements OnInit {
   };
   limit = 6;
   courses!: IcourseDetails[];
+  selectedCategory: IcategoryData | null = null;
 
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(private _studentService: StudentService) {}
 
   ngOnInit(): void {
+    this.selectedCategory = history.state.category;
+    if (this.selectedCategory && this.selectedCategory?._id) {
+      this.filter.category_ids.push(this.selectedCategory._id!);
+    }
     this.getAllCourses();
   }
 

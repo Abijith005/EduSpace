@@ -17,7 +17,9 @@
         <img
           class="w-16 h-16 rounded-full mr-4"
           [src]="
-            updatedProfilePic ? (updatedProfilePic | objectUrl) : profilePic
+            updatedProfilePic
+              ? (updatedProfilePic | objectUrl)
+              : profilePic?.url || '/images/user.png'
           "
           alt="Avatar"
           (click)="fileInput.click()"
@@ -34,19 +36,19 @@
         Update
       </button>
     </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-16">
-        <div>
-          <label class="block text-gray-700 text-sm jost-text">Name</label>
-          <input
-            type="text"
-            [value]="userName"
-            (keyup)="onNameChange($event)"
-            name="userName"
-            placeholder="Your Name"
-            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
-          />
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-16">
+      <div>
+        <label class="block text-gray-700 text-sm jost-text">Name</label>
+        <input
+          type="text"
+          [value]="userName"
+          (keyup)="onNameChange($event)"
+          name="userName"
+          placeholder="Your Name"
+          class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
+        />
       </div>
+    </div>
 
     <div class="flex items-center mb-8 justify-between">
       <div>
@@ -69,6 +71,8 @@
           <input
             type="text"
             placeholder="Old Password"
+            name="oldPassword"
+            [(ngModel)]="oldPassword"
             class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
           />
         </div>
@@ -81,6 +85,8 @@
           <input
             type="text"
             placeholder="New Password"
+            name="updatedPassword"
+            [(ngModel)]="updatedPassword"
             class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
           />
         </div>
@@ -90,7 +96,9 @@
           >
           <input
             type="text"
+            name="confirmPassword"
             placeholder="Confirm Password"
+            [(ngModel)]="confirmPassword"
             class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
           />
         </div>

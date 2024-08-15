@@ -28,7 +28,6 @@ import { ApprovedCategoriesComponent } from './components/approved-categories/ap
     PermissionManagementComponent,
     ListCetificatesComponent,
     ApprovedCategoriesComponent,
-    // RemoveTimestampPipe
   ],
   imports: [
     CommonModule,

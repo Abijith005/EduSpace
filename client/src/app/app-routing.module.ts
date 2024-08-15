@@ -8,7 +8,6 @@ import { MeetingComponent } from './modules/shared/components/meeting/meeting.co
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth' },
-  // { path: '', component: MeetingComponent },
 
   {
     path: 'auth',

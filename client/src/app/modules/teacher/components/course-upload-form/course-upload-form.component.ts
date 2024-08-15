@@ -17,10 +17,127 @@ import { ToasterService } from '../../../shared/toaster.service';
   styleUrl: './course-upload-form.component.css',
 })
 export class CourseUploadFormComponent implements OnInit, OnDestroy {
-  @Input() categories!: IcategoryData[]
+  @Input() categories!: IcategoryData[];
   @Output() modalClosed = new EventEmitter();
   courseDetailsForm!: FormGroup;
-  isSubmitted: boolean = false;;
+  isSubmitted: boolean = false;
+  newContent: string = '';
+  contents: string[] = [];
+  step: number = 2;
+  languageList = [
+    'Afrikaans',
+    'Akan',
+    'Albanian',
+    'Amharic',
+    'Arabic',
+    'Armenian',
+    'Azerbaijani',
+    'Basque',
+    'Belarusian',
+    'Bengali',
+    'Bosnian',
+    'Bulgarian',
+    'Burmese',
+    'Catalan',
+    'Cebuano',
+    'Chichewa',
+    'Chinese (Simplified)',
+    'Chinese (Traditional)',
+    'Corsican',
+    'Croatian',
+    'Czech',
+    'Danish',
+    'Dutch',
+    'English',
+    'Esperanto',
+    'Estonian',
+    'Ewe',
+    'Finnish',
+    'French',
+    'Frisian',
+    'Galician',
+    'Georgian',
+    'German',
+    'Greek',
+    'Guarani',
+    'Gujarati',
+    'Haitian Creole',
+    'Hausa',
+    'Hawaiian',
+    'Hebrew',
+    'Hindi',
+    'Hmong',
+    'Hungarian',
+    'Icelandic',
+    'Igbo',
+    'Indonesian',
+    'Irish',
+    'Italian',
+    'Japanese',
+    'Javanese',
+    'Kannada',
+    'Kazakh',
+    'Khmer',
+    'Kinyarwanda',
+    'Korean',
+    'Kurdish (Kurmanji)',
+    'Kyrgyz',
+    'Lao',
+    'Latin',
+    'Latvian',
+    'Lithuanian',
+    'Luxembourgish',
+    'Macedonian',
+    'Malagasy',
+    'Malay',
+    'Malayalam',
+    'Maltese',
+    'Maori',
+    'Marathi',
+    'Mongolian',
+    'Nepali',
+    'Norwegian',
+    'Nyanja',
+    'Odia',
+    'Pashto',
+    'Persian',
+    'Polish',
+    'Portuguese',
+    'Punjabi',
+    'Romanian',
+    'Russian',
+    'Samoan',
+    'Scots Gaelic',
+    'Serbian',
+    'Sesotho',
+    'Shona',
+    'Sindhi',
+    'Sinhala',
+    'Slovak',
+    'Slovenian',
+    'Somali',
+    'Spanish',
+    'Sundanese',
+    'Swahili',
+    'Swedish',
+    'Tagalog',
+    'Tajik',
+    'Tamil',
+    'Tatar',
+    'Telugu',
+    'Thai',
+    'Turkish',
+    'Ukrainian',
+    'Urdu',
+    'Uzbek',
+    'Vietnamese',
+    'Welsh',
+    'Xhosa',
+    'Yiddish',
+    'Yoruba',
+    'Zulu',
+  ];
+  levelList = ['Beginner', 'Intermediate', 'Advanced'];
   previewVideoFiles: File[] = [];
   previewImageFiles: File[] = [];
   videoFiles: File[] = [];
@@ -42,11 +159,41 @@ export class CourseUploadFormComponent implements OnInit, OnDestroy {
         '',
         [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)],
       ],
+      courseLanguage: ['', [Validators.required]],
+      courseLevel: ['', [Validators.required]],
+      content: [''],
     });
   }
 
-  get formContols() {
+  get formControls() {
     return this.courseDetailsForm.controls;
+  }
+
+  addContent() {
+    if (this.newContent.trim()) {
+      console.log('new content added');
+
+      this.contents.unshift(this.newContent.trim());
+      this.newContent = '';
+    }
+  }
+
+  removeContent(index: number) {
+    this.contents.splice(index, 1);
+  }
+  nextStep() {
+    if (this.contents.length < 3) {
+      this.formControls['content'].setErrors({ required: true });
+    }
+    if (this.step === 1 && this.courseDetailsForm.invalid) {
+      this.isSubmitted = true;
+      return;
+    }
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
   }
 
   onFileChange(event: Event, fileCategory: string) {
@@ -113,9 +260,21 @@ export class CourseUploadFormComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     formData.append('title', this.courseDetailsForm.get('title')?.value);
-    formData.append('category_id', this.courseDetailsForm.get('category')?.value);
+    formData.append(
+      'category_id',
+      this.courseDetailsForm.get('category')?.value
+    );
     formData.append('about', this.courseDetailsForm.get('about')?.value);
     formData.append('price', this.courseDetailsForm.get('price')?.value);
+    formData.append('contents', JSON.stringify(this.contents));
+    formData.append(
+      'courseLanguage',
+      this.courseDetailsForm.get('courseLanguage')?.value
+    );
+    formData.append(
+      'courseLevel',
+      this.courseDetailsForm.get('courseLevel')?.value
+    );
 
     this.previewVideoFiles.forEach((file: File) => {
       formData.append('previewVideo', file);

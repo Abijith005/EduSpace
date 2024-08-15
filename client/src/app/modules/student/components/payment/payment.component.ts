@@ -16,6 +16,7 @@ import { WindowRefService } from '../../window-ref.service';
 import { Subject, takeUntil } from 'rxjs';
 import { environments } from '../../../../../environments/environments';
 import { ToasterService } from '../../../shared/toaster.service';
+import { ModalService } from '../../../shared/modal.service';
 
 @Component({
   selector: 'app-payment',
@@ -34,7 +35,8 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     private _paymentService: PaymentService,
     private _windRef: WindowRefService,
     private _toaster: ToasterService,
-    private _cdr: ChangeDetectorRef
+    private _cdr: ChangeDetectorRef,
+    private _modalService: ModalService
   ) {}
 
   ngOnInit(): void {}
@@ -163,8 +165,9 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         .pipe(takeUntil(this._ngUnsubscribe$))
         .subscribe((res) => {
           if (res.success) {
-            this._toaster.toasterFunction(res);
             this.closeModal();
+            this._toaster.toasterFunction(res);
+            this._modalService.openNestedModal();
           }
         });
     };

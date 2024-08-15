@@ -1,51 +1,43 @@
 <div class="flex justify-start mt-8">
-  <div>
+  <div class="w-8/12">
     <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
 
-    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+    <div
+      *ngFor="let review of reviews"
+      class="bg-white p-4 rounded-lg shadow-md mb-4 min-w-full"
+    >
       <div class="flex items-center mb-2">
         <img
           class="w-10 h-10 rounded-full mr-4"
-          src="https://via.placeholder.com/150"
+          [src]="review.subscriber.profilePic.url || '/images/user.png'"
           alt="User image"
         />
         <div>
-          <h3 class="text-sm font-semibold text-purple-600">Farah Morin</h3>
-          <p class="text-xs text-gray-500">lice</p>
+          <h3 class="text-sm font-semibold text-purple-600">
+            {{ review.subscriber.name }}
+          </h3>
         </div>
       </div>
       <p class="text-gray-800">
-        Montes, ornare purus vestibulum, eget nec sem velit. Pharetra dolor
-        auctor facilisis nunc condimentum orci massa.
+        {{ review.feedback }}
       </p>
       <div class="flex items-center justify-between mt-2">
         <div class="flex items-center">
-          <span class="text-yellow-500">★★★☆☆</span>
+          <!-- <span class="text-yellow-500">★★★☆☆</span> -->
+          <span *ngFor="let star of review.rating | ratingStar">
+            <i
+              [ngClass]="
+                star === 1
+                  ? 'fas fa-star'
+                  : star === 0.5
+                  ? 'fas fa-star-half-alt'
+                  : 'far fa-star'
+              "
+              class="text-yellow-300 text-xs mr-0.5"
+            ></i>
+          </span>
         </div>
-        <span class="text-sm text-gray-500">22.03.2021</span>
-      </div>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-      <div class="flex items-center mb-2">
-        <img
-          class="w-10 h-10 rounded-full mr-4"
-          src="https://via.placeholder.com/150"
-          alt="User image"
-        />
-        <div>
-          <h3 class="text-sm font-semibold text-purple-600">Darin Nguyen</h3>
-          <p class="text-xs text-gray-500">staking</p>
-        </div>
-      </div>
-      <p class="text-gray-800">
-        Faucibus eu condimentum maecenas sollicitudin vitae.
-      </p>
-      <div class="flex items-center justify-between mt-2">
-        <div class="flex items-center">
-          <span class="text-yellow-500">★★★★☆</span>
-        </div>
-        <span class="text-sm text-gray-500">22.03.2021</span>
+        <span class="text-sm text-gray-500">{{ review.createdAt | date }}</span>
       </div>
     </div>
   </div>

@@ -36,6 +36,7 @@
     <div>
       <button
         class="rounded-full border-2 border-gray-400 px-3 py-2 font-medium jost-text"
+        [routerLink]="'./course'"
       >
         All Categories
       </button>
@@ -46,6 +47,7 @@
       *ngFor="let category of categories"
       class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
       style="border-top: 0.1px solid #d1d5db"
+      (click)="navigateToCourse(category)"
     >
       <i
         [ngClass]="category.icon"
@@ -146,6 +148,7 @@
     <div>
       <button
         class="rounded-full px-3 py-2 border-2 border-gray-400 font-medium jost-text"
+        [routerLink]="'./course'"
       >
         All Courses
       </button>

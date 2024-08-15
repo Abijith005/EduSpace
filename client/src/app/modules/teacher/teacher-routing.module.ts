@@ -5,6 +5,7 @@ import { TeacherDashBoardComponent } from './components/teacher-dash-board/teach
 import { TeacherProfileComponent } from './components/teacher-profile/teacher-profile.component';
 import { TeacherCourseManageComponent } from './components/teacher-course-manage/teacher-course-manage.component';
 import { TeacherPaymentComponent } from './components/teacher-payment/teacher-payment.component';
+import { DiscussionsComponent } from '../student/components/discussions/discussions.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,9 @@ const routes: Routes = [
           { path: 'dashboard', component: TeacherDashBoardComponent },
           { path: 'course_manage', component: TeacherCourseManageComponent },
           { path: 'profile_manage', component: TeacherProfileComponent },
-          {path:'payment_manage',component:TeacherPaymentComponent}
+          {path:'payment_manage',component:TeacherPaymentComponent},
+          { path: 'discussions', component: DiscussionsComponent },
+
         ],
       },
     ],

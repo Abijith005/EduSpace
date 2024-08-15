@@ -63,8 +63,6 @@ export class TeacherService {
   }
 
   updateCourse(data: FormData, course_id: string) {
-    console.log(data);
-
     return this._http.put<IgenreralResponse>(
       `/v1/course/manageCourse/updateCourse/${course_id}`,
       data

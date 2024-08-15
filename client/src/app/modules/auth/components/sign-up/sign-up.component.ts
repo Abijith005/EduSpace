@@ -40,7 +40,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _activeRoute: ActivatedRoute,
     private _socialAuthService: SocialAuthService,
-    private _store:Store<AuthState>
+    private _store: Store<AuthState>
   ) {}
 
   ngOnInit(): void {
@@ -65,7 +65,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
           const data = {
             name: res.name!,
             email: res.email,
-            profilePic: res.photoUrl,
+            profilePic: { key: '', url: res.photoUrl },
             socialId: res.id,
             role: this.role,
           };
@@ -85,10 +85,10 @@ export class SignUpComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res.success) {
           console.log(res.userInfo);
-          
+
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
-          this._store.dispatch(userLogin({userDatas:res.userInfo}))
+          this._store.dispatch(userLogin({ userDatas: res.userInfo }));
           this._toasterService.showSuccess(res.message);
           this._router.navigate([`./${res.userInfo.role}`]);
         } else {

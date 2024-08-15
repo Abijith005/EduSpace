@@ -14,7 +14,11 @@ import { SocketService } from '../../../shared/socket.service';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  userInfo$!: Observable<{ name: string; profilePic: string; userId: string }>;
+  userInfo$!: Observable<{
+    name: string;
+    profilePic: { key: string; url: string };
+    userId: string;
+  }>;
   currentUrl = '';
   private _ngUnsubscribe = new Subject<void>();
 

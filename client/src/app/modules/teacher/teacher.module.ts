@@ -12,8 +12,7 @@ import { TeacherPaymentComponent } from './components/teacher-payment/teacher-pa
 import { CourseUploadFormComponent } from './components/course-upload-form/course-upload-form.component';
 import { TeacherCourseManageComponent } from './components/teacher-course-manage/teacher-course-manage.component';
 import { TeacherUpdateCourseComponent } from './components/teacher-update-course/teacher-update-course.component';
-
-
+import { FileNameExtractorPipe } from '../shared/pipes/file-name-extractor.pipe';
 
 @NgModule({
   declarations: [
@@ -25,10 +24,16 @@ import { TeacherUpdateCourseComponent } from './components/teacher-update-course
     TeacherPaymentComponent,
     CourseUploadFormComponent,
     TeacherUpdateCourseComponent,
-    
   ],
   imports: [
-    CommonModule,TeacherRoutingModule,FormsModule,ReactiveFormsModule,NgApexchartsModule,SharedModule
-  ]
+    CommonModule,
+    TeacherRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgApexchartsModule,
+    SharedModule,
+  ],
+  providers: [FileNameExtractorPipe], 
+
 })
-export class TeacherModule { }
+export class TeacherModule {}

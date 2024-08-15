@@ -3,7 +3,7 @@ export interface AuthState {
     _id?: string;
     name: string;
     email: string;
-    profilePic: string;
+    profilePic: { key: string; url: string };
     role: string;
   };
   resetPassword: {
