@@ -38,6 +38,24 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: [true, "About is required"],
     },
+    courseLevel: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced"],
+      required: [true, "Course level is required"],
+    },
+    courseLanguage: {
+      type: String,
+      required: [true, "Course language is required"],
+    },
+    contents: {
+      type: [String],
+      required: [true, "Contents is requied"],
+    },
+    processingStatus: {
+      type: String,
+      required: [true, "Status is required"],
+      enum: ["uploading", "updating", "completed"],
+    },
     previewImage: {
       type: [fileSchema],
     },
