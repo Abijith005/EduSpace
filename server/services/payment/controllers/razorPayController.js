@@ -1,9 +1,9 @@
-import razorpayInstance from "../config/razorpayConfig.js";
 import generateTransactionReceipt from "../helpers/generateTransactionId.js";
 import crypto from "crypto";
 import paymentModel from "../models/paymentModel.js";
 import jwtDecode from "../helpers/jwtDecode.js";
 import sendSubscriptionTaskToQueue from "../rabbitmq/producers/subscribeCourse.js";
+import { razorpayInstance } from "../config/razorpayConfig.js";
 
 export const createOrder = async (req, res) => {
   try {
@@ -44,10 +44,13 @@ export const verifyPayment = async (req, res) => {
       const token = req.headers.authorization.split(" ")[1];
       const user_id = jwtDecode(token).id;
       await paymentModel.create({
-        course_id,
-        receiver_id,
-        sender_id: user_id,
+        type: "purchase",
+        courseId: course_id,
+        receiverId: receiver_id,
+        senderId: user_id,
         amount,
+        paymentMethod: "razorpay",
+        transactionId: razorpay_payment_id,
       });
       const data = { user_id, course_id };
       await sendSubscriptionTaskToQueue("course_subscription", data);
