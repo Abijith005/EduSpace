@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AuthState } from '../../../../store/auth/auth.state';
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { selectUserInfo } from '../../../../store/auth/auth.selector';
 import { IuserInformation } from '../../../../interfaces/userInformation';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { userLogOut } from '../../../../store/auth/auth.actions';
 
 @Component({
@@ -13,8 +13,31 @@ import { userLogOut } from '../../../../store/auth/auth.actions';
   styleUrl: './teacher-navbar.component.css',
 })
 export class TeacherNavbarComponent implements OnInit {
-  selectedItem = 0;
-  userInfo$!: Observable<{ name: string; profilePic: string }>;
+  userInfo$!: Observable<{
+    name: string;
+    profilePic: { key: string; url: string };
+  }>;
+  navItems = [
+    {
+      title: 'Dashboard',
+      link: './',
+      icon: 'fas fa-home',
+    },
+    {
+      title: 'Courses',
+      link: 'course_manage',
+      icon: 'fas fa-book',
+    },
+    {
+      title: 'Discussions',
+      link: 'discussions',
+      icon: 'fas fa-comments',
+    },
+    { title: 'Wallet', link: 'wallet_manage', icon: 'fas fa-wallet' },
+    { title: 'Payments', link: 'payment_history', icon: 'fas fa-receipt' },
+    { title: 'Profile', link: 'profile_manage', icon: 'fas fa-user' },
+  ];
+  currentUrl = '';
 
   constructor(
     private _store: Store<{ auth: AuthState }>,
@@ -27,14 +50,34 @@ export class TeacherNavbarComponent implements OnInit {
         profilePic: userInfo.profilePic,
       }))
     );
+
+    this.currentUrl = this._router.url;
+    this._router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.currentUrl = event.urlAfterRedirects;
+      });
+  }
+
+  isActiveLink(link: string) {
+    const url = this.currentUrl.split('/')[2];
+
+    const formattedLink = link.replace('./', '');
+
+    if (url == 'dashboard' && !formattedLink) {
+      return true;
+    }
+
+    return url === formattedLink;
   }
 
   logout() {
     localStorage.clear();
     this._router.navigate(['']);
     this._store.dispatch(userLogOut());
-  }
-  selectItem(index: number) {
-    this.selectedItem = index;
   }
 }

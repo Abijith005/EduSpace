@@ -14,16 +14,20 @@ import { SocketService } from '../../../shared/socket.service';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  userInfo$!: Observable<{ name: string; profilePic: string; userId: string }>;
+  userInfo$!: Observable<{
+    name: string;
+    profilePic: { key: string; url: string };
+    userId: string;
+  }>;
   currentUrl = '';
   private _ngUnsubscribe = new Subject<void>();
 
   navItems = [
     { title: 'Home', link: './' },
     { title: 'Courses', link: './course' },
-    { title: 'Instructors', link: './payment' },
     { title: 'Discussions', link: './discussions' },
     { title: 'Subscriptions', link: './subscriptions' },
+    { title: 'Meetings', link: './meeting' },
   ];
 
   constructor(
@@ -56,11 +60,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.currentUrl = event.urlAfterRedirects;
       });
 
-    this.userInfo$
-      .pipe(take(1))
-      .subscribe((userInfo) => {
-        this._socketService.online(userInfo.userId);
-      });
+    this.userInfo$.pipe(take(1)).subscribe((userInfo) => {
+      this._socketService.online(userInfo.userId);
+    });
   }
 
   isActiveLink(link: string) {

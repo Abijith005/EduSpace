@@ -36,6 +36,7 @@
     <div>
       <button
         class="rounded-full border-2 border-gray-400 px-3 py-2 font-medium jost-text"
+        [routerLink]="'./course'"
       >
         All Categories
       </button>
@@ -46,11 +47,9 @@
       *ngFor="let category of categories"
       class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
       style="border-top: 0.1px solid #d1d5db"
+      (click)="navigateToCourse(category)"
     >
-      <i
-        [ngClass]="category.icon"
-        class="fas fa-palette text-orange-500 text-4xl mb-4"
-      ></i>
+      <i [ngClass]="category.icon" class="text-orange-500 text-4xl mb-4"></i>
       <h3
         class="text-lg font-bold mb-2 group-hover:text-orange-500 duration-200 exo-text"
       >
@@ -86,7 +85,7 @@
       class="bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
       style="border-top: 0.1px solid #d1d5db"
     >
-      <i class="fas fa-video text-orange-500 text-4xl mb-4"></i>
+      <i class="fas fa-camera text-orange-500 text-4xl mb-4"></i>
 
       <h3 class="text-lg font-bold mb-2">Photography</h3>
       <p class="text-gray-600">38 Courses</p>
@@ -146,6 +145,7 @@
     <div>
       <button
         class="rounded-full px-3 py-2 border-2 border-gray-400 font-medium jost-text"
+        [routerLink]="'./course'"
       >
         All Courses
       </button>
@@ -154,34 +154,33 @@
 
   <div class="grid grid-cols-3 gap-x-20 gap-y-10">
     <div
+      *ngFor="let course of featuredCourses"
       class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
     >
       <img
-        src="images/banner.png"
+        [src]="course.previewImage[0].url"
         alt="Course Image 3"
         class="rounded-t-lg w-full h-72 object-cover"
       />
       <span
         class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-        >Photography</span
+        >{{ course.category_id.title | titlecase }}</span
       >
       <div class="flex-grow p-4 pb-0">
         <p class="text-gray-500 text-sm text-left jost-text">
-          by Determined-Poitras
+          by {{ course.user_id.name | titlecase }}
         </p>
         <h2
           class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
         >
-          truncate overflow-hidden line-clamp-2 text-wraptruncate
-          overflow-hidden line-clamp-2 text-wraptruncate overflow-hidden
-          line-clamp-2 text-wrapCreate An LMS Website With LearnPress
+          {{ course.title | titlecase }}
         </h2>
         <div
           class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"
         >
           <span class="jost-text flex items-center">
             <i class="fas fa-clock text-orange-500 mr-2"></i>
-            2 Weeks
+            {{ course.createdAt | date }}
           </span>
           <span class="jost-text flex items-center">
             <i class="fas fa-graduation-cap text-orange-500 mr-2"></i>
@@ -192,237 +191,13 @@
       </div>
       <div class="flex justify-between items-center p-4">
         <div class="flex justify-start space-x-3">
-          <span class="line-through text-gray-400 jost-text">$29.0</span>
-          <span class="text-green-500 font-bold jost-text">Free</span>
+          <span class=" text-gray-400 jost-text"
+            >₹ {{ course.price }}</span
+          >
         </div>
-        <button class="exo-text font-bold">View More</button>
       </div>
     </div>
-    <div
-      class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
-    >
-      <img
-        src="images/banner.png"
-        alt="Course Image 3"
-        class="rounded-t-lg w-full h-72 object-cover"
-      />
-      <span
-        class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-        >Photography</span
-      >
-      <div class="flex-grow p-4 pb-0">
-        <p class="text-gray-500 text-sm text-left jost-text">
-          by Determined-Poitras
-        </p>
-        <h2
-          class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
-        >
-          truncate overflow-hidden line-clamp-2 text-wraptruncate
-          overflow-hidden line-clamp-2 text-wraptruncate overflow-hidden
-          line-clamp-2 text-wrapCreate An LMS Website With LearnPress
-        </h2>
-        <div
-          class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"
-        >
-          <span class="jost-text flex items-center">
-            <i class="fas fa-clock text-orange-500 mr-2"></i>
-            2 Weeks
-          </span>
-          <span class="jost-text flex items-center">
-            <i class="fas fa-graduation-cap text-orange-500 mr-2"></i>
-            156 Students
-          </span>
-        </div>
-        <hr class="w-11/12 mt-2 mx-auto text-gray-500" />
-      </div>
-      <div class="flex justify-between items-center p-4">
-        <div class="flex justify-start space-x-3">
-          <span class="line-through text-gray-400 jost-text">$29.0</span>
-          <span class="text-green-500 font-bold jost-text">Free</span>
-        </div>
-        <button class="exo-text font-bold">View More</button>
-      </div>
-    </div>
-    <div
-      class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
-    >
-      <img
-        src="images/banner.png"
-        alt="Course Image 3"
-        class="rounded-t-lg w-full h-72 object-cover"
-      />
-      <span
-        class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-        >Photography</span
-      >
-      <div class="flex-grow p-4 pb-0">
-        <p class="text-gray-500 text-sm text-left jost-text">
-          by Determined-Poitras
-        </p>
-        <h2
-          class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
-        >
-          truncate overflow-hidden line-clamp-2 text-wraptruncate
-          overflow-hidden line-clamp-2 text-wraptruncate overflow-hidden
-          line-clamp-2 text-wrapCreate An LMS Website With LearnPress
-        </h2>
-        <div
-          class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"
-        >
-          <span class="jost-text flex items-center">
-            <i class="fas fa-clock text-orange-500 mr-2"></i>
-            2 Weeks
-          </span>
-          <span class="jost-text flex items-center">
-            <i class="fas fa-graduation-cap text-orange-500 mr-2"></i>
-            156 Students
-          </span>
-        </div>
-        <hr class="w-11/12 mt-2 mx-auto text-gray-500" />
-      </div>
-      <div class="flex justify-between items-center p-4">
-        <div class="flex justify-start space-x-3">
-          <span class="line-through text-gray-400 jost-text">$29.0</span>
-          <span class="text-green-500 font-bold jost-text">Free</span>
-        </div>
-        <button class="exo-text font-bold">View More</button>
-      </div>
-    </div>
-    <div
-      class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
-    >
-      <img
-        src="https://via.placeholder.com/440x280"
-        alt="Course Image 3"
-        class="rounded-t-lg w-full h-72 object-cover"
-      />
-      <span
-        class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-        >Photography</span
-      >
-      <div class="flex-grow p-4 pb-0">
-        <p class="text-gray-500 text-sm text-left jost-text">
-          by Determined-Poitras
-        </p>
-        <h2
-          class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
-        >
-          truncate overflow-hidden line-clamp-2 text-wraptruncate
-          overflow-hidden line-clamp-2 text-wraptruncate overflow-hidden
-          line-clamp-2 text-wrapCreate An LMS Website With LearnPress
-        </h2>
-        <div
-          class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"
-        >
-          <span class="jost-text flex items-center">
-            <i class="fas fa-clock text-orange-500 mr-2"></i>
-            2 Weeks
-          </span>
-          <span class="jost-text flex items-center">
-            <i class="fas fa-graduation-cap text-orange-500 mr-2"></i>
-            156 Students
-          </span>
-        </div>
-        <hr class="w-11/12 mt-2 mx-auto text-gray-500" />
-      </div>
-      <div class="flex justify-between items-center p-4">
-        <div class="flex justify-start space-x-3">
-          <span class="line-through text-gray-400 jost-text">$29.0</span>
-          <span class="text-green-500 font-bold jost-text">Free</span>
-        </div>
-        <button class="exo-text font-bold">View More</button>
-      </div>
-    </div>
-    <div
-      class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
-    >
-      <img
-        src="https://via.placeholder.com/440x280"
-        alt="Course Image 3"
-        class="rounded-t-lg w-full h-72 object-cover"
-      />
-      <span
-        class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-        >Photography</span
-      >
-      <div class="flex-grow p-4 pb-0">
-        <p class="text-gray-500 text-sm text-left jost-text">
-          by Determined-Poitras
-        </p>
-        <h2
-          class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
-        >
-          truncate overflow-hidden line-clamp-2 text-wraptruncate
-          overflow-hidden line-clamp-2 text-wraptruncate overflow-hidden
-          line-clamp-2 text-wrapCreate An LMS Website With LearnPress
-        </h2>
-        <div
-          class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"
-        >
-          <span class="jost-text flex items-center">
-            <i class="fas fa-clock text-orange-500 mr-2"></i>
-            2 Weeks
-          </span>
-          <span class="jost-text flex items-center">
-            <i class="fas fa-graduation-cap text-orange-500 mr-2"></i>
-            156 Students
-          </span>
-        </div>
-        <hr class="w-11/12 mt-2 mx-auto text-gray-500" />
-      </div>
-      <div class="flex justify-between items-center p-4">
-        <div class="flex justify-start space-x-3">
-          <span class="line-through text-gray-400 jost-text">$29.0</span>
-          <span class="text-green-500 font-bold jost-text">Free</span>
-        </div>
-        <button class="exo-text font-bold">View More</button>
-      </div>
-    </div>
-    <div
-      class="flex flex-col bg-white rounded-lg shadow-md text-center transform transition duration-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-400"
-    >
-      <img
-        src="https://via.placeholder.com/440x280"
-        alt="Course Image 3"
-        class="rounded-t-lg w-full h-72 object-cover"
-      />
-      <span
-        class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded jost-text"
-        >Photography</span
-      >
-      <div class="flex-grow p-4 pb-0">
-        <p class="text-gray-500 text-sm text-left jost-text">
-          by Determined-Poitras
-        </p>
-        <h2
-          class="font-bold text-lg text-left truncate overflow-hidden line-clamp-2 text-wrap exo-text"
-        >
-          truncate overflow-hidden line-clamp-2 text-wraptruncate
-          overflow-hidden line-clamp-2 text-wraptruncate overflow-hidden
-          line-clamp-2 text-wrapCreate An LMS Website With LearnPress
-        </h2>
-        <div
-          class="flex justify-start items-center space-x-8 text-sm text-gray-500 mt-2 mb-4"
-        >
-          <span class="jost-text flex items-center">
-            <i class="fas fa-clock text-orange-500 mr-2"></i>
-            2 Weeks
-          </span>
-          <span class="jost-text flex items-center">
-            <i class="fas fa-graduation-cap text-orange-500 mr-2"></i>
-            156 Students
-          </span>
-        </div>
-        <hr class="w-11/12 mt-2 mx-auto text-gray-500" />
-      </div>
-      <div class="flex justify-between items-center p-4">
-        <div class="flex justify-start space-x-3">
-          <span class="line-through text-gray-400 jost-text">$29.0</span>
-          <span class="text-green-500 font-bold jost-text">Free</span>
-        </div>
-        <button class="exo-text font-bold">View More</button>
-      </div>
-    </div>
+
   </div>
 
   <div

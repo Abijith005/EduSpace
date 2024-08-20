@@ -10,6 +10,10 @@ import { RatingStarPipe } from './pipes/rating-star.pipe';
 import { FileNameExtractorPipe } from './pipes/file-name-extractor.pipe';
 import { MessageTimePipe } from './pipes/message-time.pipe';
 import { MessageDatePipe } from './pipes/message-date.pipe';
+import { SearchComponent } from './components/search/search.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FilterComponent } from './components/filter/filter.component';
+import { DateRangeComponent } from './components/date-range/date-range.component';
 
 @NgModule({
   declarations: [
@@ -22,8 +26,11 @@ import { MessageDatePipe } from './pipes/message-date.pipe';
     FileNameExtractorPipe,
     MessageTimePipe,
     MessageDatePipe,
+    SearchComponent,
+    FilterComponent,
+    DateRangeComponent,
   ],
-  imports: [CommonModule, NgxExtendedPdfViewerModule],
+  imports: [CommonModule, NgxExtendedPdfViewerModule,FormsModule,ReactiveFormsModule],
   exports: [
     PaginationComponent,
     LoadingComponent,
@@ -33,6 +40,9 @@ import { MessageDatePipe } from './pipes/message-date.pipe';
     RatingStarPipe,
     FileNameExtractorPipe,
     MessageTimePipe,
+    SearchComponent,
+    FilterComponent,
+    DateRangeComponent
   ],
 })
 export class SharedModule {}

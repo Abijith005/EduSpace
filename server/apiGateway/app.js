@@ -35,7 +35,7 @@ app.use(
 
 app.use(
   "/api/v1/student",
-  // authMiddleware(["student", "admin"]),
+  authMiddleware(["student", "admin"]),
   createProxyMiddleware({
     target: process.env.STUDENT_SERVICE_URL,
     changeOrigin: true,
@@ -71,7 +71,7 @@ app.use(
 
 app.use(
   "/api/v1/payment",
-  authMiddleware(["student"]),
+  // authMiddleware(["student","teacher","admin"]),
   createProxyMiddleware({
     target: paymentUrl,
     origin: true,

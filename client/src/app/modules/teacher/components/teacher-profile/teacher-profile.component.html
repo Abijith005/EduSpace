@@ -1,93 +1,118 @@
 <div
   class="max-h-screen bg-gray-100 flex flex-col items-center justify-center mt-12"
 >
-  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-    <div class="flex items-center mb-8 justify-between">
+  <div class="bg-white p-8  pb-0 rounded-lg shadow-lg w-full max-w-4xl">
+    <div class="flex items-center mb-8 justify-between ">
       <div class="flex items-center">
+        <input
+          type="file"
+          accept="image/*"
+          #fileInput
+          (change)="onFileSelected($event)"
+          hidden
+        />
         <img
           class="w-16 h-16 rounded-full mr-4"
-          src="https://via.placeholder.com/150"
+          [src]="
+            updatedProfilePic
+              ? (updatedProfilePic | objectUrl)
+              : profilePic?.url || '/images/user.png'
+          "
           alt="Avatar"
+          (click)="fileInput.click()"
         />
         <div>
-          <h2 class="text-xl font-bold">Samantha</h2>
-          <p class="text-gray-600">alexarawlesgmail.com</p>
+          <h2 class="font-semibold exo-text">{{ userName }}</h2>
+          <p class="text-gray-600 text-sm exo-text">{{ email }}</p>
         </div>
       </div>
       <button
         type="submit"
-        class="bg-blue-700 text-white px-4 py-1.5 rounded-md ring-1 text-sm"
+        class="px-4 py-1 text-xs leading-5 font-light rounded-md ring-1 ring-blue-600 hover:bg-blue-700 hover:text-white text-blue-800 exo-text"
+      >
+        Update
+      </button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-12">
+      <div>
+        <label class="block text-gray-700 poppins-text text-sm">Name</label>
+        <input
+          type="text"
+          [value]="userName"
+          placeholder="Your  Name"
+          class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 poppins-text text-sm"
+          >Qualification</label
+        >
+        <input
+          type="text"
+          placeholder="Your Highest Qualification"
+          class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+        />
+      </div>
+    </div>
+
+    <div class="flex items-center mb-8 justify-between">
+      <div>
+        <h2 class="font-semibold exo-text">Change Password</h2>
+      </div>
+      <button
+        type="submit"
+        (click)="changePassword()"
+        class="px-4 py-1 text-xs leading-5 font-light rounded-md ring-1 ring-blue-600 hover:bg-blue-700 hover:text-white text-blue-800 exo-text"
       >
         Update
       </button>
     </div>
     <form>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-8">
         <div>
-          <label class="block text-gray-700 poppins-text text-sm">Name</label>
-          <input
-            type="text"
-            placeholder="Your  Name"
-            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
-          />
-        </div>
-
-        <div>
-          <label class="block text-gray-700 poppins-text text-sm"
-            >Qualification</label
+          <label class="block text-gray-700 poppins-text text-sm jost-text"
+            >Old Password</label
           >
           <input
             type="text"
-            placeholder="Your Highest Qualification"
-            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+            placeholder="Old Password"
+            name="oldPassword"
+            [(ngModel)]="oldPassword"
+            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
           />
         </div>
-
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-7 mb-8">
         <div>
-          <label class="block text-gray-700 poppins-text text-sm"
-            >Nick Name</label
+          <label class="block text-gray-700 poppins-text text-sm jost-text"
+            >New Password</label
           >
           <input
             type="text"
-            placeholder="Your Nick Name"
-            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+            placeholder="New Password"
+            name="updatedPassword"
+            [(ngModel)]="updatedPassword"
+            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
           />
         </div>
         <div>
-          <label class="block text-gray-700 poppins-text text-sm">Gender</label>
-          <select
-            class="w-full mt-2 p-2 bg-gray-50 pace text-sm border-none rounded-lg"
-            placeholder="Select Gender"
-          >
-            <option>Your Gender</option>
-            <option>Your Gender</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-gray-700 poppins-text text-sm"
-            >Country</label
+          <label class="block text-gray-700 poppins-text text-sm jost-text"
+            >Confirm Password</label
           >
           <input
             type="text"
-            placeholder="Your Country"
-            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            [(ngModel)]="confirmPassword"
+            class="w-full mt-2 p-3 bg-white placeholder:text-gray-400 text-sm border-none rounded-lg jost-text"
           />
-        </div>
-        <div>
-          <label class="block text-gray-700 poppins-text text-sm"
-            >Language</label
-          >
-          <select
-            class="w-full mt-2 p-2 bg-gray-50 placeholder:text-gray-400 text-sm border-none rounded-lg"
-          >
-            <option>Your Language</option>
-          </select>
         </div>
       </div>
     </form>
   </div>
 
-  <div class="mt-10 bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+  <div class="mt-10 bg-white p-8 pb-4 rounded-lg shadow-lg w-full max-w-4xl">
     <div class="flex justify-between">
       <h2 class="text-xl font-bold mb-4">Certificates</h2>
       <button

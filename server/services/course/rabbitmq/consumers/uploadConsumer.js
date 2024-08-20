@@ -1,18 +1,18 @@
 import fs from "fs";
 import s3Config from "../../config/s3BucketConfig.js";
 import { connectRabbitMQ } from "../../config/rabbitmq.js";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import courseModel from "../../models/courseModel.js";
 import sendCommuntiyTaskQueue from "../producers/communityProducer.js";
-import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
+import sendMemberTaskQueue from "../producers/memberProducer.js";
 
 const bucket = process.env.S3_BUCKET;
 const region = process.env.S3_REGION;
 
 const uploadFileToS3 = async (filePath, filename, category, title) => {
-  const key = `Course/${title}/${category}/${filename}`;
-
   try {
+    const key = `Course/${title}/${category}/${filename}`;
+
     const fileContent = fs.readFileSync(filePath);
 
     const command = new PutObjectCommand({
@@ -30,7 +30,6 @@ const uploadFileToS3 = async (filePath, filename, category, title) => {
         console.error("Error deleting file:", err);
         throw err;
       }
-      console.log("File deleted successfully");
     });
 
     return { url: s3Url, key };
@@ -74,11 +73,6 @@ const processMessage = async (msg, channel) => {
     if (data.update) {
       const updateOperations = { $set: {} };
 
-      updateOperations.$set.title = data.title;
-      updateOperations.$set.price = data.price;
-      updateOperations.$set.about = data.about;
-      updateOperations.$set.category_id = data.category_id;
-
       for (const category of categories) {
         if (uploadResults[category].length > 0) {
           if (!updateOperations.$push) updateOperations.$push = {};
@@ -91,19 +85,20 @@ const processMessage = async (msg, channel) => {
         updateOperations
       );
 
-      const { title, price, about, category_id } = data;
-
-      let update = { $set: { title, price, about, category_id } };
+      let update = {};
 
       const deletedFields = ["videos", "notes", "previewVideo", "previewImage"];
 
-      if (data.deletedFiles) {
-        const deletedFiles = JSON.parse(data.deletedFiles);
-        let Objects = [];
+      if (Object.keys(data.deletedFiles).length > 0) {
+        const deletedFiles = data.deletedFiles;
+        let objectsToDelete = [];
         update.$pull = {};
+
         for (const fields of deletedFields) {
           if (deletedFiles[fields]) {
-            Objects.push(...deletedFiles[fields].map((key) => ({ Key: key })));
+            objectsToDelete.push(
+              ...deletedFiles[fields].map((key) => ({ Key: key }))
+            );
 
             update.$pull[fields] = {
               key: { $in: deletedFiles[fields] },
@@ -114,19 +109,34 @@ const processMessage = async (msg, channel) => {
         const command = new DeleteObjectsCommand({
           Bucket: process.env.S3_BUCKET,
           Delete: {
-            Objects,
+            Objects: objectsToDelete,
           },
         });
-       const a= await s3Config.send(command);
+        await s3Config.send(command);
       }
+      update.$set = { processingStatus: "completed" };
 
       await courseModel.findByIdAndUpdate({ _id: data.course_id }, update);
-      
     } else {
-      const course = await courseModel.create({ ...data, ...uploadResults });
+      const course = await courseModel.findByIdAndUpdate(
+        { _id: data._id },
+        {
+          $set: {
+            videos: uploadResults.videos,
+            previewVideo: uploadResults.previewVideo,
+            previewImage: uploadResults.previewImage,
+            notes: uploadResults.notes,
+            processingStatus: "completed",
+          },
+        }
+      );
       const { title } = data;
       const course_id = course._id;
-      sendCommuntiyTaskQueue({ course_id, title });
+      await sendCommuntiyTaskQueue({ course_id, title });
+      await sendMemberTaskQueue({
+        user_id: course.user_id,
+        course_id: course._id,
+      });
     }
 
     channel.ack(msg);
@@ -136,16 +146,18 @@ const processMessage = async (msg, channel) => {
 };
 
 const startConsumer = async () => {
-  const connection = await connectRabbitMQ();
-  const channel = await connection.createChannel();
-  const queue = "course_upload";
+  try {
+    const connection = await connectRabbitMQ();
+    const channel = await connection.createChannel();
+    const queue = "course_upload";
 
-  await channel.assertQueue(queue, { durable: true });
-  channel.consume(queue, (msg) => processMessage(msg, channel), {
-    noAck: false,
-  });
-
-  console.log("Consumer started, waiting for messages...");
+    await channel.assertQueue(queue, { durable: true });
+    channel.consume(queue, (msg) => processMessage(msg, channel), {
+      noAck: false,
+    });
+  } catch (error) {
+    console.error("Failed to consume message:", error);
+  }
 };
 
 export default startConsumer;

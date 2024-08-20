@@ -12,6 +12,26 @@ import { Subject, takeUntil } from 'rxjs';
 import { ToasterService } from '../../../shared/toaster.service';
 import { TeacherService } from '../../teacher.service';
 import { IcourseDetails } from '../../../../interfaces/courseDetails';
+import { FileNameExtractorPipe } from '../../../shared/pipes/file-name-extractor.pipe';
+interface IcourseData {
+  _id: string;
+  title: string;
+  about: string;
+  category_id: {
+    _id: string;
+    title: string;
+  };
+  contents: string[];
+  courseLanguage: string;
+  courseLevel: string;
+  price: number;
+  processingStatus: ProcessingStatus;
+}
+enum ProcessingStatus {
+  Uploading = 'uploading',
+  Updating = 'updating',
+  Completed = 'completed',
+}
 
 @Component({
   selector: 'app-teacher-update-course',
@@ -22,6 +42,7 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
   @Input() courseDataInput!: IcourseDetails;
   @Input() categories!: IcategoryData[];
   @Output() modalClosed = new EventEmitter();
+  @Output() courseDataUpdated = new EventEmitter<IcourseData>();
   courseDetailsForm!: FormGroup;
   isSubmitted: boolean = false;
   previewVideoFiles: any[] = [];
@@ -30,15 +51,130 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
   notesFiles: any[] = [];
   deletedFiles: any = {};
   courseData!: IcourseDetails;
+  newContent: string = '';
+  contents: string[] = [];
+  step: number = 1;
+  languageList = [
+    'Albanian',
+    'Arabic',
+    'Armenian',
+    'Azerbaijani',
+    'Basque',
+    'Belarusian',
+    'Bengali',
+    'Bosnian',
+    'Bulgarian',
+    'Burmese',
+    'Catalan',
+    'Cebuano',
+    'Chichewa',
+    'Chinese',
+    'Corsican',
+    'Croatian',
+    'Czech',
+    'Danish',
+    'Dutch',
+    'English',
+    'Esperanto',
+    'Estonian',
+    'Ewe',
+    'Finnish',
+    'French',
+    'Frisian',
+    'Galician',
+    'Georgian',
+    'German',
+    'Greek',
+    'Guarani',
+    'Gujarati',
+    'Haitian Creole',
+    'Hausa',
+    'Hawaiian',
+    'Hebrew',
+    'Hindi',
+    'Hmong',
+    'Hungarian',
+    'Icelandic',
+    'Igbo',
+    'Indonesian',
+    'Irish',
+    'Italian',
+    'Japanese',
+    'Javanese',
+    'Kannada',
+    'Kazakh',
+    'Khmer',
+    'Kinyarwanda',
+    'Korean',
+    'Kurdish (Kurmanji)',
+    'Kyrgyz',
+    'Lao',
+    'Latin',
+    'Latvian',
+    'Lithuanian',
+    'Luxembourgish',
+    'Macedonian',
+    'Malagasy',
+    'Malay',
+    'Malayalam',
+    'Maltese',
+    'Maori',
+    'Marathi',
+    'Mongolian',
+    'Nepali',
+    'Norwegian',
+    'Nyanja',
+    'Odia',
+    'Pashto',
+    'Persian',
+    'Polish',
+    'Portuguese',
+    'Punjabi',
+    'Romanian',
+    'Russian',
+    'Samoan',
+    'Scots Gaelic',
+    'Serbian',
+    'Sesotho',
+    'Shona',
+    'Sindhi',
+    'Sinhala',
+    'Slovak',
+    'Slovenian',
+    'Somali',
+    'Spanish',
+    'Sundanese',
+    'Swahili',
+    'Swedish',
+    'Tagalog',
+    'Tajik',
+    'Tamil',
+    'Tatar',
+    'Telugu',
+    'Thai',
+    'Turkish',
+    'Ukrainian',
+    'Urdu',
+    'Uzbek',
+    'Vietnamese',
+    'Welsh',
+    'Xhosa',
+    'Yiddish',
+    'Yoruba',
+    'Zulu',
+  ];
+  levelList = ['Beginner', 'Intermediate', 'Advanced'];
 
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
     private _fb: FormBuilder,
     private _toaster: ToasterService,
-    private _teacherService: TeacherService
+    private _teacherService: TeacherService,
+    private _fileNameExtractorPipe: FileNameExtractorPipe
   ) {}
 
   ngOnInit(): void {
+
     this.courseDetailsForm = this._fb.group({
       title: ['', [Validators.required]],
       category: ['', [Validators.required]],
@@ -47,23 +183,56 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
         '',
         [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)],
       ],
+      courseLanguage: ['', [Validators.required]],
+      courseLevel: ['', [Validators.required]],
+      content: [''],
     });
     this.courseData = JSON.parse(JSON.stringify(this.courseDataInput));
 
     this.courseDetailsForm.patchValue({
       category: this.courseData.category_id._id,
-      title:this.courseData.title,
-      price:this.courseData.price,
-      about:this.courseData.about
+      title: this.courseData.title,
+      price: this.courseData.price,
+      about: this.courseData.about,
+      courseLanguage: this.courseData.courseLanguage,
+      courseLevel: this.courseData.courseLevel,
     });
+    this.contents = this.courseData.contents;
     this.previewImageFiles = this.courseData.previewImage;
     this.previewVideoFiles = this.courseData.previewVideo;
     this.videoFiles = this.courseData.videos;
     this.notesFiles = this.courseData.notes;
+
   }
 
-  get formContols() {
+  get formControls() {
     return this.courseDetailsForm.controls;
+  }
+
+  addContent() {
+    if (this.newContent.trim()) {
+
+      this.contents.unshift(this.newContent.trim());
+      this.newContent = '';
+    }
+  }
+
+  removeContent(index: number) {
+    this.contents.splice(index, 1);
+  }
+  nextStep() {
+    if (this.contents.length < 3) {
+      this.formControls['content'].setErrors({ required: true });
+    }
+    if (this.step === 1 && this.courseDetailsForm.invalid) {
+      this.isSubmitted = true;
+      return;
+    }
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
   }
 
   onFileChange(event: Event, fileCategory: string) {
@@ -86,7 +255,9 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
       } else if (fileCategory === 'notes') {
         const remainingSlot = 3 - this.notesFiles.length;
         if (filesArray.length <= remainingSlot) {
+          
           this.notesFiles.push(...filesArray);
+          
         } else {
           this._toaster.showError('Max. 3 notes are allowed');
         }
@@ -118,7 +289,6 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
   }
 
   handleFileRemoval(fileCategory: string, fileArray: any[], index: number) {
-
     if (!this.deletedFiles[fileCategory]) {
       this.deletedFiles[fileCategory] = [];
     }
@@ -126,11 +296,9 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
     if (removedFile.key) {
       this.deletedFiles[fileCategory].push(removedFile.key);
     }
-    console.log(this.deletedFiles);
   }
 
   onSubmit() {
-
     this.isSubmitted = true;
 
     if (this.courseDetailsForm.invalid) {
@@ -154,6 +322,15 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
     );
     formData.append('about', this.courseDetailsForm.get('about')?.value);
     formData.append('price', this.courseDetailsForm.get('price')?.value);
+    formData.append(
+      'courseLanguage',
+      this.courseDetailsForm.get('courseLanguage')?.value
+    );
+    formData.append(
+      'courseLevel',
+      this.courseDetailsForm.get('courseLevel')?.value
+    );
+    formData.append('contents', JSON.stringify(this.contents));
     formData.append('deletedFiles', JSON.stringify(this.deletedFiles));
 
     this.previewVideoFiles.forEach((file: File) => {
@@ -180,17 +357,49 @@ export class TeacherUpdateCourseComponent implements OnInit, OnDestroy {
       }
     });
 
-    console.log(formData);
-
     this._teacherService
       .updateCourse(formData, this.courseData._id)
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         this._toaster.toasterFunction(res);
         if (res.success) {
+          this.updateCourseData(this.courseData._id);
           this.closeModal();
         }
       });
+  }
+
+
+  getNoteDisplayName(note: File | { key: string }): string {
+  if (note instanceof File) {
+    return note.name;
+  } else {
+    return this._fileNameExtractorPipe.transform(note.key);
+  }
+}
+
+
+  updateCourseData(courseId: string) {
+    const data: IcourseData = {
+      _id: courseId,
+      title: this.courseDetailsForm.get('title')?.value,
+      about: this.courseDetailsForm.get('about')?.value,
+      category_id: {
+        _id: this.courseDetailsForm.get('category')?.value,
+        title:
+          this.categories.find(
+            (category) =>
+              category._id === this.courseDetailsForm.get('category')?.value
+          )?.title || '',
+      },
+      contents: this.contents,
+      courseLanguage: this.courseDetailsForm.get('courseLanguage')?.value,
+      courseLevel: this.courseDetailsForm.get('courseLevel')?.value,
+      price: this.courseDetailsForm.get('price')?.value,
+      processingStatus: ProcessingStatus.Updating,
+    };
+
+    this.courseDataUpdated.emit(data);
   }
 
   closeModal() {

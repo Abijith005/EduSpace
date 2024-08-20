@@ -1,4 +1,3 @@
-// config/rabbitmq.js
 import amqp from "amqplib";
 
 const RABBITMQ_URL = process.env.RABBITMQ_URL;
@@ -10,8 +9,6 @@ export const connectRabbitMQ = async () => {
     return connection;
   } catch (error) {
     console.error("Error connecting to RabbitMQ:", error);
-    throw error; 
+    throw error;
   }
 };
-
-

@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import {
   checkAuthStatusFailure,
   checkAuthStatusSuccess,
+  infoUpdate,
   resetPasswordOtp,
   userLogOut,
   userLogin,
@@ -10,10 +11,10 @@ import { AuthState } from './auth.state';
 
 export const initialState: AuthState = {
   userData: {
-    _id:'',
+    _id: '',
     name: '',
     email: '',
-    profilePic: '',
+    profilePic: { key: '', url: '' },
     role: '',
   },
   resetPassword: {
@@ -25,7 +26,7 @@ export const initialState: AuthState = {
 
 export const userAuthReducer = createReducer(
   initialState,
-  on(userLogin, (state, { userDatas }) => {    
+  on(userLogin, (state, { userDatas }) => {
     return {
       ...state,
       userData: {
@@ -58,5 +59,19 @@ export const userAuthReducer = createReducer(
   }),
   on(checkAuthStatusFailure, (state) => {
     return initialState;
+  }),
+  on(infoUpdate, (state, { updatedData }) => {
+    console.log('reducer calledddddddddddddd,updateddata',updatedData);
+    
+    const a= {
+      ...state,
+      userData: {
+        ...state.userData,
+        ...updatedData,
+      },
+    };
+console.log('updated value',a);
+
+    return a
   })
 );

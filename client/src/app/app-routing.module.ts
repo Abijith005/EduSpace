@@ -7,8 +7,7 @@ import { teacherModuleGuard } from './guards/teacher-module.guard';
 import { MeetingComponent } from './modules/shared/components/meeting/meeting.component';
 
 const routes: Routes = [
-  // { path: '', pathMatch: 'full', redirectTo: 'auth' },
-  { path: '', component: MeetingComponent },
+  { path: '', pathMatch: 'full', redirectTo: 'auth' },
 
   {
     path: 'auth',

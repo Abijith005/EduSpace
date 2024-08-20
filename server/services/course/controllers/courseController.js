@@ -5,7 +5,7 @@ import sendUploadTaskToQueue from "../rabbitmq/producers/uploadProducer.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 import s3Config from "../config/s3BucketConfig.js";
 import mongoose from "mongoose";
-import subscriptionModel from "../models/subscriptionModel.js";
+import reviewModel from "../models/reviewModel.js";
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -19,8 +19,35 @@ export const uploadCourse = async (req, res) => {
       return res.status(400).send({ message: "No files uploaded" });
     }
     const token = req.headers.authorization.split(" ")[1];
-    req.body.user_id = jwtDecode(token).id;
-    await sendUploadTaskToQueue(req.files, req.body);
+    const user_id = await jwtDecode(token).id;
+
+    const {
+      title,
+      category_id,
+      about,
+      price,
+      contents,
+      courseLevel,
+      courseLanguage,
+    } = req.body;
+    const parsedContents = JSON.parse(contents);
+
+    const course = await cousreModel.create({
+      title,
+      category_id,
+      about,
+      price,
+      courseLanguage,
+      courseLevel,
+      contents: parsedContents,
+      user_id,
+      processingStatus: "uploading",
+    });
+    const data = {
+      title,
+      _id: course._id,
+    };
+    await sendUploadTaskToQueue(req.files, data);
     res.status(200).send({
       success: true,
       message: "Files uploaded successfully and processing in background",
@@ -48,7 +75,6 @@ export const getAllCourses = async (req, res) => {
 
     if (filter) {
       const parsedFilter = JSON.parse(filter);
-      console.log(parsedFilter);
       const { category_ids, instructor_ids, priceRange, ratingRange } =
         parsedFilter;
 
@@ -93,10 +119,9 @@ export const getAllCourses = async (req, res) => {
     const datas = await cousreModel
       .find(query)
       .skip(skip)
-      .limit( limit)
+      .limit(limit)
       .populate("category_id", { _id: 1, title: 1 })
       .lean();
-      console.log(datas.length);
     const user_ids = [...new Set(datas.map((item) => item.user_id.toString()))];
     const authQuery = { _id: { $in: user_ids } };
     const userDetails = await sendRPCRequest(
@@ -109,6 +134,13 @@ export const getAllCourses = async (req, res) => {
       return { ...item, user_id };
     });
 
+    const courseIds = [...new Set(courses.map((item) => item._id))];
+
+    const reviews = await reviewModel.aggregate([
+      { $match: { courseId: { $in: courseIds } } },
+      { $group: { _id: "$courseId", totalReviews: { $sum: 1 } } },
+    ]);
+
     return res.status(200).json({ success: true, courses, totalPages });
   } catch (error) {
     console.log("Error \n", error);
@@ -120,35 +152,68 @@ export const getAllCourses = async (req, res) => {
 
 export const updateCourse = async (req, res) => {
   try {
+    console.log(req.body);
     if (req.fileValidationError) {
       return res.status(400).send({ message: req.fileValidationError });
     }
 
     const { course_id } = req.params;
-    req.body.course_id = course_id;
-    req.body.update = true;
+
+    const {
+      title,
+      price,
+      about,
+      category_id,
+      courseLanguage,
+      courseLevel,
+      contents,
+      deletedFiles,
+    } = req.body;
+    const filesToDelete = JSON.parse(deletedFiles);
+
+    const parsedContents = JSON.parse(contents);
+
+    const data = {
+      update: true,
+      course_id,
+      deletedFiles: filesToDelete,
+      title,
+    };
+
+    let updateOperations = {
+      $set: {
+        title,
+        price,
+        about,
+        category_id,
+        courseLanguage,
+        courseLevel,
+        contents: parsedContents,
+        processingStatus: "updating",
+      },
+    };
+
+    await cousreModel.findByIdAndUpdate({ _id: course_id }, updateOperations);
 
     if (Object.keys(req.files).length > 0) {
-      await sendUploadTaskToQueue(req.files, req.body);
+      await sendUploadTaskToQueue(req.files, data);
       return res.status(200).send({
         success: true,
-        message: "Course updates succesfully",
+        message: "Course updating...",
       });
     }
 
-    const { title, price, about, category_id } = req.body;
-
-    let updateOperations = { $set: { title, price, about, category_id } };
-
     const deletedFields = ["videos", "notes", "previewVideo", "previewImage"];
 
-    if (req.body.deletedFiles) {
+    if (Object.keys(filesToDelete).length > 0) {
       const deletedFiles = JSON.parse(req.body.deletedFiles);
-      let Objects = [];
+      let objectsToDelete = [];
       updateOperations.$pull = {};
       for (const fields of deletedFields) {
         if (deletedFiles[fields]) {
-          Objects.push(...deletedFiles[fields].map((key) => ({ Key: key })));
+          objectsToDelete.push(
+            ...deletedFiles[fields].map((key) => ({ Key: key }))
+          );
 
           updateOperations.$pull[fields] = {
             key: { $in: deletedFiles[fields] },
@@ -156,22 +221,20 @@ export const updateCourse = async (req, res) => {
         }
       }
 
-      if (Objects.length > 0) {
+      if (objectsToDelete.length > 0) {
         const command = new DeleteObjectsCommand({
           Bucket: process.env.S3_BUCKET,
           Delete: {
-            Objects,
+            Objects: objectsToDelete,
           },
         });
         await s3Config.send(command);
       }
     }
 
-    await cousreModel.findByIdAndUpdate({ _id: course_id }, updateOperations);
-
     return res.status(200).send({
       success: true,
-      message: "Course updates succesfully",
+      message: "Course updated succesfully",
     });
   } catch (error) {
     console.log("Error \n", error);
@@ -183,7 +246,6 @@ export const updateCourse = async (req, res) => {
 
 export const getAllCourseStats = async (req, res) => {
   try {
-    // Fetch min and max price
     const priceRange = await cousreModel.aggregate([
       {
         $group: {
@@ -293,8 +355,8 @@ export const getAllCourseStats = async (req, res) => {
 
 export const getCourseDetails = async (req, res) => {
   try {
-    const { course_id } = req.params;
-    const courseDetails = await cousreModel.findById({ _id: course_id }).lean();
+    const { courseId } = req.params;
+    const courseDetails = await cousreModel.findById({ _id: courseId }).lean();
     const user_ids = [courseDetails.user_id];
     const query = { _id: { $in: user_ids } };
     const userDetails = await sendRPCRequest(
@@ -305,6 +367,11 @@ export const getCourseDetails = async (req, res) => {
       name: userDetails[0].name,
       _id: userDetails[0]._id,
     };
+
+    const totalReviews = await reviewModel
+      .find({ courseId: courseId })
+      .countDocuments();
+    courseDetails.totalReviews = totalReviews;
     res.status(200).json({ success: true, courseDetails: courseDetails });
   } catch (error) {
     console.log("Error \n", error);
@@ -314,53 +381,35 @@ export const getCourseDetails = async (req, res) => {
   }
 };
 
-export const getAllSubscriptions = async (req, res) => {
+export const getCourseData = async (courseIds) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const user_id = jwtDecode(token).id;
+    const data = await cousreModel.find({ _id: { $in: courseIds } });
+    return data;
+  } catch (error) {
+    console.log("Error \n", error);
+  }
+};
 
-    const courses = await subscriptionModel.aggregate([
-      { $match: { subscriber_id: new mongoose.Types.ObjectId(user_id) } },
-      {
-        $lookup: {
-          from: "courses",
-          localField: "course_id",
-          foreignField: "_id",
-          as: "course",
-        },
-      },
-      { $unwind: "$course" },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "course.category_id",
-          foreignField: "_id",
-          as: "course.category_id",
-        },
-      },
-      { $unwind: "$course.category_id" },
-      {
-        $project: {
-          subscriber_id: 0,
-          course_id: 0,
-        },
-      },
-    ]);
+export const getFeaturedCourse = async (req, res) => {
+  try {
+    const courseDetails = await cousreModel
+      .find()
+      .sort({ rating: 1 })
+      .limit(6).populate('category_id').lean()
 
-    const user_ids = [...new Set(courses.map((item) => item.course.user_id))];
-    const query = { _id: { $in: user_ids } };
+    const userIds = [...new Set(courseDetails.map((course) => course.user_id))];
+    console.log(userIds);
+    const query = { _id: { $in: userIds } };
     const userDetails = await sendRPCRequest(
       "authQueue",
       JSON.stringify(query)
     );
-
-    const data = courses.map((item) => {
-      const user = userDetails.find((e) => e._id == item.course.user_id);
-      item.course.user_id = user;
-      return item;
+    const courses = courseDetails.map((item) => {
+      const user_id = userDetails.find((e) => e._id == item.user_id);
+      return { ...item, user_id };
     });
-
-    res.status(200).json({ success: true, courses: data });
+    console.log(courses);
+    res.status(200).json({ success: true, courseDetails:courses });
   } catch (error) {
     console.log("Error \n", error);
     return res

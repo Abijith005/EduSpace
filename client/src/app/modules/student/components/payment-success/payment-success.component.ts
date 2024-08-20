@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,17 +6,22 @@ import { Router } from '@angular/router';
   templateUrl: './payment-success.component.html',
   styleUrl: './payment-success.component.css',
 })
-export class PaymentSuccessComponent {
+export class PaymentSuccessComponent implements OnInit {
   @Output() nestedModalClosed = new EventEmitter<void>();
   @Input() price!: number;
+  amount: number = 0;
 
   constructor(private _router: Router) {}
-  amount = this.price + this.price * 0.05;
+  ngOnInit(): void {
+    this.amount = Number(this.price) + Number(this.price) * 0.05;
+  }
+
   onCancel() {
     this.nestedModalClosed.emit();
   }
 
   onGotoSubscription() {
+    this.nestedModalClosed.emit();
     this._router.navigate(['student/subscriptions']);
   }
 }

@@ -2,6 +2,9 @@ import { getUserCommunities, storeMessages } from "./comunityManager.js";
 
 const socket = (io) => {
   io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    // Handle user going online
     socket.on("online", async (userId) => {
       try {
         const userCommunities = await getUserCommunities(userId);
@@ -47,24 +50,29 @@ const socket = (io) => {
       } 
     });
 
-    // Join a room
+    // Handle joining a room
     socket.on("join-room", (roomId, userId) => {
       console.log(`User ${userId} joined room ${roomId}`);
       socket.join(roomId);
-      socket.to(roomId).emit("user-connected", userId);
+      io.to(roomId).emit("user-connected", userId);
+    });
 
-      socket.on("disconnect", () => {
-        console.log(`User ${userId} disconnected from room ${roomId}`);
-        socket.to(roomId).emit("user-disconnected", userId);
-      });
+    // Handle disconnect
+    socket.on("disconnect", () => {
+      console.log(`User disconnected: ${socket.id}`);
+    });
 
-      socket.on("leave-room", (roomId, userId) => {
-        socket.to(roomId).broadcast.emit("user-disconnected", userId);
-      });
+    // Handle leaving a room
+    socket.on("leave-room", (roomId, userId) => {
+      console.log(`User ${userId} left room ${roomId}`);
+      socket.leave(roomId);
+      io.to(roomId).emit("user-disconnected", userId);
+    });
 
-      socket.on("end-meeting", (roomId) => {
-        socket.to(roomId).broadcast.emit("meeting-ended");
-      });
+    // Handle ending a meeting
+    socket.on("end-meeting", (roomId) => {
+      console.log(`Meeting ended in room ${roomId}`);
+      io.to(roomId).emit("meeting-ended");
     });
   });
 };

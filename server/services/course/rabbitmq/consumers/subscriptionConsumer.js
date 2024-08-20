@@ -29,7 +29,7 @@ const processMessage = async (msg) => {
   try {
     const { user_id, course_id } = msg;
     await subscriptionModel.create({ course_id, subscriber_id: user_id });
-    sendMemberTaskQueue({ user_id, course_id });
+    await sendMemberTaskQueue({ user_id, course_id });
   } catch (error) {
     console.error("Failed to process message:", error);
   }

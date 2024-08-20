@@ -1,6 +1,4 @@
-// import { getChannel } from "../config/rabbitmq.js";
-// import { getCategoryDetails } from "../consumers/categoryConsumer.js";
-// import { getUserDetails } from "../consumers/userDetailsConsumer.js";
+
 import jwtDecode from "../helpers/jwtDecode.js";
 import requestModel from "../models/categoryRequestModeldel.js";
 import teacherProfileModel from "../models/teacherProfileModel.js";
@@ -18,7 +16,7 @@ export const uploadCertificates = async (req, res) => {
     }));
     await requestModel.create({
       userId: userId,
-      category: category,
+      category: category, 
       certificates: certificates,
     });
     res

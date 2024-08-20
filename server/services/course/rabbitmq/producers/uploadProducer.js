@@ -14,7 +14,7 @@ const sendUploadTaskToQueue = async (files, data) => {
     setTimeout(() => {
       channel.close();
       connection.close();
-    }, 500);
+    }, 5000);
   } catch (error) {
     throw error;
   }

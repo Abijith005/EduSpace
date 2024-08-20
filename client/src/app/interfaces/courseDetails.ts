@@ -1,5 +1,5 @@
-import { IcategoryData } from "./categoryData";
-import { IuserInformation } from "./userInformation";
+import { IcategoryData } from './categoryData';
+import { IuserInformation } from './userInformation';
 
 interface FileDetails {
   url: string;
@@ -13,12 +13,23 @@ export interface IcourseDetails {
   title: string;
   price: number;
   about: string;
+  courseLanguage: string;
+  courseLevel: string;
+  contents: string[];
+  processingStatus: ProcessingStatus;
   previewImage: FileDetails[];
   previewVideo: FileDetails[];
   videos: FileDetails[];
   notes: FileDetails[];
   rating: number;
   activeStatus: boolean;
+  totalReviews: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export enum ProcessingStatus {
+  Uploading = 'uploading',
+  Updating = 'updating',
+  Completed = 'completed',
 }

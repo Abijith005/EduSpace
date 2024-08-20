@@ -14,6 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermissionManagementComponent } from './components/permission-management/permission-management.component';
 import { ListCetificatesComponent } from './components/list-cetificates/list-cetificates.component';
 import { ApprovedCategoriesComponent } from './components/approved-categories/approved-categories.component';
+import { WithdrawalManageComponent } from './components/withdrawal-manage/withdrawal-manage.component';
+import { ViewWithdrawRequestComponent } from './components/view-withdraw-request/view-withdraw-request.component';
 
 
 @NgModule({
@@ -28,7 +30,8 @@ import { ApprovedCategoriesComponent } from './components/approved-categories/ap
     PermissionManagementComponent,
     ListCetificatesComponent,
     ApprovedCategoriesComponent,
-    // RemoveTimestampPipe
+    WithdrawalManageComponent,
+    ViewWithdrawRequestComponent,
   ],
   imports: [
     CommonModule,

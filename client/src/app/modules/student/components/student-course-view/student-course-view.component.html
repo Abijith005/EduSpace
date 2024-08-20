@@ -18,9 +18,23 @@
           </div>
         </div>
         <div class="flex items-center mb-2">
-          <span class="text-yellow-500">⭐⭐⭐☆☆</span>
-          <span class="ml-2 text-gray-600 jost-text"
-            >({{ courseDetails.rating }} Reviews)</span
+          <span
+            class="text-yellow-500"
+            *ngFor="let star of courseDetails.rating | ratingStar"
+          >
+            <i
+              [ngClass]="
+                star === 1
+                  ? 'fas fa-star'
+                  : star === 0.5
+                  ? 'fas fa-star-half-alt'
+                  : 'far fa-star'
+              "
+              class="text-yellow-300 mr-1"
+            ></i>
+          </span>
+          <span class="ml-2 text-gray-600 text-sm jost-text"
+            >({{ courseDetails.totalReviews }} Reviews)</span
           >
         </div>
       </div>
@@ -30,14 +44,13 @@
           <h3
             class="text-sm font-semibold exo-text cursor-pointer"
             *ngFor="let item of navItems"
-            [routerLink]="item.link"
+            (click)="navigate(item.link)"
             [class]="isActive(item.link) ? 'text-orange-500' : ''"
           >
             {{ item.title }}
           </h3>
         </div>
       </div>
-      
     </div>
   </div>
 
@@ -61,7 +74,7 @@
       </p>
       <div #paymentRef></div>
       <button
-        (click)="openModal()"
+        (click)="openPaymentModal()"
         class="mt-4 ring-1 text-green-500 py-2 w-full exo-text rounded"
         style="color: #40c003"
       >
@@ -118,7 +131,7 @@
     class="fixed inset-0 z-50 overflow-y-auto flex items-center w-full justify-center bg-black bg-opacity-60"
   >
     <app-payment
-      (modalClosed)="closeModal()"
+      (modalClosed)="closePaymentModal()"
       [courseDetails]="courseDetails"
     ></app-payment>
   </div>
@@ -128,7 +141,8 @@
     class="fixed inset-0 z-50 overflow-y-auto flex items-center w-full justify-center bg-black bg-opacity-60"
   >
     <app-payment-success
-    (nestedModalClosed)="closeNestedModal()"
-    [price]="courseDetails.price"></app-payment-success>
+      (nestedModalClosed)="closeNestedModal()"
+      [price]="courseDetails.price"
+    ></app-payment-success>
   </div>
 </div>
