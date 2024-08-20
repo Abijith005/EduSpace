@@ -116,4 +116,10 @@ export class StudentService {
       `/v1/course/reviews/all?courseId=${courseId}&page=${page}&limit=${limit}`
     );
   }
+
+  getFeaturedCourses() {
+    return this._http.get<
+      IgenreralResponse & { courseDetails: IcourseDetails[] }
+    >(`/v1/course/manageCourse/featured`);
+  }
 }

@@ -28,7 +28,6 @@ export class SignInComponent implements OnInit, OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _authService: AuthService,
-    private _ngToaster: NgToastService,
     private _router: Router,
     private _toasterService: ToasterService,
     private _socialAuthService: SocialAuthService,

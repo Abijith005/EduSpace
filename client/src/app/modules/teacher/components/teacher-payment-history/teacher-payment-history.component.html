@@ -1,0 +1,107 @@
+<div class="min-h-fit p-8">
+  <div class="bg-white rounded-lg drop-shadow-md p-6 mt-10">
+    <div class="flex items-center justify-between space-x-4 pb-6">
+      <div class="flex gap-5 items-center">
+        <app-date-range (applyDateRange)="applyDateRange($event)">
+        </app-date-range>
+      </div>
+
+      <div class="flex gap-5">
+        <app-search (search)="onSearch($event)"> </app-search>
+
+        <app-filter
+          [filterValues]="filterValues"
+          (filterAction)="onFilterChange($event)"
+        ></app-filter>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr class="">
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Sender Name
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Receiver Name
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Course Name
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Amount
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Payment Type
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Date
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200 poppins-text">
+          <tr class="text-center" *ngFor="let data of paymentDatas">
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ data.sender ? data.sender.name : ("----------" | titlecase) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ data.receiver.name | titlecase }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ data.courseDetails ? data.courseDetails.title : ("----------" | titlecase) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ data.amount }}</td>
+            <td
+              class="px-6 py-4 whitespace-nowrap flex items-center justify-center"
+            >
+              {{ data.type | titlecase }}
+              <i
+                *ngIf="data.type === 'purchase'; else minusIcon"
+                class="fas fa-plus-circle text-green-500 ml-2"
+              ></i>
+              <ng-template #minusIcon>
+                <i class="fas fa-minus-circle text-red-500 ml-2"></i>
+              </ng-template>
+            </td>
+
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+              {{ data.createdAt | date }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">Completed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-16 flex justify-center items-center">
+      <app-pagination
+        [totalPages]="totalPages"
+        [currentPage]="currentPage"
+        (pageChanged)="onPageChanged($event)"
+      ></app-pagination>
+    </div>
+  </div>
+</div>

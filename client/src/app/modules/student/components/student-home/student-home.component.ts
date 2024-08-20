@@ -4,6 +4,7 @@ import { StudentService } from '../../student.service';
 import { IcategoryResponse } from '../../../../interfaces/categoryResponse';
 import { IcategoryData } from '../../../../interfaces/categoryData';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IcourseDetails } from '../../../../interfaces/courseDetails';
 
 @Component({
   selector: 'app-student-home',
@@ -12,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class StudentHomeComponent implements OnInit, OnDestroy {
   private _ngUnsubscribe$ = new Subject<void>();
+  featuredCourses!: IcourseDetails[];
 
   categories!: IcategoryResponse[];
 
@@ -28,6 +30,8 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.categories = res.categories;
       });
+
+    this.getFeaturedCorses();
   }
 
   scrollTop() {
@@ -38,7 +42,16 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  navigateToCourse(category: IcategoryData) {    
+  getFeaturedCorses() {
+    this._studentService
+      .getFeaturedCourses()
+      .pipe(takeUntil(this._ngUnsubscribe$))
+      .subscribe((res) => {
+        this.featuredCourses = res.courseDetails;
+      });
+  }
+
+  navigateToCourse(category: IcategoryData) {
     this._router.navigate(['./course'], {
       relativeTo: this._activatedRoute,
       state: { category },

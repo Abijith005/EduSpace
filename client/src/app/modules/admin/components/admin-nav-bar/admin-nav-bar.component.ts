@@ -31,6 +31,7 @@ export class AdminNavBarComponent implements OnInit {
     { title: 'Categories', link: 'category_manage', icon: 'fas fa-list-alt' },
     { title: 'Permissions', link: 'permission_manage', icon: 'fas fa-key' },
     { title: 'Payments', link: 'payment_manage', icon: 'fas fa-credit-card' },
+    { title: 'Withdrawals', link: 'withdrawal_manage', icon: 'fas fa-hand-holding-usd' },
   ];
 
   constructor(

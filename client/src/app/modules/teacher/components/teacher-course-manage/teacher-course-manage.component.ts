@@ -129,5 +129,7 @@ export class TeacherCourseManageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._ngUnsubscribe$.next();
     this._ngUnsubscribe$.complete();
+    this._modalService.closeModal()
+    this._modalService.closeNestedModal()
   }
 }

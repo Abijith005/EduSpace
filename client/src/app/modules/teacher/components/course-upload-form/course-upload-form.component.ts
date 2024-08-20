@@ -23,7 +23,7 @@ export class CourseUploadFormComponent implements OnInit, OnDestroy {
   isSubmitted: boolean = false;
   newContent: string = '';
   contents: string[] = [];
-  step: number = 2;
+  step: number = 1;
   languageList = [
     'Afrikaans',
     'Akan',

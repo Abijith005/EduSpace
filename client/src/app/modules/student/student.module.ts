@@ -6,7 +6,6 @@ import { StudentRoutingModule } from './student.routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StudentCourseListComponent } from './components/student-course-list/student-course-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FilterComponent } from './components/filter/filter.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { StudentCourseViewComponent } from './components/student-course-view/student-course-view.component';
@@ -24,13 +23,14 @@ import { DiscussionsComponent } from './components/discussions/discussions.compo
 import { MeetingComponent } from '../shared/components/meeting/meeting.component';
 import { StudentProfileComponent } from './components/student-profile/student-profile.component';
 import { RatingComponent } from './components/rating/rating.component';
+import { CourseFilterComponent } from './components/course-filter/course-filter.component';
 
 @NgModule({
   declarations: [
     NavbarComponent,
     StudentHomeComponent,
     StudentCourseListComponent,
-    FilterComponent,
+    CourseFilterComponent,
     StudentCourseViewComponent,
     StudentViewReviewComponent,
     StudentAboutCourseComponent,

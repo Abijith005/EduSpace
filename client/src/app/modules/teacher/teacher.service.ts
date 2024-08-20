@@ -4,6 +4,8 @@ import { IgenreralResponse } from '../../interfaces/generalResponse';
 import { IcategoryData } from '../../interfaces/categoryData';
 import { IcourseDetails } from '../../interfaces/courseDetails';
 import { IfilterValues } from '../../interfaces/filterValues';
+import { IwithdrawRequest } from '../../interfaces/withdrawRequests';
+import { IpaymentDatas } from '../../interfaces/paymentData';
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +68,74 @@ export class TeacherService {
     return this._http.put<IgenreralResponse>(
       `/v1/course/manageCourse/updateCourse/${course_id}`,
       data
+    );
+  }
+
+  sentWithdrawalOtp(password: string) {
+    return this._http.post<IgenreralResponse>(
+      '/v1/teacher/withdrawal/sentOTP',
+      { password }
+    );
+  }
+
+  withdrawalRequest(data: {
+    accountNumber: string;
+    ifsc: string;
+    amount: string;
+    otp: string;
+    accountHolder: string;
+  }) {
+    return this._http.post<IgenreralResponse>(
+      '/v1/teacher/withdrawal/request',
+      data
+    );
+  }
+  updateWithdrawalRequest(data: {
+    accountNumber: string;
+    ifsc: string;
+    amount: string;
+    otp: string;
+    accountHolder: string;
+    requestId: string;
+  }) {
+    return this._http.put<IgenreralResponse>(
+      '/v1/teacher/withdrawal/request',
+      data
+    );
+  }
+
+  userWithdrawalData(
+    filter: string,
+    startDate: string,
+    endDate: string,
+    currentPage: number,
+    limit: number
+  ) {
+    return this._http.get<
+      IgenreralResponse & { totalPages: number; data: IwithdrawRequest[] }
+    >(
+      `/v1/payment/withdrawal/userRequests?filter=${filter}&currentPage=${currentPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`
+    );
+  }
+
+  getWalletBalance(userId: string) {
+    return this._http.get<IgenreralResponse & { walletBalance: number }>(
+      `/v1/payment/wallet/balance/${userId}`
+    );
+  }
+
+  getAllPayments(
+    search: string,
+    filter: string,
+    startDate: string,
+    endDate: string,
+    currentPage: number,
+    limit: number
+  ) {
+    return this._http.get<
+      IgenreralResponse & { data: IpaymentDatas[]; totalPages: number }
+    >(
+      `/v1/payment/paymentManage/all?search=${search}&filter=${filter}&currentPage=${currentPage}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`
     );
   }
 }

@@ -8,11 +8,14 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from '../shared/shared.module';
 import { TeacherProfileComponent } from './components/teacher-profile/teacher-profile.component';
 import { UploadCertificatesComponent } from './components/upload-certificates/upload-certificates.component';
-import { TeacherPaymentComponent } from './components/teacher-payment/teacher-payment.component';
 import { CourseUploadFormComponent } from './components/course-upload-form/course-upload-form.component';
 import { TeacherCourseManageComponent } from './components/teacher-course-manage/teacher-course-manage.component';
 import { TeacherUpdateCourseComponent } from './components/teacher-update-course/teacher-update-course.component';
 import { FileNameExtractorPipe } from '../shared/pipes/file-name-extractor.pipe';
+import { TeacherWalletWithdrawComponent } from './components/teacher-wallet-withdraw/teacher-wallet-withdraw.component';
+import { TeacherWalletManageComponent } from './components/teacher-wallet-manage/teacher-wallet-manage.component';
+import { TeacherPaymentHistoryComponent } from './components/teacher-payment-history/teacher-payment-history.component';
+import { WithdrawUpdateComponent } from './components/withdraw-update/withdraw-update.component';
 
 @NgModule({
   declarations: [
@@ -21,9 +24,12 @@ import { FileNameExtractorPipe } from '../shared/pipes/file-name-extractor.pipe'
     TeacherCourseManageComponent,
     TeacherProfileComponent,
     UploadCertificatesComponent,
-    TeacherPaymentComponent,
     CourseUploadFormComponent,
     TeacherUpdateCourseComponent,
+    TeacherWalletWithdrawComponent,
+    TeacherWalletManageComponent,
+    TeacherPaymentHistoryComponent,
+    WithdrawUpdateComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +39,6 @@ import { FileNameExtractorPipe } from '../shared/pipes/file-name-extractor.pipe'
     NgApexchartsModule,
     SharedModule,
   ],
-  providers: [FileNameExtractorPipe], 
-
+  providers: [FileNameExtractorPipe],
 })
 export class TeacherModule {}

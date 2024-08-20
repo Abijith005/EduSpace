@@ -4,8 +4,9 @@ import { TeacherNavbarComponent } from './components/teacher-navbar/teacher-navb
 import { TeacherDashBoardComponent } from './components/teacher-dash-board/teacher-dash-board.component';
 import { TeacherProfileComponent } from './components/teacher-profile/teacher-profile.component';
 import { TeacherCourseManageComponent } from './components/teacher-course-manage/teacher-course-manage.component';
-import { TeacherPaymentComponent } from './components/teacher-payment/teacher-payment.component';
 import { DiscussionsComponent } from '../student/components/discussions/discussions.component';
+import { TeacherWalletManageComponent } from './components/teacher-wallet-manage/teacher-wallet-manage.component';
+import { TeacherPaymentHistoryComponent } from './components/teacher-payment-history/teacher-payment-history.component';
 
 const routes: Routes = [
   {
@@ -19,9 +20,12 @@ const routes: Routes = [
           { path: 'dashboard', component: TeacherDashBoardComponent },
           { path: 'course_manage', component: TeacherCourseManageComponent },
           { path: 'profile_manage', component: TeacherProfileComponent },
-          {path:'payment_manage',component:TeacherPaymentComponent},
+          { path: 'wallet_manage', component: TeacherWalletManageComponent },
+          {
+            path: 'payment_history',
+            component: TeacherPaymentHistoryComponent,
+          },
           { path: 'discussions', component: DiscussionsComponent },
-
         ],
       },
     ],

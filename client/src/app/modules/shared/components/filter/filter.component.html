@@ -1,0 +1,15 @@
+<div class="flex items-center jost-text">
+    <p class="text-md font-semibold">Filter</p>
+    <select
+      class="ml-2 rounded-md border shadow-md border-gray-300 px-2 py-1 focus:ring-0"
+      (change)="onFilterChange($event)"
+    >
+      <option value='""'>All</option>
+      <option
+        [value]="filterValue"
+        *ngFor="let filterValue of filterValues"
+      >
+        {{ filterValue | titlecase }}
+      </option>
+    </select>
+  </div>

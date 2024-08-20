@@ -12,7 +12,6 @@ import {
 import { StudentService } from '../../student.service';
 import { Subject, takeUntil } from 'rxjs';
 import { IfilterSelectionItems } from '../../../../interfaces/filterSelectionList';
-import { IcategoryData } from '../../../../interfaces/categoryData';
 
 interface filterValues {
   searchKey: string;

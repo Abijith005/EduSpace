@@ -7,6 +7,7 @@ import { InstructorManagementComponent } from './components/instructor-managemen
 import { StudentManagementComponent } from './components/student-management/student-management.component';
 import { PaymentManagemetComponent } from './components/payment-managemet/payment-managemet.component';
 import { PermissionManagementComponent } from './components/permission-management/permission-management.component';
+import { WithdrawalManageComponent } from './components/withdrawal-manage/withdrawal-manage.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
           { path: 'instructor_manage',component: InstructorManagementComponent },
           { path: 'student_manage', component: StudentManagementComponent },
           { path: 'payment_manage', component: PaymentManagemetComponent },
+          { path: 'withdrawal_manage', component: WithdrawalManageComponent },
         ],
       },
     ],
