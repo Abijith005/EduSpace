@@ -1,10 +1,9 @@
 import connectRabbitMQ from "../../config/rabbitmq.js";
 
-const sendProfileTaskToQueue = async (userId) => {
+const sendTaskToQueue = async (queue,userId) => {
   try {
     const connection = await connectRabbitMQ();
     const channel = await connection.createChannel();
-    const queue = "teacher_profile";
 
     await channel.assertQueue(queue, { durable: true });
     channel.sendToQueue(queue, Buffer.from(JSON.stringify(userId)), {
@@ -20,4 +19,4 @@ const sendProfileTaskToQueue = async (userId) => {
   }
 };
 
-export default sendProfileTaskToQueue;
+export default sendTaskToQueue;

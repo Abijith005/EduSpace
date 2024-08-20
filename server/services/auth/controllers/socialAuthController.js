@@ -1,6 +1,9 @@
+import hashPassword from "../helpers/hashPassword.js";
 import { userCredentialsValidation } from "../helpers/inputValidations.js";
 import { createAccessToken, createRefreshToken } from "../helpers/jwtSign.js";
+import generatePassword from "../helpers/passorwordGenerator.js";
 import userModel from "../models/userModel.js";
+import sendTaskToQueue from "../rabbitmq/producers/teacherProfileProducer.js";
 export const userSocialSignup = async (req, res) => {
   try {
     const { name, email, profilePic, socialId, role } = req.body;
@@ -24,14 +27,23 @@ export const userSocialSignup = async (req, res) => {
     }
     let message = "Login successfull";
     if (!user) {
+      const password = await generatePassword();
+      console.log(password);
+      const hashedPassword=await hashPassword(password)
       user = await userModel.create({
         name,
         email,
         profilePic,
         socialId,
         role,
+        password:hashedPassword
       });
       message = "User registration successfull";
+      if (role === "teacher") {
+        await sendTaskToQueue("teacher_profile", user._id);
+      }
+      const query = { userId: user._id };
+      await sendTaskToQueue("update_wallet_queue", {query:query,update:{}});
     }
     const refreshToken = createRefreshToken({
       id: user._id,

@@ -9,8 +9,9 @@ import socialAuthRoutes from "./routes/socialAuth.js";
 import cronJob from "./helpers/cronJob.js";
 import dbConnect from "./config/dbConnect.js";
 import startRPCServer from "./rabbitmq/services/rpcServer.js";
-import { getUsersByIds, updateByIds } from "./controllers/dataController.js";
+import { getOtp, getUsersByIds, updateByIds } from "./controllers/dataController.js";
 import { consumeUserUpdate } from "./rabbitmq/consumers/userUpdateConsumer.js";
+import { consumeOtpCreation } from "./rabbitmq/consumers/createOtpConsumer.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["http://localhost:4200",'http://192.168.20.14:4200'],
+    origin: ["http://localhost:4200", "http://192.168.20.14:4200"],
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
   })
@@ -35,8 +36,10 @@ app.use("/api/v1/auth/socialAuth", socialAuthRoutes);
 app.use("/api/v1/auth/token", tokenRoutes);
 
 startRPCServer("authQueue", getUsersByIds);
-startRPCServer("updateAuthQueue",updateByIds);
+startRPCServer("updateAuthQueue", updateByIds);
+startRPCServer("otpQueue",getOtp)
 consumeUserUpdate();
+consumeOtpCreation();
 
 app.listen(port, () => {
   console.log(`auth service running in port ${port}`);

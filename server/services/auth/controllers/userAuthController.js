@@ -6,7 +6,7 @@ import { createAccessToken, createRefreshToken } from "../helpers/jwtSign.js";
 import otpModel from "../models/otpModel.js";
 import bcrypt from "bcrypt";
 import userModel from "../models/userModel.js";
-import sendProfileTaskToQueue from "../rabbitmq/producers/teacherProfileProducer.js";
+import sendTaskToQueue from "../rabbitmq/producers/teacherProfileProducer.js";
 
 export const userRegister = async (req, res) => {
   try {
@@ -43,9 +43,11 @@ export const userRegister = async (req, res) => {
         password: hashedPassword,
         role,
       });
-      if (role === "teacher") {
-        await sendProfileTaskToQueue(user._id);
+      if (role === "teacher") { 
+        await sendTaskToQueue("teacher_profile", user._id);
       }
+      const query={userId:user._id}
+      await sendTaskToQueue("update_wallet_queue", {query:query,update:{}});
       return res
         .status(200)
         .json({ success: true, message: `${role} registration successfull` });
@@ -270,12 +272,12 @@ export const updatePassword = async (req, res) => {
     const { oldPassword, password, email } = req.body;
     console.log(oldPassword, password, email);
     const user = await userModel.findOne({ email: email });
-    if (user?.socialId) {
-      return res.status(403).json({
-        success: false,
-        message: `Social login users can't change password.`,
-      });
-    }
+    // if (user?.socialId) {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: `Social login users can't change password.`,
+    //   });
+    // }
     const validate = userCredentialsValidation({ password, email });
     if (!validate.isValid) {
       return res
@@ -302,7 +304,7 @@ export const updatePassword = async (req, res) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    user.password = hashedPassword
+    user.password = hashedPassword;
     await user.save();
     res
       .status(200)
