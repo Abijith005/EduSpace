@@ -15,6 +15,7 @@ import {
 import startRpcServer from "./rabbitmq/services/rpcServer.js";
 import startConsumer from "./rabbitmq/consumers/uploadConsumer.js";
 import consumeSubscriptionTasks from "./rabbitmq/consumers/subscriptionConsumer.js";
+import { getCourseData } from "./controllers/courseController.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -34,6 +35,7 @@ app.use(
 );
 startRpcServer("category", getCategoriesByIds);
 startRpcServer("subscriptionDataQueue", getSubscriptionDatas);
+startRpcServer("courseDataQueue", getCourseData);
 startConsumer();
 consumeSubscriptionTasks();
 

@@ -14,7 +14,7 @@ export const createCategory = async (req, res) => {
         .json({ success: false, message: validate.message });
     }
     await categoryModel.create({ title, icon });
-    return res
+    return res 
       .status(201)
       .json({ success: true, message: "Category added successfully" });
   } catch (error) {

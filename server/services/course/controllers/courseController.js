@@ -380,3 +380,40 @@ export const getCourseDetails = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const getCourseData = async (courseIds) => {
+  try {
+    const data = await cousreModel.find({ _id: { $in: courseIds } });
+    return data;
+  } catch (error) {
+    console.log("Error \n", error);
+  }
+};
+
+export const getFeaturedCourse = async (req, res) => {
+  try {
+    const courseDetails = await cousreModel
+      .find()
+      .sort({ rating: 1 })
+      .limit(6).populate('category_id').lean()
+
+    const userIds = [...new Set(courseDetails.map((course) => course.user_id))];
+    console.log(userIds);
+    const query = { _id: { $in: userIds } };
+    const userDetails = await sendRPCRequest(
+      "authQueue",
+      JSON.stringify(query)
+    );
+    const courses = courseDetails.map((item) => {
+      const user_id = userDetails.find((e) => e._id == item.user_id);
+      return { ...item, user_id };
+    });
+    console.log(courses);
+    res.status(200).json({ success: true, courseDetails:courses });
+  } catch (error) {
+    console.log("Error \n", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
