@@ -39,7 +39,6 @@ export const getCategories = async (req, res) => {
         .skip(skip)
         .limit(limit)
         .lean();
-      console.log(categories.length);
     } else {
       categories = await categoryModel.find().lean();
     }

@@ -12,6 +12,7 @@ server/services/chat/.env
 server/services/chat/node_modules
 server/apiGateway/.env
 server/apiGateway/node_modules
+server/docker-compose.yml
 
 
 client/node_modules

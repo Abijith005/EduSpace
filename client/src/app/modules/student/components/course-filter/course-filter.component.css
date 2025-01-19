@@ -1,0 +1,52 @@
+:host ::ng-deep .ngx-slider-pointer {
+    height: 15px !important;
+    width: 15px !important;
+    background-color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 50%;
+    top: -6.5px !important;
+    z-index: 10;
+  }
+  
+  :host ::ng-deep .ngx-slider-pointer::after {
+    display: none !important;
+  }
+  
+  
+  input[type="checkbox"] {
+    outline: none;
+  }
+  
+  input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  
+  input[type="checkbox"] {
+      outline: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background-color: white;
+      border: 1px solid black;
+      border-radius: 3px;
+      position: relative;
+    }
+    
+    input[type="checkbox"]:checked {
+      background-color: black;
+    }
+    
+    input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    

@@ -6,16 +6,29 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subject, filter, map, of, takeUntil, tap } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  filter,
+  finalize,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { StudentService } from '../../student.service';
 import { IcourseDetails } from '../../../../interfaces/courseDetails';
 import { ModalService } from '../../../shared/modal.service';
 import { ToasterService } from '../../../shared/toaster.service';
 interface RouterState {
   courseId?: string;
-  data?: string;
+  data?: any;
 }
-
+interface aboutData {
+  contents: string[];
+  about: string;
+}
 @Component({
   selector: 'app-student-course-view',
   templateUrl: './student-course-view.component.html',
@@ -34,6 +47,7 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
   isNestedVisible$ = this._modalService.isNestedVisible$;
   courseDetails$ = of<IcourseDetails | null>(null);
   isLoading$ = of(true);
+  data!: aboutData;
   private _ngUnsubscribe$ = new Subject<void>();
   constructor(
     private _router: Router,
@@ -78,7 +92,7 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
       state.courseId = this.courseId;
     }
     if (link == './about') {
-      state.data = '';
+      state.data = this.data;
     }
     this._router.navigate([link], { state, relativeTo: this._activatedRoute });
   }
@@ -95,10 +109,60 @@ export class StudentCourseViewComponent implements OnInit, OnDestroy {
     this.courseDetails$ = this._studentService
       .getCourseDetails(this.courseId)
       .pipe(
-        takeUntil(this._ngUnsubscribe$),
         tap(() => (this.isLoading$ = of(false))),
-        map((response) => response.courseDetails)
+        switchMap((response) => {
+          const videoUrls = response.courseDetails.videos.map(
+            (video) => video.url
+          );
+          return this.calculateTotalVideoDuration(videoUrls).pipe(
+            map((duration) => {
+              this.data = {
+                about: response.courseDetails.about,
+                contents: response.courseDetails.contents,
+              };
+              let state: RouterState = {};
+              state.data = this.data;
+              this._router.navigate(['./about'], {
+                state,
+                relativeTo: this._activatedRoute,
+              });
+              return {
+                ...response.courseDetails,
+                totalVideoDuration: duration,
+              };
+            })
+          );
+        }),
+        finalize(() => (this.isLoading$ = of(false)))
       );
+  }
+  calculateTotalVideoDuration(urls: string[]): Observable<number> {
+    const durations$ = urls.map((url) => this.getVideoDuration(url));
+    return new Observable<number>((observer) => {
+      Promise.all(durations$)
+        .then((durations) => {
+          const totalDuration = durations.reduce(
+            (acc, duration) => acc + duration,
+            0
+          );
+          observer.next(totalDuration);
+          observer.complete();
+        })
+        .catch((err) => {
+          observer.error(err);
+        });
+    });
+  }
+
+  getVideoDuration(url: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      video.src = url;
+      video.addEventListener('loadedmetadata', () => {
+        resolve(video.duration);
+      });
+      video.addEventListener('error', reject);
+    });
   }
 
   isActive(link: string): boolean {

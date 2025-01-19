@@ -1,5 +1,4 @@
 import axios from "axios";
-import qs from "qs";
 
 const client_id = process.env.PAYPAL_CLIENT_ID;
 const client_secret = process.env.PAYPAL_CLIENT_SECRET;

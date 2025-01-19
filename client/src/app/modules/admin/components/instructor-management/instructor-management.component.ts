@@ -44,6 +44,7 @@ export class InstructorManagementComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         this.instructorDetails = res.instructorDetails;
+        
         this.totalPages = res.totalPages;
       });
   }

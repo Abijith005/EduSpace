@@ -9,7 +9,12 @@ import socialAuthRoutes from "./routes/socialAuth.js";
 import cronJob from "./helpers/cronJob.js";
 import dbConnect from "./config/dbConnect.js";
 import startRPCServer from "./rabbitmq/services/rpcServer.js";
-import { getOtp, getUsersByIds, updateByIds } from "./controllers/dataController.js";
+import {
+  getOtp,
+  getUsersByIds,
+  updateByIds,
+  userStatus,
+} from "./controllers/dataController.js";
 import { consumeUserUpdate } from "./rabbitmq/consumers/userUpdateConsumer.js";
 import { consumeOtpCreation } from "./rabbitmq/consumers/createOtpConsumer.js";
 
@@ -37,7 +42,8 @@ app.use("/api/v1/auth/token", tokenRoutes);
 
 startRPCServer("authQueue", getUsersByIds);
 startRPCServer("updateAuthQueue", updateByIds);
-startRPCServer("otpQueue",getOtp)
+startRPCServer("otpQueue", getOtp);
+startRPCServer("statusQueue", userStatus);
 consumeUserUpdate();
 consumeOtpCreation();
 

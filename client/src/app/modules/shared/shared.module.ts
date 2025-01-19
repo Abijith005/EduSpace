@@ -14,6 +14,10 @@ import { SearchComponent } from './components/search/search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterComponent } from './components/filter/filter.component';
 import { DateRangeComponent } from './components/date-range/date-range.component';
+import { NumberConvertionPipe } from './pipes/number-convertion.pipe';
+import { DurationPipe } from './pipes/duration.pipe';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+import { NoDataComponent } from './components/no-data/no-data.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +33,10 @@ import { DateRangeComponent } from './components/date-range/date-range.component
     SearchComponent,
     FilterComponent,
     DateRangeComponent,
+    NumberConvertionPipe,
+    DurationPipe,
+    ConfirmationComponent,
+    NoDataComponent,
   ],
   imports: [CommonModule, NgxExtendedPdfViewerModule,FormsModule,ReactiveFormsModule],
   exports: [
@@ -42,7 +50,10 @@ import { DateRangeComponent } from './components/date-range/date-range.component
     MessageTimePipe,
     SearchComponent,
     FilterComponent,
-    DateRangeComponent
+    DateRangeComponent,NumberConvertionPipe,
+    DurationPipe,
+    ConfirmationComponent,
+    NoDataComponent
   ],
 })
 export class SharedModule {}

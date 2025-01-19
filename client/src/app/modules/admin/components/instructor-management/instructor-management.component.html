@@ -1,6 +1,6 @@
 <div class="min-h-fit p-8 pb-0">
   <h1 class="text-2xl font-bold mb-4 exo-text">Instructors</h1>
-  <div class="bg-white rounded-lg drop-shadow-md p-6 mt-10">
+  <div *ngIf="instructorDetails.length>0,else noData;" class="bg-white rounded-lg drop-shadow-md p-6 mt-10">
     <div class="flex items-center justify-end space-x-4 pb-6">
       <div class="relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -169,6 +169,12 @@
       ></app-pagination>
     </div>
   </div>
+<ng-template #noData>
+  <div class="bg-white rounded-lg drop-shadow-md p-6 mt-10">
+<app-no-data></app-no-data>
+  </div>
+
+</ng-template>
 </div>
 
 <div
