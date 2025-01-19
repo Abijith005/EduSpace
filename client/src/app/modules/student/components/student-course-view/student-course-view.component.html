@@ -87,7 +87,8 @@
           ></i>
 
           <p class="jost-text">
-            Course Level: <span class="font-light">Intermediate</span>
+            Course Level:
+            <span class="font-light">{{ courseDetails.courseLevel }}</span>
           </p>
         </li>
         <li class="flex items-center">
@@ -95,7 +96,7 @@
             class="far fa-clock w-6 h-6 mr-3 border border-gray-400 rounded-md p-4 flex items-center justify-center"
           ></i>
           <p class="jost-text">
-            Duration: <span class="font-light">1hr 45m</span>
+            Duration: <span class="font-light">{{courseDetails.totalVideoDuration|duration}}</span>
           </p>
         </li>
 
@@ -103,20 +104,27 @@
           <i
             class="fas fa-video w-6 h-6 mr-3 border border-gray-400 rounded-md p-4 flex items-center justify-center"
           ></i>
-          <p class="jost-text">Lessons: <span class="font-light">5</span></p>
+          <p class="jost-text">
+            Lessons:
+            <span class="font-light">{{ courseDetails.videos.length }}</span>
+          </p>
         </li>
         <li class="flex items-center">
           <i
             class="fas fa-file-alt w-6 h-6 mr-3 border border-gray-400 rounded-md p-4 flex items-center justify-center"
           ></i>
-          <p class="jost-text">Notes: <span class="font-light">2</span></p>
+          <p class="jost-text">
+            Notes:
+            <span class="font-light">{{ courseDetails.notes.length }}</span>
+          </p>
         </li>
         <li class="flex items-center">
           <i
             class="far fa-flag w-6 h-6 mr-3 border border-gray-400 rounded-md p-4 flex items-center justify-center"
           ></i>
           <p class="jost-text">
-            Language: <span class="font-light">English</span>
+            Language:
+            <span class="font-light">{{ courseDetails.courseLanguage }}</span>
           </p>
         </li>
       </ul>

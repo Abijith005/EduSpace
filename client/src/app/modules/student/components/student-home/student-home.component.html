@@ -191,13 +191,10 @@
       </div>
       <div class="flex justify-between items-center p-4">
         <div class="flex justify-start space-x-3">
-          <span class=" text-gray-400 jost-text"
-            >₹ {{ course.price }}</span
-          >
+          <span class="text-gray-400 jost-text">₹ {{ course.price }}</span>
         </div>
       </div>
     </div>
-
   </div>
 
   <div
@@ -241,30 +238,39 @@
       class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
       style="border-top: 0.1px solid #d1d5db"
     >
-      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">25K+</h2>
-      <p class="text-gray-600 text-sm mb-2 jost-text">Active Students</p>
-    </div>
-    <div
-      class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
-      style="border-top: 0.1px solid #d1d5db"
-    >
-      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">25K+</h2>
-      <p class="text-gray-600 text-sm mb-2 jost-text">Active Students</p>
-    </div>
-    <div
-      class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
-      style="border-top: 0.1px solid #d1d5db"
-    >
-      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">899</h2>
-      <p class="text-gray-600 text-sm mb-2 jost-text">Total Courses</p>
-    </div>
-    <div
-      class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
-      style="border-top: 0.1px solid #d1d5db"
-    >
-      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">158</h2>
+      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">
+        {{ activeTeachers|numberConvertion}}
+      </h2>
       <p class="text-gray-600 text-sm mb-2 jost-text">Instructor</p>
     </div>
+    <div
+      class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
+      style="border-top: 0.1px solid #d1d5db"
+    >
+      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">
+        {{ activeStudents|numberConvertion }}K+
+      </h2>
+      <p class="text-gray-600 text-sm mb-2 jost-text">Active Students</p>
+    </div>
+    <div
+      class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
+      style="border-top: 0.1px solid #d1d5db"
+    >
+      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">
+        {{ activeTeachers|numberConvertion }}K+
+      </h2>
+      <p class="text-gray-600 text-sm mb-2 jost-text">Active Students</p>
+    </div>
+    <div
+      class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
+      style="border-top: 0.1px solid #d1d5db"
+    >
+      <h2 class="font-bold text-orange-500 text-4xl mb-4 exo-text">
+        {{ totalCourses|numberConvertion }}
+      </h2>
+      <p class="text-gray-600 text-sm mb-2 jost-text">Total Courses</p>
+    </div>
+    
     <div
       class="group bg-white crd rounded-lg shadow-md shadow-slate-400 p-6 text-center transform transition-transform hover:scale-110 hover:ease-out"
       style="border-top: 0.1px solid #d1d5db"
@@ -280,7 +286,7 @@
         Student Feedbacks
       </h1>
       <p class="text-center text-xl jost-text text-gray-400">
-        What Students Say About Academy LMS
+        What Students Say About EduSpace
       </p>
     </div>
   </div>
@@ -296,20 +302,6 @@
         I must explain to you how all this mistaken. Tdea all all a a of
         denouncing pleasure and praising pain was born and I will give you a
         complete account of the system and expound
-      </p>
-      <h2 class="text-xl py-2 font-bold exo-text text-gray-600">Roe Smith</h2>
-      <p class="text-gray-500 text-lg jost-text">Designer</p>
-    </div>
-    <div class="bg-white border rounded-3xl py-6 px-8">
-      <div class="flex items-center mb-3 ml-">
-        <img src="images/quote.ico" alt="" />
-      </div>
-      <p
-        class="text-gray-700 text-lg mb-4 leading-8 pt-0 text-left font-medium jost-text"
-      >
-        I must explain to you how all this mistaken. Tdea of denouncing pleasure
-        and praising pain was born and I will give you a complete account of the
-        system and expound
       </p>
       <h2 class="text-xl py-2 font-bold exo-text text-gray-600">Roe Smith</h2>
       <p class="text-gray-500 text-lg jost-text">Designer</p>

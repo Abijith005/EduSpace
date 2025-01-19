@@ -4,6 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 import openaiRoutes from "./routes/openaiRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js"
+import statusRoutes from "./routes/statusRoutes.js"
 
 const app = express();
 const port = process.env.PORT;
@@ -21,6 +22,7 @@ app.use(
 
 app.use("/api/v1/student/openAI", openaiRoutes);
 app.use("/api/v1/student/studentManage", studentRoutes);
+app.use("/api/v1/student/status/", statusRoutes);
 
 app.listen(port, () => {
   console.log(`student service running in port ${port}`);

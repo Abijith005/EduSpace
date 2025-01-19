@@ -70,8 +70,6 @@ export class SignInComponent implements OnInit, OnDestroy {
         if (res.success) {
           localStorage.setItem('accessToken', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
-          console.log(res.userInfo, 'from login');
-
           this._store.dispatch(userLogin({ userDatas: res.userInfo }));
           this._toasterService.showSuccess(res.message);
           this._router.navigate([`./${res.userInfo.role}`]);
@@ -102,12 +100,8 @@ export class SignInComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsbscribe))
       .subscribe((res) => {
         if (res.success) {
-          console.log(res, 'logindetails');
-
           localStorage.setItem('accessToken', res.accessToken!);
           localStorage.setItem('refreshToken', res.refreshToken!);
-          console.log(res.userInfo, 'fsdffdfd');
-
           this._store.dispatch(userLogin({ userDatas: res.userInfo }));
           this._toasterService.showSuccess(res.message);
           this._router.navigate([`/${res.userInfo.role}`]);

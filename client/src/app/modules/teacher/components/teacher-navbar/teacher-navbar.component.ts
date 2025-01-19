@@ -6,6 +6,7 @@ import { selectUserInfo } from '../../../../store/auth/auth.selector';
 import { IuserInformation } from '../../../../interfaces/userInformation';
 import { NavigationEnd, Router } from '@angular/router';
 import { userLogOut } from '../../../../store/auth/auth.actions';
+import { ModalService } from '../../../shared/modal.service';
 
 @Component({
   selector: 'app-teacher-navbar',
@@ -38,10 +39,12 @@ export class TeacherNavbarComponent implements OnInit {
     { title: 'Profile', link: 'profile_manage', icon: 'fas fa-user' },
   ];
   currentUrl = '';
+  isVisibleConfirmation$ = this._modalService.isLogoutModalVisible$;
 
   constructor(
     private _store: Store<{ auth: AuthState }>,
-    private _router: Router
+    private _router: Router,
+    private _modalService: ModalService
   ) {}
   ngOnInit(): void {
     this.userInfo$ = this._store.select(selectUserInfo).pipe(
@@ -75,9 +78,22 @@ export class TeacherNavbarComponent implements OnInit {
     return url === formattedLink;
   }
 
+  confirmation(confirmed: boolean) {
+    if (!confirmed) {
+      this._modalService.closeLogoutModal();
+    } else {
+      this._modalService.closeLogoutModal();
+      localStorage.clear();
+      this._router.navigate(['']);
+      this._store.dispatch(userLogOut());
+    }
+  }
+
+  profile(){
+    this._router.navigate(['teacher/profile_manage']);
+  }
+
   logout() {
-    localStorage.clear();
-    this._router.navigate(['']);
-    this._store.dispatch(userLogOut());
+    this._modalService.openLogoutModal();
   }
 }

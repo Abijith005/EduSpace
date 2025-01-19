@@ -15,15 +15,15 @@
         <i class="mr-2" [class]="item.icon"></i> {{ item.title }}
       </a>
       <a
-        [routerLink]="''"
         class="text-gray-700 hover:text-gray-900 block mb-4 py-2 px-4 jost-text cursor-pointer"
+        (click)="logout()"
       >
         <i class="fas fa-sign-out-alt mr-2"></i> Logout
       </a>
     </div>
   </div>
 
-  <div class="flex flex-1" style="background: #f3f2f7">
+  <div  class="flex flex-1" style="background: #f3f2f7">
     <div class="flex items-center justify-between px-6 fixed w-full z-10">
       <div class="w-64 px-6"></div>
       <div
@@ -56,7 +56,7 @@
           <ng-container *ngIf="userInfo$ | async as userInfo">
             <span class="mr-4">{{ userInfo.name | titlecase }}</span>
             <img
-              (click)="logout()"
+              (click)="profile()"
               [src]="userInfo.profilePic.url || 'images/user.png'"
               class="h-7 w-7 rounded-full"
               alt="User Profile Picture"
@@ -70,4 +70,17 @@
       <router-outlet></router-outlet>
     </div>
   </div>
+</div>
+
+<div
+  *ngIf="isVisibleConfirmation$ | async"
+  class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-60"
+>
+  <app-confirmation
+  (confirmed)="confirmation($event)">
+  <div>
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Log Out?</h2>
+    <p class="text-gray-600 mb-6">Are you sure you want to log out?</p>
+  </div>  
+  </app-confirmation>
 </div>

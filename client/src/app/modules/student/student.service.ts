@@ -119,7 +119,16 @@ export class StudentService {
 
   getFeaturedCourses() {
     return this._http.get<
-      IgenreralResponse & { courseDetails: IcourseDetails[] }
+      IgenreralResponse & {
+        courseDetails: IcourseDetails[];
+        totalCount: number;
+      }
     >(`/v1/course/manageCourse/featured`);
+  }
+
+  getStatus() {
+    return this._http.get<
+      IgenreralResponse & { students: number; teachers: number }
+    >(`/v1/student/status/applicationStatus`);
   }
 }

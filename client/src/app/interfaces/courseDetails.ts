@@ -22,6 +22,7 @@ export interface IcourseDetails {
   videos: FileDetails[];
   notes: FileDetails[];
   rating: number;
+  totalVideoDuration:number
   activeStatus: boolean;
   totalReviews: number;
   createdAt: Date;

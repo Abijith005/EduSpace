@@ -1,6 +1,6 @@
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import jwtDecode from "../helpers/jwtDecode.js";
-import cousreModel from "../models/courseModel.js";
+import courseModel from "../models/courseModel.js";
 import sendUploadTaskToQueue from "../rabbitmq/producers/uploadProducer.js";
 import sendRPCRequest from "../rabbitmq/services/rpcClient.js";
 import s3Config from "../config/s3BucketConfig.js";
@@ -32,7 +32,7 @@ export const uploadCourse = async (req, res) => {
     } = req.body;
     const parsedContents = JSON.parse(contents);
 
-    const course = await cousreModel.create({
+    const course = await courseModel.create({
       title,
       category_id,
       about,
@@ -109,14 +109,14 @@ export const getAllCourses = async (req, res) => {
       const token = req.headers.authorization.split(" ")[1];
       const user_id = jwtDecode(token).id;
       query = { ...query, user_id: user_id };
-      totalDocs = await cousreModel.countDocuments(query);
+      totalDocs = await courseModel.countDocuments(query);
     } else {
-      totalDocs = await cousreModel.countDocuments(query);
+      totalDocs = await courseModel.countDocuments(query);
     }
 
     const totalPages = Math.ceil(totalDocs / limit);
     const skip = (page - 1) * limit;
-    const datas = await cousreModel
+    const datas = await courseModel
       .find(query)
       .skip(skip)
       .limit(limit)
@@ -193,7 +193,7 @@ export const updateCourse = async (req, res) => {
       },
     };
 
-    await cousreModel.findByIdAndUpdate({ _id: course_id }, updateOperations);
+    await courseModel.findByIdAndUpdate({ _id: course_id }, updateOperations);
 
     if (Object.keys(req.files).length > 0) {
       await sendUploadTaskToQueue(req.files, data);
@@ -246,7 +246,7 @@ export const updateCourse = async (req, res) => {
 
 export const getAllCourseStats = async (req, res) => {
   try {
-    const priceRange = await cousreModel.aggregate([
+    const priceRange = await courseModel.aggregate([
       {
         $group: {
           _id: null,
@@ -262,7 +262,7 @@ export const getAllCourseStats = async (req, res) => {
     ]);
 
     // Get count of courses per category
-    const categoryData = await cousreModel.aggregate([
+    const categoryData = await courseModel.aggregate([
       {
         $group: { _id: "$category_id", count: { $sum: 1 } },
       },
@@ -294,7 +294,7 @@ export const getAllCourseStats = async (req, res) => {
     ]);
 
     // Get count of courses per teacher
-    const teacherData = await cousreModel.aggregate([
+    const teacherData = await courseModel.aggregate([
       { $group: { _id: "$user_id", count: { $sum: 1 } } },
       {
         $project: {
@@ -316,7 +316,7 @@ export const getAllCourseStats = async (req, res) => {
     });
 
     // Get rating count
-    const ratingData = await cousreModel.aggregate([
+    const ratingData = await courseModel.aggregate([
       { $project: { roundedRating: { $ceil: "$rating" } } },
       {
         $group: { _id: "$roundedRating", count: { $sum: 1 } },
@@ -356,7 +356,7 @@ export const getAllCourseStats = async (req, res) => {
 export const getCourseDetails = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const courseDetails = await cousreModel.findById({ _id: courseId }).lean();
+    const courseDetails = await courseModel.findById({ _id: courseId }).lean();
     const user_ids = [courseDetails.user_id];
     const query = { _id: { $in: user_ids } };
     const userDetails = await sendRPCRequest(
@@ -383,7 +383,7 @@ export const getCourseDetails = async (req, res) => {
 
 export const getCourseData = async (courseIds) => {
   try {
-    const data = await cousreModel.find({ _id: { $in: courseIds } });
+    const data = await courseModel.find({ _id: { $in: courseIds } });
     return data;
   } catch (error) {
     console.log("Error \n", error);
@@ -392,13 +392,50 @@ export const getCourseData = async (courseIds) => {
 
 export const getFeaturedCourse = async (req, res) => {
   try {
-    const courseDetails = await cousreModel
-      .find()
-      .sort({ rating: 1 })
-      .limit(6).populate('category_id').lean()
+    // const courseDetails = await courseModel
+    //   .find()
+    //   .sort({ rating: 1 })
+    //   .limit(6)
+    //   .populate("category_id")
+    //   .lean();
 
+    const [data] = await courseModel.aggregate([
+      {
+        $facet: {
+          totalCount: [{ $count: "count" }],
+          courseDetails: [
+            { $sort: { rating: -1 } },
+            { $limit: 6 },
+            {
+              $lookup: {
+                from: "categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "categoryDetails",
+              },
+            },
+            {
+              $unwind: "$categoryDetails",
+            },
+            {
+              $addFields: { category_id: "$categoryDetails" },
+            },
+            {
+              $project: { categoryDetails: 0 },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          totalCount: { $arrayElemAt: ["$totalCount.count", 0] },
+          courseDetails: 1,
+        },
+      },
+    ]);
+
+    const { totalCount, courseDetails } = data;
     const userIds = [...new Set(courseDetails.map((course) => course.user_id))];
-    console.log(userIds);
     const query = { _id: { $in: userIds } };
     const userDetails = await sendRPCRequest(
       "authQueue",
@@ -408,8 +445,9 @@ export const getFeaturedCourse = async (req, res) => {
       const user_id = userDetails.find((e) => e._id == item.user_id);
       return { ...item, user_id };
     });
-    console.log(courses);
-    res.status(200).json({ success: true, courseDetails:courses });
+
+    console.log(courses, totalCount);
+    res.status(200).json({ success: true, courseDetails: courses, totalCount });
   } catch (error) {
     console.log("Error \n", error);
     return res

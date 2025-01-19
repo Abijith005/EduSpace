@@ -14,6 +14,9 @@ import { IcourseDetails } from '../../../../interfaces/courseDetails';
 export class StudentHomeComponent implements OnInit, OnDestroy {
   private _ngUnsubscribe$ = new Subject<void>();
   featuredCourses!: IcourseDetails[];
+  activeStudents: number = 0;
+  activeTeachers: number = 0;
+  totalCourses: number = 0;
 
   categories!: IcategoryResponse[];
 
@@ -32,6 +35,7 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
       });
 
     this.getFeaturedCorses();
+    this.getStatus();
   }
 
   scrollTop() {
@@ -48,6 +52,24 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         this.featuredCourses = res.courseDetails;
+        this.totalCourses = res.totalCount;
+      });
+  }
+
+  // getComments() {
+  //   this._studentService
+  //     .getComments()
+  //     .pipe(takeUntil(this._ngUnsubscribe$))
+  //     .subscribe();
+  // }
+
+  getStatus() {
+    this._studentService
+      .getStatus()
+      .pipe(takeUntil(this._ngUnsubscribe$))
+      .subscribe((res) => {
+        this.activeStudents = res.students;
+        this.activeTeachers = res.teachers;
       });
   }
 
