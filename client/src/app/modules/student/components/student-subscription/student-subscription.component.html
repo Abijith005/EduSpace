@@ -1,132 +1,129 @@
-<!-- courses.component.html -->
-<div class="container mx-auto sticky top-16 py-4 bg-white z-10">
-  <div class="py-2">
-    <h1 class="text-2xl font-semibold exo-text">Subscriptions</h1>
-  </div>
-  <div
-    class="container mx-auto px-20 flex items-center justify-end space-x-4 pb-6"
-  >
-    <div class="relative">
-      <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-        <svg
-          class="h-5 w-5 text-gray-400 z-10"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+<ng-container *ngIf="courses&&courses.length>0 else noData">
+  <div class="container mx-auto sticky top-16 py-4 bg-white z-10">
+    <div class="py-2">
+      <h1 class="text-2xl font-semibold exo-text">Subscriptions</h1>
+    </div>
+    <div
+      class="container mx-auto px-20 flex items-center justify-end space-x-4 pb-6"
+    >
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg
+            class="h-5 w-5 text-gray-400 z-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16z"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-4.35-4.35"
+            ></path>
+          </svg>
+        </span>
+        <input
+          class="rounded-md pl-10 pr-4 py-1 drop-shadow-md text-gray-700 placeholder-gray-400 focus:ring-0 jost-text"
+          type="text"
+          placeholder="Search"
+          [(ngModel)]="search"
+          (keyup)="onSearch()"
+        />
+      </div>
+      <div class="flex items-center jost-text">
+        <p class="text-md font-semibold">Filter</p>
+        <select
+          class="ml-2 rounded-md border shadow-md border-gray-300 px-2 py-1 focus:ring-0"
+          (change)="onFilterSelect($event)"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16z"
-          ></path>
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-4.35-4.35"
-          ></path>
-        </svg>
-      </span>
-      <input
-        class="rounded-md pl-10 pr-4 py-1 drop-shadow-md text-gray-700 placeholder-gray-400 focus:ring-0 jost-text"
-        type="text"
-        placeholder="Search"
-        [(ngModel)]="search"
-        (keyup)="onSearch()"
-      />
-    </div>
-    <div class="flex items-center jost-text">
-      <p class="text-md font-semibold">Filter</p>
-      <select
-        class="ml-2 rounded-md border shadow-md border-gray-300 px-2 py-1 focus:ring-0"
-        (change)="onFilterSelect($event)"
-      >
-        <option value="">All</option>
-        <option *ngFor="let category of categories" [value]="category._id">
-          {{ category.title | titlecase }}
-        </option>
-      </select>
+          <option value="">All</option>
+          <option *ngFor="let category of categories" [value]="category._id">
+            {{ category.title | titlecase }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="container mx-auto px-20 py-4 space-y-6">
-  <div
-    *ngFor="let course of courses"
-    class="flex bg-white shadow-md rounded-lg overflow-hidden"
-  >
-    <div class="w-4/12 md:h-72 relative">
-      <img
-        [src]="course.course.previewImage[0].url"
-        alt="Course Image"
-        class="w-full h-full object-cover"
-      />
-      <span
-        class="inline-block bg-black text-white text-xs font-bold px-2 py-1 rounded absolute top-2 left-2 jost-text"
-        >{{ course.course.category_id.title | titlecase }}</span
-      >
-    </div>
-    <div class="flex flex-col justify-between p-4 w-3/4">
-      <div class="flex flex-col gap-2">
-        <p class="text-sm text-gray-600 jost-text">
-          {{ course.course.user_id.name | titlecase }}
-        </p>
-        <div class="mt-2 flex justify-between items-center">
-          <h2 class="text-lg font-semibold exo-text">
-            {{ course.course.title | titlecase }}
-          </h2>
-
-          <div class="flex justify-between items-center mr-6">
-            <div class="space-x-4">
-              <button
-                class="ring-1 text-blue-500 text-sm jost-text px-3 py-1 rounded"
-              >
-                Open Discussion
-              </button>
-              <button
-                class="ring-1 text-blue-500 text-sm jost-text px-3 py-1 rounded"
-                (click)="navigateWithData(course.course._id)"
-              >
-                Open Course
-              </button>
+  <div class="container mx-auto px-20 py-4 space-y-6">
+    <div
+      *ngFor="let course of courses"
+      class="flex bg-white shadow-md rounded-lg overflow-hidden"
+    >
+      <div class="w-4/12 md:h-72 relative">
+        <img
+          [src]="course.course.previewImage[0].url"
+          alt="Course Image"
+          class="w-full h-full object-cover"
+        />
+        <span
+          class="inline-block bg-black text-white text-xs font-bold px-2 py-1 rounded absolute top-2 left-2 jost-text"
+          >{{ course.course.category_id.title | titlecase }}</span
+        >
+      </div>
+      <div class="flex flex-col justify-between p-4 w-3/4">
+        <div class="flex flex-col gap-2">
+          <p class="text-sm text-gray-600 jost-text">
+            {{ course.course.user_id.name | titlecase }}
+          </p>
+          <div class="mt-2 flex justify-between items-center">
+            <h2 class="text-lg font-semibold exo-text">
+              {{ course.course.title | titlecase }}
+            </h2>
+  
+            <div class="flex justify-between items-center mr-6">
+              <div class="space-x-4">
+                <button
+                  class="ring-1 text-blue-500 text-sm jost-text px-3 py-1 rounded"
+                >
+                  Open Discussion
+                </button>
+                <button
+                  class="ring-1 text-blue-500 text-sm jost-text px-3 py-1 rounded"
+                  (click)="navigateWithData(course.course._id)"
+                >
+                  Open Course
+                </button>
+              </div>
             </div>
           </div>
+          <div class="flex items-center text-gray-600 text-sm mt-2 space-x-2">
+            <span>
+              <i class="fas fa-clock text-orange-500 mr-2"></i
+              >{{ course.course.createdAt | date }}</span
+            >
+            <span
+              ><i class="fas fa-graduation-cap text-orange-500 mr-2"></i> 156
+              Students</span
+            >
+            <span
+              ><i class="fas fa-signal text-orange-500 mr-2"></i> Intermediate
+              Level</span
+            >
+            <span
+              ><i class="fas fa-video text-orange-500 mr-2"></i>2 Lessons</span
+            >
+          </div>
         </div>
-        <div class="flex items-center text-gray-600 text-sm mt-2 space-x-2">
-          <span>
-            <i class="fas fa-clock text-orange-500 mr-2"></i
-            >{{ course.course.createdAt | date }}</span
-          >
-          <span
-            ><i class="fas fa-graduation-cap text-orange-500 mr-2"></i> 156
-            Students</span
-          >
-          <span
-            ><i class="fas fa-signal text-orange-500 mr-2"></i> Intermediate
-            Level</span
-          >
-          <span
-            ><i class="fas fa-video text-orange-500 mr-2"></i>2 Lessons</span
-          >
+  
+        <div class="border-b border-gray-200 mt-20"></div>
+  
+        <div class="flex justify-end items-center">
+          <button *ngIf="!course.review" class="jost-text mr-6" (click)="openModal(course.course._id)">
+            Rate & Review
+          </button>
         </div>
-      </div>
-
-      <div class="border-b border-gray-200 mt-20"></div>
-
-      <div class="flex justify-end items-center">
-        <button *ngIf="!course.review" class="jost-text mr-6" (click)="openModal(course.course._id)">
-          Rate & Review
-        </button>
       </div>
     </div>
   </div>
-</div>
 
-<div></div>
-
-<div
+  <div
   *ngIf="isVisible$ | async"
   class="fixed inset-0 z-50 overflow-y-auto flex items-center w-full justify-center bg-black bg-opacity-60"
 >
@@ -141,3 +138,9 @@
   [totalPages]="totalPages"
   (pageChanged)="onPageChange($event)"
 ></app-pagination>
+
+</ng-container>
+
+<ng-template #noData>
+<app-no-data></app-no-data>
+</ng-template>

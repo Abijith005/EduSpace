@@ -33,7 +33,7 @@ export class ResponseInterceptor implements HttpInterceptor {
     let loading: any;
     if (!isOpenAIRoute) {
       loading = setTimeout(() => {
-        this._store.dispatch(setLoading({ isLoading: true }));
+        this._store.dispatch(setLoading({ isLoading: false }));
       }, 300);
     }
     return next.handle(request).pipe(

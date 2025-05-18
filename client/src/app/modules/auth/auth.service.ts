@@ -65,6 +65,13 @@ export class AuthService {
     );
   }
 
+  resetPassword(data: { email: string; password: string }) {
+    return this._http.patch<IgenreralResponse>(
+      `/v1/auth/user/resetPassword`,
+      data
+    );
+  }
+
   getUserInfo(token: string | null) {
     if (!token) {
       return of({ success: false } as {

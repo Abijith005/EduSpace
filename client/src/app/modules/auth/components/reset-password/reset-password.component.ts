@@ -60,7 +60,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     const password = this.passwordForm.get('password')?.value;
     const data = { password: password, email: this.email };
     this._authService
-      .updatePassword(data)
+      .resetPassword(data)
       .pipe(takeUntil(this._ngUnsubscribe))
       .subscribe((res) => {
         if (res.success) {

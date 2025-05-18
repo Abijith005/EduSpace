@@ -7,7 +7,7 @@ import { StudentCourseViewComponent } from './components/student-course-view/stu
 import { StudentAboutCourseComponent } from './components/student-about-course/student-about-course.component';
 import { StudentViewReviewComponent } from './components/student-view-review/student-view-review.component';
 import { StudentSubscriptionComponent } from './components/student-subscription/student-subscription.component';
-import { CourseComponent } from './components/discussions/course/course.component';
+import { CourseComponent } from './components/course/course.component';
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';
 import { DiscussionsComponent } from './components/discussions/discussions.component';

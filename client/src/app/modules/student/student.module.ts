@@ -14,7 +14,7 @@ import { StudentAboutCourseComponent } from './components/student-about-course/s
 import { PaymentComponent } from './components/payment/payment.component';
 import { StudentSubscriptionComponent } from './components/student-subscription/student-subscription.component';
 import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
-import { CourseComponent } from './components/discussions/course/course.component';
+import { CourseComponent } from './components/course/course.component';
 import { ChatGptComponent } from './components/chat-gpt/chat-gpt.component';
 import { LessonsComponent } from './components/lessons/lessons.component';
 import { NotesComponent } from './components/notes/notes.component';

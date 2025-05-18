@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { IcourseDetails } from '../../../../../interfaces/courseDetails';
-import { StudentService } from '../../../student.service';
+import { IcourseDetails } from '../../../../interfaces/courseDetails';
+import { StudentService } from '../../student.service';
 import { Subject, filter, map, of, takeUntil, tap } from 'rxjs';
-import { SharedDataService } from '../../../shared-data.service';
+import { SharedDataService } from '../../shared-data.service';
 
 @Component({
   selector: 'app-course',

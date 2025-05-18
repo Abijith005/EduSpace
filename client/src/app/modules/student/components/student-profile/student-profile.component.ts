@@ -95,15 +95,12 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
   }
 
   changePassword(): void {
-    console.log(this.updatedPassword, this.confirmPassword, this.oldPassword);
-
     if (!this.updatedPassword || !this.oldPassword || !this.confirmPassword) {
       this._toasterService.showError('Fill all the Fields');
       return;
     }
     if (this.updatedPassword !== this.confirmPassword) {
       this._toasterService.showError('Password not matching');
-      this.clearPasswords();
       return;
     }
     const passwordPattern = /^.{4,}$/;
@@ -111,7 +108,6 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
 
     if (!passwordPattern.test(this.updatedPassword)) {
       this._toasterService.showError('Password contain min 4 charactors');
-      this.clearPasswords();
       return;
     }
 
@@ -120,6 +116,9 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         this._toasterService.toasterFunction(res);
+        if (res?.success) {
+          this.clearPasswords()
+        }
       });
   }
   clearPasswords() {

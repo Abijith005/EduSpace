@@ -66,6 +66,8 @@ export class DiscussionsComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this._ngUnsubscribe$))
       .subscribe((res) => {
         this.communityData = res.communities;
+        console.log(this.communityData,'this is community datassssss\n\n\n\n\n\n');
+        
       });
 
     this._store

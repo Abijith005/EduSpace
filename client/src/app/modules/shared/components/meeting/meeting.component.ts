@@ -281,7 +281,7 @@ export class MeetingComponent implements OnInit {
     this.socket.emit('leave-room', this.roomId, this.userPeerId);
 
     // Navigate away or update UI
-    this._toasterService.showSuccess('You have left the call.');
+    this._toasterService.showSuccess('You have left the meeting.');
   }
 
   endMeeting() {

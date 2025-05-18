@@ -1,4 +1,4 @@
-<div *ngIf="communityData" class="container mx-auto py-8 px-4">
+<div *ngIf="communityData&&communityData.length>0 else noData" class="container mx-auto py-8 px-4">
   <div
     class="px-36 grid grid-cols-12 gap-4"
     style="min-height: 765px; max-height: 765px"
@@ -159,3 +159,8 @@
     </div>
   </div>
 </div>
+<ng-template  #noData>
+  <app-no-data />
+</ng-template>
+
+
